@@ -78,13 +78,30 @@ return {
         end,
     },
 
-    -- UI/notifications & LSP message enhancements
+    -- Notifications (configure before noice so it reuses settings)
+    {
+        "rcarriga/nvim-notify",
+        event = "VeryLazy",
+        config = function()
+            local ok, notify = pcall(require, "notify")
+            if not ok then return end
+            notify.setup({
+                background_colour = "#1e2030", -- solid base behind transparent theme (adjust if you change colorscheme)
+                stages = "fade_in_slide_out",
+                timeout = 2000,
+                render = "compact",
+                top_down = false,
+            })
+            vim.notify = notify -- route vim.notify through nvim-notify
+        end,
+    },
+
+    -- UI/notifications enhancements (cmdline, LSP popups) via noice reusing nvim-notify
     {
         "folke/noice.nvim",
         event = "VeryLazy",
         dependencies = {
             "MunifTanjim/nui.nvim",
-            "rcarriga/nvim-notify",
         },
         config = function()
             require("noice").setup({
