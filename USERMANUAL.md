@@ -1,4 +1,4 @@
-# Neovim Config Usage Guide
+  # Neovim Config Usage Guide
 
 This setup is based on **NvChad v2.5** with a minimal layer of customizations. This document lists the key plugins, keymaps (both custom & important NvChad defaults), and how to extend the configuration.
 

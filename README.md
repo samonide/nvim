@@ -2,19 +2,31 @@
 
 # Neovim Config (NvChad v2.5 Layer)
 
-Minimal, fast, and competitive-programming friendly Neovim setup built on top of **NvChad**.
+Minimal, fast, and competitive‑programming friendly Neovim setup built on top of **NvChad**.
 
-![Status](https://img.shields.io/badge/status-active-success?style=flat-square) ![Neovim](https://img.shields.io/badge/Neovim-%3E=0.9-green?style=flat-square)
+![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
+![Neovim](https://img.shields.io/badge/Neovim-%3E=0.9-green?style=flat-square)
+![License](https://img.shields.io/badge/License-Unlicense-blue?style=flat-square)
 
 </div>
+
+## 📋 Prerequisites
+
+Install first:
+* Neovim >= 0.9
+* Git
+* A Nerd Font (for icons) – e.g. FiraCode / JetBrainsMono Nerd Font
+
+Optional (installed/managed automatically when configured): LSP servers, linters, formatters.
 
 ## ✨ Highlights
 
 * NvChad core (theme system, statusline, bufferline, tree, telescope)
-* Competitive Programming helpers (compile/run, test harness, optimization profiles)
-* Dashboard (alpha.nvim) + Enhanced UI (noice.nvim)
+* Competitive Programming helpers (compile/run, test harness, optimization profile cycling, reusable terminal)
+* Auto‑insert C++ template on new `*.cpp` file + `cp` snippet
+* Dashboard (alpha.nvim) + Enhanced UI & command popup border feedback (noice.nvim)
 * Diagnostics UI (trouble.nvim) & Quick Navigation (harpoon)
-* Tasks (overseer.nvim) & Formatting/Linting (conform + nvim-lint)
+* Tasks (overseer.nvim) & Formatting/Linting (conform + nvim-lint + mason bridges)
 * Snippets (LuaSnip + friendly-snippets + custom `cp` C++ template)
 
 Full usage & keymaps: see the [User Manual](./USERMANUAL.md).
@@ -27,21 +39,21 @@ backup_dir="$HOME/.config/nvim_backup_$(date +%s)" && \
 mv ~/.config/nvim "$backup_dir" 2>/dev/null || true && \
 mv ~/.local/share/nvim "$backup_dir-data" 2>/dev/null || true && \
 mv ~/.cache/nvim "$backup_dir-cache" 2>/dev/null || true && \
-git clone <your-fork-or-repo-url> ~/.config/nvim && \
+git clone https://github.com/samonide/nvim ~/.config/nvim && \
 nvim
 ```
 
 ### Option B: Git Subdirectory (Manage as Git Submodule in dotfiles)
 ```bash
 mkdir -p ~/.config && \
-git submodule add <repo-url> ~/.config/nvim || git clone <repo-url> ~/.config/nvim && \
+git submodule add https://github.com/samonide/nvim ~/.config/nvim || git clone https://github.com/samonide/nvim ~/.config/nvim && \
 nvim
 ```
 
 ### Option C: Try Ephemeral (No Overwrite) Using `XDG_CONFIG_HOME`
 ```bash
 TMPDIR=$(mktemp -d)
-git clone <repo-url> "$TMPDIR/nvim"
+git clone https://github.com/samonide/nvim "$TMPDIR/nvim"
 XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_STATE_HOME="$TMPDIR/state" XDG_CACHE_HOME="$TMPDIR/cache" nvim
 ```
 
@@ -79,7 +91,7 @@ Open input.txt | `<leader>ci`
 * Add formatters/linters via conform / nvim-lint config files.
 * Place new snippets with LuaSnip in a dedicated module or VSCode-style JSON.
 
-## ♻️ Updating
+## ♻️ Updating / Syncing
 ```bash
 cd ~/.config/nvim
 git pull --rebase
@@ -88,6 +100,8 @@ git pull --rebase
 
 Commit `lazy-lock.json` to lock plugin versions.
 
+To update just plugins without git changes: inside Neovim run `:Lazy sync` (or `:Lazy check` to inspect outdated first).
+
 ## 🐛 Troubleshooting (Quick)
 Issue | Check
 ------|------
@@ -95,6 +109,7 @@ Missing highlight | `:TSInstall <lang>`
 Formatter not running | `<leader>fm` / check filetype mapping
 LSP inactive | `:LspInfo` / `:Mason`
 Test harness mismatch | Ensure `tests/*.out` files exist
+Icons wrong | Install & select a Nerd Font in terminal
 ## 📜 License
 See [`LICENSE`](./LICENSE).
 
