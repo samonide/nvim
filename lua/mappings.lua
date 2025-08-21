@@ -270,3 +270,46 @@ map({ 'i', 's' }, '<C-k>', function()
 	local ls = require('luasnip')
 	if ls.jumpable(-1) then ls.jump(-1) end
 end, { desc = 'Snippet jump backward' })
+
+-- =============================================
+-- Simple terminal toggle (<leader>tt)
+-- Opens a bottom 15-line split running the user's shell. Reuses buffer.
+-- If visible: closes the window. If hidden: re-shows. If destroyed: recreates.
+-- =============================================
+local function toggle_term()
+	local buf = vim.g.toggle_term_buf
+	local buf_valid = buf and vim.api.nvim_buf_is_valid(buf)
+	local win_with_buf
+	if buf_valid then
+		for _, w in ipairs(vim.api.nvim_list_wins()) do
+			if vim.api.nvim_win_get_buf(w) == buf then
+				win_with_buf = w
+				break
+			end
+		end
+	end
+
+	-- If buffer is currently shown -> close the window (toggle off)
+	if buf_valid and win_with_buf then
+		pcall(vim.api.nvim_win_close, win_with_buf, true)
+		return
+	end
+
+	-- If buffer exists but not shown -> show it
+	if buf_valid then
+		vim.cmd('botright 15split')
+		vim.api.nvim_set_current_buf(buf)
+		vim.cmd('startinsert')
+		return
+	end
+
+	-- Create new terminal buffer
+	vim.cmd('botright 15split')
+	vim.cmd('enew')
+	local new_buf = vim.api.nvim_get_current_buf()
+	vim.fn.termopen(vim.o.shell)
+	vim.g.toggle_term_buf = new_buf
+	vim.cmd('startinsert')
+end
+
+map('n', '<leader>tt', toggle_term, { desc = 'Toggle terminal split' })

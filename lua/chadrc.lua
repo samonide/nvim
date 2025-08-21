@@ -7,19 +7,13 @@
 ---@type ChadrcConfig
 local M = {}
 
-M.ui = {
-    tabufline = { enabled = false },
-    },
-
 M.base46 = {
     theme = "bearded-arc",
     transparency = true,
 
     hl_override = {
-        Comment = { italic = true },
+        -- Comment = { italic = true },
         ["@comment"] = { italic = true },
-    -- Ensure notify background group has a defined bg to silence warning when transparency is on.
-    NotifyBackground = { bg = "#1e2030" },
     },
 }
 
