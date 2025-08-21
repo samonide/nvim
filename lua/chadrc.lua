@@ -7,6 +7,12 @@
 ---@type ChadrcConfig
 local M = {}
 
+M.ui = {
+    tabufline = {
+        enabled = false,
+    },
+}
+
 M.base46 = {
     theme = "chadracula",
     transparency = true,
@@ -18,3 +24,4 @@ M.base46 = {
 }
 
 return M
+

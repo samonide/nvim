@@ -272,11 +272,15 @@ map({ 'i', 's' }, '<C-k>', function()
 end, { desc = 'Snippet jump backward' })
 
 -- =============================================
--- Simple terminal toggle (<leader>tt)
--- Opens a bottom 15-line split running the user's shell. Reuses buffer.
--- If visible: closes the window. If hidden: re-shows. If destroyed: recreates.
+-- Terminal toggle (Alt-h / Alt-v) and leader h/v for window navigation
 -- =============================================
-local function toggle_term()
+
+-- Repurpose leader h/v to navigate splits
+map('n', '<leader>h', '<C-w>h', { desc = 'Focus left split' })
+map('n', '<leader>v', '<C-w>l', { desc = 'Focus right split' })
+
+-- Horizontal terminal toggle (Alt-h) and Vertical (Alt-v)
+local function toggle_term(dir)
 	local buf = vim.g.toggle_term_buf
 	local buf_valid = buf and vim.api.nvim_buf_is_valid(buf)
 	local win_with_buf
@@ -295,21 +299,21 @@ local function toggle_term()
 		return
 	end
 
-	-- If buffer exists but not shown -> show it
-	if buf_valid then
-		vim.cmd('botright 15split')
-		vim.api.nvim_set_current_buf(buf)
-		vim.cmd('startinsert')
-		return
-	end
+		-- If buffer exists but not shown -> show it (direction respected)
+		if buf_valid then
+			if dir == 'v' then vim.cmd('botright vsplit') else vim.cmd('botright 15split') end
+			vim.api.nvim_set_current_buf(buf)
+			vim.cmd('startinsert')
+			return
+		end
 
-	-- Create new terminal buffer
-	vim.cmd('botright 15split')
+		-- Create new terminal buffer
+		if dir == 'v' then vim.cmd('botright vsplit') else vim.cmd('botright 15split') end
 	vim.cmd('enew')
 	local new_buf = vim.api.nvim_get_current_buf()
 	vim.fn.termopen(vim.o.shell)
 	vim.g.toggle_term_buf = new_buf
 	vim.cmd('startinsert')
 end
-
-map('n', '<leader>tt', toggle_term, { desc = 'Toggle terminal split' })
+	map('n', '<A-h>', function() toggle_term('h') end, { desc = 'Toggle horizontal terminal' })
+	map('n', '<A-v>', function() toggle_term('v') end, { desc = 'Toggle vertical terminal' })
