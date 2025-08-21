@@ -31,7 +31,14 @@ Optional (installed/managed automatically when configured): LSP servers, linters
 
 Guides: [User Manual](./guide/USERMANUAL.md) · [Snippets](./guide/SNIPPETS.md) · [Motions](./guide/MOTIONS.md)
 
-## 📦 Installation Options
+## � Screenshots
+
+Dashboard (Alpha) | Editing (Normal) | Transparent UI
+:--:|:--:|:--:
+![Dashboard](./screenshots/dashboard.png) | ![Normal](./screenshots/normal.png) | ![Transparent](./screenshots/transparent.png)
+
+
+## �📦 Installation Options
 
 ### Option A: Fresh Install (Replace Existing Config)
 ```bash
