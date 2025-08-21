@@ -1,13 +1,21 @@
-require "nvchad.mappings"
+-- =====================================================================
+--  mappings.lua
+--  Extends NvChad default mappings. All custom keymaps are declared with
+--  descriptive `desc` for WhichKey & cheatsheet visibility.
+--  Sections:
+--    * Core quality-of-life
+--    * Competitive Programming helpers
+--    * Harpoon, Trouble, Overseer, Snippets
+-- =====================================================================
 
--- add yours here
+require "nvchad.mappings" -- load NvChad defaults first
 
 local map = vim.keymap.set
 
+-- ---------- Core QoL --------------------------------------------------
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
-
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+map("i", "jk", "<ESC>", { desc = "Exit insert (jk)" })
+-- map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>") -- Uncomment for Ctrl+S save
 
 -- =====================================================
 -- Competitive Programming: C / C++ build & run helpers
@@ -50,6 +58,7 @@ local function build_and_run_cpp()
 	})
 end
 
+-- Execute last built artifact without rebuilding
 local function run_only()
 	local ft = vim.bo.filetype
 	if ft ~= 'cpp' and ft ~= 'c' then
@@ -66,8 +75,8 @@ local function run_only()
 	term:send(output)
 end
 
-map('n', '<leader>cr', build_and_run_cpp, { desc = 'C/C++ Compile & Run (c++17 -O2)' })
-map('n', '<leader>cb', build_and_run_cpp, { desc = 'C/C++ Build (same as compile & run)' })
+map('n', '<leader>cr', build_and_run_cpp, { desc = 'C/C++ Compile & Run (profile flags)' })
+map('n', '<leader>cb', build_and_run_cpp, { desc = 'C/C++ Build alias' })
 map('n', '<leader>ce', run_only, { desc = 'C/C++ Execute last build' })
 
 -- Quick open input.txt in split for manual IO during contests
@@ -121,7 +130,7 @@ map('n', '<leader>ot', '<cmd>OverseerToggle<CR>', { desc = 'Overseer task list' 
 map('n', '<leader>or', '<cmd>OverseerRun<CR>', { desc = 'Overseer run task' })
 
 -- =============================================
--- Simple multi-test harness for C++ (tests/1.in 1.out ...)
+-- Simple multi-test harness for C++ (tests/1.in 1.out ...) — lightweight alternative to full task config
 -- =============================================
 local function run_all_tests()
 	local ft = vim.bo.filetype
@@ -187,7 +196,23 @@ local function cycle_profile()
 end
 map('n', '<leader>co', cycle_profile, { desc = 'Cycle C++ optimization profile' })
 
--- Adjust build command to respect profile (override previous build_and_run_cpp)
+-- Toggle shell between zsh and fish (Neovim internal terminal only)
+map('n', '<leader>ts', function()
+	local current = vim.o.shell
+	local zsh = (vim.fn.executable('/usr/bin/zsh') == 1 and '/usr/bin/zsh') or (vim.fn.executable('/bin/zsh') == 1 and '/bin/zsh')
+	local fish = (vim.fn.executable('/usr/bin/fish') == 1 and '/usr/bin/fish') or (vim.fn.executable('/bin/fish') == 1 and '/bin/fish')
+	if current == zsh and fish then
+		vim.o.shell = fish
+		vim.notify('Shell set to fish (Neovim only)')
+	elseif zsh then
+		vim.o.shell = zsh
+		vim.notify('Shell set to zsh (Neovim only)')
+	else
+		vim.notify('No zsh found; shell unchanged', vim.log.levels.WARN)
+	end
+end, { desc = 'Toggle shell zsh<->fish (nvim term)' })
+
+-- Override build function to inject active optimization profile flags
 local old_build = build_and_run_cpp
 build_and_run_cpp = function()
 	local ft = vim.bo.filetype

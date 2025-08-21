@@ -1,7 +1,8 @@
+-- Mason-LSPconfig: derive ensure_installed list from lspconfig.servers
 local lspconfig = package.loaded["lspconfig"]
 
 -- List of servers to ignore during install
-local ignore_install = {}
+local ignore_install = {} -- Add server names you want to skip auto-installing
 
 -- Helper function to find if value is in table.
 local function table_contains(table, value)

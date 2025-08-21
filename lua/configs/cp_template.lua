@@ -1,4 +1,5 @@
 -- Auto insert competitive programming C++ template on new empty *.cpp file
+-- Keep minimal & fast; editing the file later will not re-insert.
 local api = vim.api
 
 api.nvim_create_autocmd("BufNewFile", {

@@ -1,5 +1,12 @@
+-- =====================================================================
+--  plugins/init.lua
+--  Additional plugin specifications layered on top of NvChad core.
+--  Grouped logically (syntax/LSP, tooling, UI, CP helpers, snippets).
+-- =====================================================================
+
 return {
 
+    -- Syntax highlighting & incremental parsing
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPre", "BufNewFile" },
@@ -8,6 +15,7 @@ return {
         end,
     },
 
+    -- LSP client configuration
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
@@ -145,7 +153,7 @@ return {
         opts = {},
     },
 
-    -- Snippets: LuaSnip + community snippets
+    -- Snippets: LuaSnip + community snippets + custom CP snippet
     { "L3MON4D3/LuaSnip", event = "InsertEnter" },
     {
         "rafamadriz/friendly-snippets",

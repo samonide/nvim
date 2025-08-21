@@ -1,5 +1,8 @@
--- This file needs to have same structure as nvconfig.lua
--- https://github.com/NvChad/ui/blob/v2.5/lua/nvconfig.lua
+-- =====================================================================
+--  chadrc.lua
+--  Theme/UI overrides for NvChad. Only set what you need; keep this lean.
+--  Reference structure: https://github.com/NvChad/ui/blob/v2.5/lua/nvconfig.lua
+-- =====================================================================
 
 ---@type ChadrcConfig
 local M = {}

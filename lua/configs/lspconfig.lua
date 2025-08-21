@@ -1,3 +1,9 @@
+-- =====================================================================
+--  configs/lspconfig.lua
+--  Custom LSP server configurations layered after NvChad defaults.
+--  Adjust server list & per-server settings here.
+-- =====================================================================
+
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
@@ -5,6 +11,7 @@ local capabilities = require("nvchad.configs.lspconfig").capabilities
 local lspconfig = require("lspconfig")
 
 -- list of all servers configured.
+-- Master list of desired servers (Mason installer consumes this via mason-lspconfig)
 lspconfig.servers = {
     "lua_ls",
     -- "clangd",
@@ -15,6 +22,7 @@ lspconfig.servers = {
 }
 
 -- list of servers configured with default config.
+-- Servers using default setup (loop below)
 local default_servers = {
     -- "ols",
     -- "pyright",
@@ -73,6 +81,7 @@ end
 --     capabilities = capabilities,
 -- })
 
+-- lua_ls customized (diagnostics disabled; can re-enable if desired)
 lspconfig.lua_ls.setup({
     on_attach = on_attach,
     on_init = on_init,

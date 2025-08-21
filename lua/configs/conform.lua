@@ -1,3 +1,4 @@
+-- conform.nvim formatting configuration
 local options = {
     formatters_by_ft = {
         lua = { "stylua" },

@@ -1,3 +1,4 @@
+-- Treesitter configuration: parsers to install + basic modules
 local options = {
     ensure_installed = {
         "bash",

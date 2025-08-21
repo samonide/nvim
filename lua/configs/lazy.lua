@@ -1,3 +1,4 @@
+-- lazy.nvim global configuration (performance tweaks & UI)
 return {
   defaults = { lazy = true },
   install = { colorscheme = { "nvchad" } },

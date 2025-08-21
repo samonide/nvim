@@ -1,4 +1,4 @@
+-- Mason-conform: auto-install formatters defined in conform config (except ignored)
 require("mason-conform").setup({
-    -- List of formatters to ignore during install
-    ignore_install = {},
+    ignore_install = {}, -- Add formatter names you want to skip
 })

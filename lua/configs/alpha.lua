@@ -1,3 +1,4 @@
+-- Startup dashboard (alpha.nvim) configuration
 local present, alpha = pcall(require, "alpha")
 if not present then
   return
