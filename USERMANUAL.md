@@ -22,7 +22,7 @@ Clone into your Neovim config path (backup any existing config first):
 
 ```bash
 rm -rf ~/.config/nvim ~/.local/share/nvim ~/.cache/nvim
-git clone <your-repo-url> ~/.config/nvim
+git clone https://github.com/samonide/nvim.git ~/.config/nvim
 nvim
 ```
 
