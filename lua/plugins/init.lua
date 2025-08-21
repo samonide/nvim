@@ -96,13 +96,73 @@ return {
                     },
                 },
                 presets = {
-                    bottom_search = true,
-                    command_palette = true,
+                    bottom_search = true,        -- keep search at bottom
+                    command_palette = false,     -- disable so we can center cmdline popup
                     long_message_to_split = true,
                     inc_rename = false,
                     lsp_doc_border = true,
                 },
+                views = {
+                    cmdline_popup = {
+                        position = { row = "50%", col = "50%" }, -- center of screen
+                        size = { width = 60, height = "auto" },
+                        border = { style = "rounded", padding = { 0, 1 } },
+                        win_options = {
+                            winhighlight = "Normal:NormalFloat,FloatBorder:NoiceCmdlinePopupBorder", -- ensure border group used
+                        },
+                    },
+                },
+                cmdline = {
+                    format = {
+                        cmdline = { pattern = "^:", icon = "", lang = "vim" },
+                    },
+                },
             })
+
+            -- Dynamic border coloring for valid/invalid Ex commands
+            local hl = vim.api.nvim_get_hl(0, { name = 'NoiceCmdlinePopupBorder', link = false }) or {}
+            local default_border = { fg = hl.fg, bg = hl.bg }
+
+            local function set_border(color_fg)
+                vim.api.nvim_set_hl(0, 'NoiceCmdlinePopupBorder', { fg = color_fg, bg = default_border.bg })
+            end
+
+            local function reset_border()
+                vim.api.nvim_set_hl(0, 'NoiceCmdlinePopupBorder', default_border)
+            end
+
+            vim.api.nvim_create_autocmd({ 'CmdlineLeave', 'CmdlineEnter' }, {
+                callback = reset_border,
+            })
+
+            vim.api.nvim_create_autocmd('CmdlineChanged', {
+                callback = function()
+                    local line = vim.fn.getcmdline()
+                    if not line:match('^:') then
+                        reset_border()
+                        return
+                    end
+                    local cmd = line:sub(2):match('^(%S+)') -- first word after ':'
+                    if not cmd or cmd == '' then
+                        reset_border()
+                        return
+                    end
+                    local exists = vim.fn.exists(':' .. cmd) == 2
+                    if exists then
+                        set_border('#37d99e') -- green
+                    else
+                        set_border('#e86671') -- red
+                    end
+                end,
+            })
+
+            -- Reapply default on colorscheme change to retain dynamic logic
+            vim.api.nvim_create_autocmd('ColorScheme', { callback = function()
+                local hl2 = vim.api.nvim_get_hl(0, { name = 'NoiceCmdlinePopupBorder', link = false }) or {}
+                default_border.fg = hl2.fg or default_border.fg
+                default_border.bg = hl2.bg or default_border.bg
+                reset_border()
+            end })
         end,
     },
 
