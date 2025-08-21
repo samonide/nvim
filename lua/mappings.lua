@@ -21,7 +21,25 @@ map("i", "jk", "<ESC>", { desc = "Exit insert (jk)" })
 -- Competitive Programming: C / C++ build & run helpers
 -- =====================================================
 -- Functions compile current file (if cpp or c) into a temp/ project local bin
--- and open / reuse a terminal at bottom to run it. Adjust flags as needed.
+-- and open / reuse a terminal (simple split + termopen) to run it interactively.
+-- We avoid nvchad.term here because its API returned nil in some setups; a
+-- lightweight custom terminal ensures the binary starts AND waits for input.
+
+-- Open a bottom split terminal running a command, reusing buffer variable
+local function open_cp_term(cmd)
+	-- Always create a fresh terminal (simpler & avoids job conflicts)
+	vim.cmd("botright 15split")
+	vim.cmd("enew")
+	local buf = vim.api.nvim_get_current_buf()
+	-- termopen executes immediately; pass list for safety (handles spaces)
+	if type(cmd) == 'string' then
+		vim.fn.termopen(cmd)
+	else
+		vim.fn.termopen(cmd)
+	end
+	vim.cmd("startinsert")
+	vim.g.cp_term_buf = buf
+end
 
 local function build_and_run_cpp()
 	local ft = vim.bo.filetype
@@ -48,9 +66,7 @@ local function build_and_run_cpp()
 		on_exit = function(_, code)
 			if code == 0 then
 				vim.notify('Build success: ' .. output, vim.log.levels.INFO)
-				-- Open / reuse terminal and run
-				local term = require('nvchad.term').new({ pos = 'sp', size = 15, id = 'cp_run_term' })
-				term:send(output)
+				open_cp_term(output)
 			else
 				vim.notify('Build failed (code ' .. code .. ')', vim.log.levels.ERROR)
 			end
@@ -71,8 +87,7 @@ local function run_only()
 		vim.notify('Binary not found. Build first (<leader>cr)', vim.log.levels.WARN)
 		return
 	end
-	local term = require('nvchad.term').new({ pos = 'sp', size = 15, id = 'cp_run_term' })
-	term:send(output)
+	open_cp_term(output)
 end
 
 map('n', '<leader>cr', build_and_run_cpp, { desc = 'C/C++ Compile & Run (profile flags)' })
@@ -96,8 +111,7 @@ map('n', '<leader>ct', function()
 		vim.notify('input.txt missing in cwd', vim.log.levels.WARN)
 		return
 	end
-	local term = require('nvchad.term').new({ pos = 'sp', size = 15, id = 'cp_run_term' })
-	term:send(string.format('%s < input.txt', bin))
+	open_cp_term(string.format('%s < input.txt', bin))
 end, { desc = 'Run binary with input.txt redirected' })
 
 -- =============================================
@@ -237,8 +251,7 @@ build_and_run_cpp = function()
 		on_exit = function(_, code)
 			if code == 0 then
 				vim.notify('Build success: ' .. output, vim.log.levels.INFO)
-				local term = require('nvchad.term').new({ pos = 'sp', size = 15, id = 'cp_run_term' })
-				term:send(output)
+				open_cp_term(output)
 			else
 				vim.notify('Build failed (code ' .. code .. ')', vim.log.levels.ERROR)
 			end
