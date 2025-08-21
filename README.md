@@ -29,7 +29,7 @@ Optional (installed/managed automatically when configured): LSP servers, linters
 * Tasks (overseer.nvim) & Formatting/Linting (conform + nvim-lint + mason bridges)
 * Snippets (LuaSnip + friendly-snippets + custom `cp` C++ template)
 
-Full usage & keymaps: see the [User Manual](./USERMANUAL.md).
+Guides: [User Manual](./guide/USERMANUAL.md) · [Snippets](./guide/SNIPPETS.md) · [Motions](./guide/MOTIONS.md)
 
 ## 📦 Installation Options
 
@@ -73,7 +73,9 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_STATE_HOME="$TMPDIR/s
 | `lua/mappings.lua` | All custom keymaps (CP + tooling) |
 | `lua/plugins/` | Additional plugin specs |
 | `lua/configs/` | Per-plugin configuration modules |
-| `USERMANUAL.md` | Comprehensive user & keymap manual |
+| `guide/USERMANUAL.md` | Comprehensive user & keymap manual |
+| `guide/SNIPPETS.md` | Competitive programming snippets reference |
+| `guide/MOTIONS.md` | Beginner Vim motions & operators cheat sheet |
 
 ## 🧠 Competitive Programming Toolkit
 Feature | Keymaps
@@ -114,4 +116,4 @@ Icons wrong | Install & select a Nerd Font in terminal
 See [`LICENSE`](./LICENSE).
 
 ---
-Happy hacking! For deep usage details, read the full manual in [USERMANUAL.md](./USERMANUAL.md).
+Happy hacking! For deep usage details, read the full manual in [guide/USERMANUAL.md](./guide/USERMANUAL.md).

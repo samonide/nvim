@@ -1,4 +1,4 @@
-  # Neovim Config Usage Guide
+   # Neovim Config Usage Guide
 
 This setup is based on **NvChad v2.5** with a minimal layer of customizations. This document lists the key plugins, keymaps (both custom & important NvChad defaults), and how to extend the configuration.
 
@@ -266,11 +266,11 @@ Use `desc` so WhichKey & the cheatsheet show them.
 Add a spec to `lua/plugins/init.lua`:
 ```lua
 {
-  "folke/zen-mode.nvim",
-  cmd = "ZenMode",
-  config = function()
-    require("zen-mode").setup {}
-  end,
+	"folke/zen-mode.nvim",
+	cmd = "ZenMode",
+	config = function()
+		require("zen-mode").setup {}
+	end,
 },
 ```
 Restart or run `:Lazy sync`.
@@ -314,4 +314,15 @@ Useful commands:
 5. Start coding 🎯
 
 ---
+## 19. Snippets Reference
+See `SNIPPETS.md` for the full list of competitive programming C++ snippets (templates, DS, graphs, math, strings, utilities). Reload them after editing with:
+```
+:lua package.loaded["configs.cp_snippets"] = nil; require("configs.cp_snippets")
+```
+
+---
 Happy hacking! Customize boldly—this setup is purposely minimal so you can grow it organically.
+
+---
+Navigation: [Snippets](./SNIPPETS.md) · [Motions](./MOTIONS.md)
+

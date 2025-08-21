@@ -248,6 +248,8 @@ return {
                     }),
                 }),
             })
+            -- Load extended CP snippets (dsu, bit, modops, etc.)
+            pcall(require, "configs.cp_snippets")
         end,
     },
 }
