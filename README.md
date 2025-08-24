@@ -121,6 +121,41 @@ Formatter not running | `<leader>fm` / check filetype mapping
 LSP inactive | `:LspInfo` / `:Mason`
 Test harness mismatch | Ensure `tests/*.out` files exist
 Icons wrong | Install & select a Nerd Font in terminal
+
+## 🔌 Plugins Used
+
+### Core (NvChad Base)
+- [lazy.nvim](https://github.com/folke/lazy.nvim) - Plugin manager
+- [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua) - File explorer
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) - Fuzzy finder
+- [which-key.nvim](https://github.com/folke/which-key.nvim) - Keybinding helper
+- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) - Completion engine
+
+### Syntax & Language Support
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) - Syntax highlighting & parsing
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) - LSP client configurations
+- [mason.nvim](https://github.com/williamboman/mason.nvim) - LSP/tool installer
+- [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) - Mason-LSP bridge
+
+### Formatting & Linting
+- [conform.nvim](https://github.com/stevearc/conform.nvim) - Code formatting
+- [nvim-lint](https://github.com/mfussenegger/nvim-lint) - Linting engine
+- [mason-conform.nvim](https://github.com/zapling/mason-conform.nvim) - Mason-conform bridge
+- [mason-nvim-lint](https://github.com/rshkarin/mason-nvim-lint) - Mason-lint bridge
+
+### UI & Experience
+- [alpha-nvim](https://github.com/goolord/alpha-nvim) - Dashboard/startup screen
+- [noice.nvim](https://github.com/folke/noice.nvim) - Enhanced UI for messages/cmdline
+- [nvim-notify](https://github.com/rcarriga/nvim-notify) - Notification system
+- [trouble.nvim](https://github.com/folke/trouble.nvim) - Diagnostics UI
+- [harpoon](https://github.com/ThePrimeagen/harpoon) - Quick file navigation
+
+### Development Tools
+- [overseer.nvim](https://github.com/stevearc/overseer.nvim) - Task runner
+- [telescope-fzf-native.nvim](https://github.com/nvim-telescope/telescope-fzf-native.nvim) - Native fzf sorter
+- [LuaSnip](https://github.com/L3MON4D3/LuaSnip) - Snippet engine
+- [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) - Community snippets
+
 ## 📜 License
 See [`LICENSE`](./LICENSE).
 
