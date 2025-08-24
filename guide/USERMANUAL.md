@@ -65,9 +65,13 @@ Added functions to compile & run the current C/C++ file using optimized flags an
 | `<leader>ct` | Run last binary with `input.txt` as stdin (`binary < input.txt`) |
 | `<leader>ctt` | Run all tests in `tests/*.in` comparing outputs with matching `.out` |
 | `<leader>co` | Cycle optimization profile (O2 ↔ Ofast) |
+| `<C-A-n>` | **NEW**: Run C++ with input.txt → output.txt (auto-creates files, opens output split) |
 | `<leader>ha` | Harpoon add current file |
 | `<leader>hm` | Harpoon quick menu |
 | `<leader>h1..h4` | Harpoon jump slots 1–4 |
+| `<leader>h` / `<leader>v` | **CHANGED**: Focus left/right split (was terminal) |
+| `<A-h>` / `<A-v>` | **NEW**: Toggle horizontal/vertical terminal |
+| `<leader>tt` | Toggle terminal split (legacy) |
 | `<leader>td` | Trouble diagnostics toggle |
 | `<leader>tq` | Trouble quickfix toggle |
 | `<leader>tr` | Trouble LSP references toggle |
@@ -138,11 +142,12 @@ These come from upstream NvChad (`nvchad/mappings.lua`). Only the most commonly 
 ### Terminals
 | Key | Action |
 |-----|--------|
-| `<leader>h` | New horizontal terminal |
-| `<leader>v` | New vertical terminal |
-| `<A-h>` / `<A-v>` | Toggle horizontal / vertical persistent term |
+| `<A-h>` / `<A-v>` | Toggle horizontal / vertical persistent terminal |
 | `<A-i>` | Toggle floating terminal |
+| `<leader>tt` | Toggle terminal split (custom) |
 | Terminal mode: `<C-x>` | Exit to normal mode |
+
+**Note**: Default `<leader>h` / `<leader>v` terminal mappings disabled in favor of split navigation.
 
 ### LSP (Core subset)
 | Key | Action |
@@ -181,7 +186,7 @@ Defined in `lua/plugins/init.lua`:
 * `telescope-fzf-native` – Native fzf sorter for faster Telescope search
 * `overseer.nvim` – Task orchestration (compile/run/test integration base)
 * `trouble.nvim` – Diagnostics & references list UI
-* `LuaSnip` + `friendly-snippets` – Snippet engine + community snippets (custom C++ snippet `cp`)
+* `LuaSnip` + `friendly-snippets` – Snippet engine + community snippets (custom C++ snippets: `cp` for full competitive template, `cb` for simple boilerplate)
 
 NvChad core already brings: telescope, nvim-tree, bufferline (tabufline), statusline, themes, terminal manager, which-key integration, commenting, etc.
 
@@ -315,7 +320,11 @@ Useful commands:
 
 ---
 ## 19. Snippets Reference
-See `SNIPPETS.md` for the full list of competitive programming C++ snippets (templates, DS, graphs, math, strings, utilities). Reload them after editing with:
+See `SNIPPETS.md` for the full list of competitive programming C++ snippets (templates, DS, graphs, math, strings, utilities). Key snippets:
+- **`cp`** - Full competitive programming template (typedefs, macros, solve function structure)
+- **`cb`** - Simple C++ boilerplate for basic coding
+
+Reload them after editing with:
 ```
 :lua package.loaded["configs.cp_snippets"] = nil; require("configs.cp_snippets")
 ```

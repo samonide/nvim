@@ -69,7 +69,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_STATE_HOME="$TMPDIR/s
 2. Let `lazy.nvim` install plugins.
 3. Open the dashboard (auto) or run `:Alpha`.
 4. Press `<leader>ch` (NvChad cheatsheet) or `<leader>wK` (WhichKey) to explore.
-5. For C++: create `main.cpp` (template inserts automatically), then `<leader>cr` to compile & run.
+5. For C++: create `main.cpp`, type `cp<Tab>` for full template or `cb<Tab>` for simple boilerplate, then `<leader>cr` to compile & run.
 
 ## 🗂 Structure
 | Path | Purpose |
@@ -90,9 +90,11 @@ Feature | Keymaps
 Compile & Run | `<leader>cr` / `<leader>cb`
 Run last binary | `<leader>ce`
 Run tests (tests/*.in) | `<leader>ctt`
+Run with I/O files | `<C-A-n>` (**NEW**: input.txt → output.txt)
 Optimization profile cycle | `<leader>co`
 Redirect input.txt | `<leader>ct`
 Open input.txt | `<leader>ci`
+Templates | `cp` (full competitive), `cb` (simple boilerplate)
 
 ## 🔧 Customization Tips
 * Add more LSP servers in `configs/lspconfig.lua` & rerun Neovim.

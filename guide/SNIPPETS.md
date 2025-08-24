@@ -7,7 +7,8 @@ All LuaSnip triggers defined in `lua/configs/cp_snippets.lua` plus the basic `cp
 ## Core Templates
 | Trigger | Purpose |
 |---------|---------|
-| `cp` | Full minimal contest template (fast I/O + loop) |
+| `cp` | Full competitive programming template (advanced: typedefs, macros, solve function, multi-test support) |
+| `cb` | Simple C++ boilerplate (basic includes + main function for quick coding) |
 | `main` | Flexible main (choice of include/pragma + optional multi-test) |
 | `fastio` | Insert fast I/O lines |
 | `hdr` | File header (author/date/contest) |
@@ -72,12 +73,14 @@ All LuaSnip triggers defined in `lua/configs/cp_snippets.lua` plus the basic `cp
 | `scan` | Fast integer scanner (GNU / POSIX getchar_unlocked) |
 
 ## Usage Notes
-1. Some snippets assume variables: `n`, `g` (adjacency), `a` (array), `MOD` defined externally.
-2. `comb` requires an `inv()` modular inverse (already provided by `modops`). Expand `modops` first or adapt.
-3. `lca` expects `g` as `vector<vector<int>>` and builds from root `0`; adjust as needed.
-4. `dijk` assumes `g[v]` holds `pair<int,long long>` (to, weight); adapt for other weight types.
-5. `LOCAL` debug macro: compile with `-DLOCAL` to enable `dbg(x)` prints.
-6. For very large constraints, consider adding custom allocators or iterative DFS to avoid stack limits.
+1. **`cp`** - Full competitive template with solve() structure, typedefs (ll, pii, vi), loop macros (FOR, FORE), constants (MOD, INF)
+2. **`cb`** - Simple boilerplate for basic C++ coding practice
+3. Some snippets assume variables: `n`, `g` (adjacency), `a` (array), `MOD` defined externally.
+4. `comb` requires an `inv()` modular inverse (already provided by `modops`). Expand `modops` first or adapt.
+5. `lca` expects `g` as `vector<vector<int>>` and builds from root `0`; adjust as needed.
+6. `dijk` assumes `g[v]` holds `pair<int,long long>` (to, weight); adapt for other weight types.
+7. `LOCAL` debug macro: compile with `-DLOCAL` to enable `dbg(x)` prints.
+8. For very large constraints, consider adding custom allocators or iterative DFS to avoid stack limits.
 
 ## Customizing
 Add or edit snippets in `lua/configs/cp_snippets.lua` then reload Neovim or run:

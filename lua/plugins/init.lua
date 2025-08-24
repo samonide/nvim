@@ -241,30 +241,95 @@ return {
             local s = ls.snippet
             local t = ls.text_node
             local i = ls.insert_node
-            -- Custom C++ competitive template snippet (trigger: cp)
+            
+            -- Full competitive programming template (trigger: cp)
             ls.add_snippets("cpp", {
                 s("cp", {
                     t({
                         "#include <bits/stdc++.h>",
                         "using namespace std;",
                         "",
-                        "#define fast_io ios::sync_with_stdio(false); cin.tie(nullptr);",
+                        "// Competitive Programming Template",
+                        "// Author: " .. vim.fn.expand("$USER"),
+                        "// Date: " .. os.date("%Y-%m-%d"),
+                        "",
+                        "typedef long long ll;",
+                        "typedef unsigned long long ull;",
+                        "typedef pair<int, int> pii;",
+                        "typedef pair<ll, ll> pll;",
+                        "typedef vector<int> vi;",
+                        "typedef vector<ll> vll;",
+                        "typedef vector<pii> vpii;",
+                        "",
                         "#define all(x) (x).begin(), (x).end()",
+                        "#define rall(x) (x).rbegin(), (x).rend()",
                         "#define sz(x) (int)(x).size()",
-                        "using ll = long long;",
+                        "#define pb push_back",
+                        "#define mp make_pair",
+                        "#define fi first",
+                        "#define se second",
+                        "#define endl '\\n'",
+                        "",
+                        "#define FOR(i, a, b) for(int i = (a); i < (b); i++)",
+                        "#define FORE(i, a, b) for(int i = (a); i <= (b); i++)",
+                        "#define RFOR(i, a, b) for(int i = (a); i > (b); i--)",
+                        "#define RFORE(i, a, b) for(int i = (a); i >= (b); i--)",
+                        "",
+                        "const int MOD = 1e9 + 7;",
+                        "const int INF = 1e9;",
+                        "const ll LINF = 1e18;",
+                        "",
+                        "void fast_io() {",
+                        "    ios::sync_with_stdio(false);",
+                        "    cin.tie(nullptr);",
+                        "    cout.tie(nullptr);",
+                        "}",
+                        "",
+                        "void solve() {",
+                        "    ",
+                    }),
+                    i(1, "// Your solution here"),
+                    t({
+                        "",
+                        "}",
                         "",
                         "int main() {",
-                        "    fast_io;",
-                        "    int T = 1;",
-                        "    // cin >> T;",
-                        "    while (T--) {",
-                        "        ",
+                        "    fast_io();",
+                        "    ",
+                        "    int t = 1;",
+                        "    // cin >> t; // Uncomment for multiple test cases",
+                        "    ",
+                        "    while(t--) {",
+                        "        solve();",
                         "    }",
+                        "    ",
+                        "    return 0;",
+                        "}",
+                    }),
+                }),
+                
+                -- Simple C++ boilerplate (trigger: cb)
+                s("cb", {
+                    t({
+                        "#include <iostream>",
+                        "#include <vector>",
+                        "#include <string>",
+                        "#include <algorithm>",
+                        "",
+                        "using namespace std;",
+                        "",
+                        "int main() {",
+                        "    ",
+                    }),
+                    i(1, "// Your code here"),
+                    t({
+                        "",
                         "    return 0;",
                         "}",
                     }),
                 }),
             })
+            
             -- Load extended CP snippets (dsu, bit, modops, etc.)
             pcall(require, "configs.cp_snippets")
         end,

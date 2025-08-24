@@ -196,6 +196,59 @@ end
 map('n', '<leader>ctt', run_all_tests, { desc = 'Run all tests in tests/*.in' })
 
 -- =============================================
+-- Run with input.txt -> output.txt (Ctrl+Alt+n)
+-- =============================================
+local function run_with_io_files()
+	local ft = vim.bo.filetype
+	if ft ~= 'cpp' and ft ~= 'c' then
+		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
+		return
+	end
+	local base = vim.fn.expand('%:t:r')
+	local bin = vim.fn.getcwd() .. '/.build/' .. base
+	local input_file = 'input.txt'
+	local output_file = 'output.txt'
+	
+	-- Create input.txt if it doesn't exist
+	if vim.fn.filereadable(input_file) == 0 then
+		vim.fn.writefile({''}, input_file)
+		vim.notify('Created empty input.txt', vim.log.levels.INFO)
+	end
+	
+	-- Check if binary exists, build if not
+	if vim.fn.filereadable(bin) == 0 then
+		vim.notify('Binary not found. Building first...', vim.log.levels.INFO)
+		-- Build first, then run with IO
+		build_and_run_cpp()
+		vim.defer_fn(function()
+			if vim.fn.filereadable(bin) == 1 then
+				local cmd = string.format('%s < %s > %s', bin, input_file, output_file)
+				vim.fn.system(cmd)
+				vim.notify('Output written to output.txt', vim.log.levels.INFO)
+				-- Open output.txt in split
+				vim.cmd('vsplit output.txt')
+			end
+		end, 1000) -- Wait 1s for build to complete
+		return
+	end
+	
+	-- Run with input/output redirection
+	local cmd = string.format('%s < %s > %s', bin, input_file, output_file)
+	local result = vim.fn.system(cmd)
+	local exit_code = vim.v.shell_error
+	
+	if exit_code == 0 then
+		vim.notify('Success! Output written to output.txt', vim.log.levels.INFO)
+		-- Open output.txt in split
+		vim.cmd('vsplit output.txt')
+	else
+		vim.notify('Runtime error (code ' .. exit_code .. ')', vim.log.levels.ERROR)
+	end
+end
+
+map('n', '<C-A-n>', run_with_io_files, { desc = 'Run C++ with input.txt -> output.txt' })
+
+-- =============================================
 -- Optimization profile toggle for C++
 -- =============================================
 local opt_profiles = {
