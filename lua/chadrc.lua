@@ -14,7 +14,7 @@ M.ui = {
 }
 
 M.base46 = {
-    theme = "chadracula",
+    theme = "eldritch",
     transparency = true,
 
     hl_override = {

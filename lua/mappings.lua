@@ -94,10 +94,16 @@ map('n', '<leader>cr', build_and_run_cpp, { desc = 'C/C++ Compile & Run (profile
 map('n', '<leader>cb', build_and_run_cpp, { desc = 'C/C++ Build alias' })
 map('n', '<leader>ce', run_only, { desc = 'C/C++ Execute last build' })
 
--- Quick open input.txt in split for manual IO during contests
+-- Quick create input.txt for manual IO during contests
 map('n', '<leader>ci', function()
-	vim.cmd('vsplit input.txt')
-end, { desc = 'Open input.txt in vsplit' })
+	local input_file = 'input.txt'
+	if vim.fn.filereadable(input_file) == 0 then
+		vim.fn.writefile({''}, input_file)
+		vim.notify('Created input.txt', vim.log.levels.INFO)
+	else
+		vim.notify('input.txt already exists', vim.log.levels.INFO)
+	end
+end, { desc = 'Create input.txt file' })
 
 -- Feed input.txt to last built binary (if exists)
 map('n', '<leader>ct', function()
@@ -225,8 +231,6 @@ local function run_with_io_files()
 				local cmd = string.format('%s < %s > %s', bin, input_file, output_file)
 				vim.fn.system(cmd)
 				vim.notify('Output written to output.txt', vim.log.levels.INFO)
-				-- Open output.txt in split
-				vim.cmd('vsplit output.txt')
 			end
 		end, 1000) -- Wait 1s for build to complete
 		return
@@ -239,8 +243,6 @@ local function run_with_io_files()
 	
 	if exit_code == 0 then
 		vim.notify('Success! Output written to output.txt', vim.log.levels.INFO)
-		-- Open output.txt in split
-		vim.cmd('vsplit output.txt')
 	else
 		vim.notify('Runtime error (code ' .. exit_code .. ')', vim.log.levels.ERROR)
 	end
