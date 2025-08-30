@@ -18,6 +18,39 @@ local function date()
 end
 
 ls.add_snippets("cpp", {
+  -- Simple classic for-loop: for (int i = 0; i < n; ++i) { ... }
+  s("for", fmt([[for (int {} = {}; {} < {}; ++{}) {{
+    {}
+}}]], {
+    i(1, "i"),
+    c(2, { t"0", i(nil, "start") }),
+    rep(1),
+    i(3, "n"),
+    rep(1),
+    i(0),
+  })),
+
+  -- Alias trigger for convenience
+  s("fori", fmt([[for (int {} = {}; {} < {}; ++{}) {{
+    {}
+}}]], {
+    i(1, "i"),
+    c(2, { t"0", i(nil, "start") }),
+    rep(1),
+    i(3, "n"),
+    rep(1),
+    i(0),
+  })),
+
+  -- Range-based for: for (auto &x : a) { ... }
+  s("forr", fmt([[for (auto{} {} : {}) {{
+    {}
+}}]], {
+    c(1, { t"&", t"" }),
+    i(2, "x"),
+    i(3, "a"),
+    i(0),
+  })),
   s("main", fmt([[{}
 using namespace std;
 

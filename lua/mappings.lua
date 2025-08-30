@@ -41,37 +41,58 @@ local function open_cp_term(cmd)
 	vim.g.cp_term_buf = buf
 end
 
-local function build_and_run_cpp()
+-- Build profiles and generic compile helper (can run or just build)
+local opt_profiles = {
+	{ name = 'O2',    cpp = '-std=c++17 -O2 -Wall -Wextra -Wshadow -pedantic', c = '-O2 -Wall -Wextra -pedantic' },
+	{ name = 'Ofast', cpp = '-std=c++17 -Ofast -march=native -DNDEBUG -Wall -Wextra -Wshadow', c = '-Ofast -march=native -DNDEBUG -Wall -Wextra' },
+}
+local current_profile = 1
+
+local function compile_cpp(opts)
+	opts = opts or {}
+	local run_after = opts.run ~= false
+	local on_success = opts.on_success
+
 	local ft = vim.bo.filetype
-	if ft ~= "cpp" and ft ~= "c" then
-		vim.notify("Not a C/C++ file", vim.log.levels.WARN)
+	if ft ~= 'cpp' and ft ~= 'c' then
+		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
 		return
 	end
+
 	local filename = vim.fn.expand('%:t')
 	local filepath = vim.fn.expand('%:p')
 	local base = vim.fn.expand('%:t:r')
-	local outdir = vim.fn.getcwd() .. "/.build" -- local build cache folder
+	local outdir = vim.fn.getcwd() .. '/.build'
 	vim.fn.mkdir(outdir, 'p')
-	local output = outdir .. "/" .. base
-	local cmd
-	if ft == 'cpp' then
-		cmd = string.format('g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -pedantic "%s" -o "%s"', filepath, output)
-	else
-		cmd = string.format('gcc -O2 -Wall -Wextra -pedantic "%s" -o "%s"', filepath, output)
-	end
-	vim.notify('Compiling ' .. filename .. ' ...', vim.log.levels.INFO)
+	local bin = outdir .. '/' .. base
+
+	local profile = opt_profiles[current_profile]
+	local flags = ft == 'cpp' and profile.cpp or profile.c
+	local compiler = ft == 'cpp' and 'g++' or 'gcc'
+	local cmd = string.format('%s %s "%s" -o "%s"', compiler, flags, filepath, bin)
+
+	vim.notify(string.format('Compiling (%s): %s', profile.name, filename), vim.log.levels.INFO)
 	vim.fn.jobstart(cmd, {
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_exit = function(_, code)
 			if code == 0 then
-				vim.notify('Build success: ' .. output, vim.log.levels.INFO)
-				open_cp_term(output)
+				if run_after then
+					vim.notify('Build success → running', vim.log.levels.INFO)
+					open_cp_term(bin)
+				else
+					vim.notify('Build success', vim.log.levels.INFO)
+					if on_success then on_success(bin) end
+				end
 			else
 				vim.notify('Build failed (code ' .. code .. ')', vim.log.levels.ERROR)
 			end
 		end,
 	})
+end
+
+local function build_and_run_cpp()
+	compile_cpp({ run = true })
 end
 
 -- Execute last built artifact without rebuilding
@@ -158,11 +179,50 @@ local function run_all_tests()
 		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
 		return
 	end
+
+	local function run_tests(bin)
+		local test_dir = 'tests'
+		if vim.fn.isdirectory(test_dir) == 0 then
+			vim.notify('No tests/ directory', vim.log.levels.WARN)
+			return
+		end
+		local inputs = vim.fn.globpath(test_dir, '*.in', false, true)
+		if #inputs == 0 then
+			vim.notify('No *.in test files', vim.log.levels.WARN)
+			return
+		end
+		local passed, total = 0, #inputs
+		local results = {}
+		for _, infile in ipairs(inputs) do
+			local stem = infile:match('(.+)%%.in$') or infile
+			local expected_file = stem .. '.out'
+			local actual = vim.fn.system(string.format('%s < %s', bin, infile))
+			local expected = ''
+			local has_expected = vim.fn.filereadable(expected_file) == 1
+			if has_expected then
+				expected = table.concat(vim.fn.readfile(expected_file), '\n') .. '\n'
+			end
+			if has_expected and actual == expected then
+				passed = passed + 1
+				table.insert(results, '✓ ' .. infile .. ' PASS')
+			elseif has_expected then
+				table.insert(results, '✗ ' .. infile .. ' FAIL')
+				table.insert(results, '  expected: ' .. expected:gsub('\n$', ''))
+				table.insert(results, '  actual  : ' .. actual:gsub('\n$', ''))
+			else
+				table.insert(results, '… ' .. infile .. ' (no expected .out file)')
+			end
+		end
+		table.insert(results, string.format('Result: %d/%d passed', passed, total))
+		vim.notify(table.concat(results, '\n'), passed == total and vim.log.levels.INFO or vim.log.levels.WARN, { title = 'Test Summary' })
+	end
+
 	local base = vim.fn.expand('%:t:r')
 	local bin = vim.fn.getcwd() .. '/.build/' .. base
 	if vim.fn.filereadable(bin) == 0 then
 		vim.notify('Binary not built. Building now...', vim.log.levels.INFO)
-		build_and_run_cpp() -- will also run once, acceptable
+		compile_cpp({ run = false, on_success = run_tests })
+		return
 	end
 	local test_dir = 'tests'
 	if vim.fn.isdirectory(test_dir) == 0 then
@@ -221,18 +281,17 @@ local function run_with_io_files()
 		vim.notify('Created empty input.txt', vim.log.levels.INFO)
 	end
 	
-	-- Check if binary exists, build if not
+	-- Check if binary exists, build if not (compile only, no run)
 	if vim.fn.filereadable(bin) == 0 then
 		vim.notify('Binary not found. Building first...', vim.log.levels.INFO)
-		-- Build first, then run with IO
-		build_and_run_cpp()
-		vim.defer_fn(function()
-			if vim.fn.filereadable(bin) == 1 then
-				local cmd = string.format('%s < %s > %s', bin, input_file, output_file)
-				vim.fn.system(cmd)
+		compile_cpp({
+			run = false,
+			on_success = function(new_bin)
+				local cmd2 = string.format('%s < %s > %s', new_bin, input_file, output_file)
+				vim.fn.system(cmd2)
 				vim.notify('Output written to output.txt', vim.log.levels.INFO)
-			end
-		end, 1000) -- Wait 1s for build to complete
+			end,
+		})
 		return
 	end
 	
@@ -253,11 +312,6 @@ map('n', '<C-A-n>', run_with_io_files, { desc = 'Run C++ with input.txt -> outpu
 -- =============================================
 -- Optimization profile toggle for C++
 -- =============================================
-local opt_profiles = {
-	{ name = 'O2', cpp = '-O2 -Wall -Wextra -Wshadow -pedantic', c = '-O2 -Wall -Wextra -pedantic' },
-	{ name = 'Ofast', cpp = '-Ofast -march=native -DNDEBUG -Wall -Wextra -Wshadow', c = '-Ofast -march=native -DNDEBUG -Wall -Wextra' },
-}
-local current_profile = 1
 local function cycle_profile()
 	current_profile = current_profile % #opt_profiles + 1
 	vim.g.cpp_opt_profile = opt_profiles[current_profile].name
@@ -282,37 +336,7 @@ map('n', '<leader>ts', function()
 end, { desc = 'Toggle shell zsh<->fish (nvim term)' })
 
 -- Override build function to inject active optimization profile flags
-local old_build = build_and_run_cpp
-build_and_run_cpp = function()
-	local ft = vim.bo.filetype
-	if ft ~= 'cpp' and ft ~= 'c' then
-		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
-		return
-	end
-	local filename = vim.fn.expand('%:t')
-	local filepath = vim.fn.expand('%:p')
-	local base = vim.fn.expand('%:t:r')
-	local outdir = vim.fn.getcwd() .. '/.build'
-	vim.fn.mkdir(outdir, 'p')
-	local output = outdir .. '/' .. base
-	local profile = opt_profiles[current_profile]
-	local flags = ft == 'cpp' and profile.cpp or profile.c
-	local compiler = ft == 'cpp' and 'g++ -std=c++17' or 'gcc'
-	local cmd = string.format('%s %s "%s" -o "%s"', compiler, flags, filepath, output)
-	vim.notify('Compiling (' .. profile.name .. '): ' .. filename, vim.log.levels.INFO)
-	vim.fn.jobstart(cmd, {
-		stdout_buffered = true,
-		stderr_buffered = true,
-		on_exit = function(_, code)
-			if code == 0 then
-				vim.notify('Build success: ' .. output, vim.log.levels.INFO)
-				open_cp_term(output)
-			else
-				vim.notify('Build failed (code ' .. code .. ')', vim.log.levels.ERROR)
-			end
-		end,
-	})
-end
+-- Old override removed; compile_cpp now handles profiles and running
 
 -- =============================================
 -- LuaSnip navigation (if using luasnip)
