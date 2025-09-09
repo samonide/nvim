@@ -61,16 +61,17 @@ Added functions to compile & run the current C/C++ file using optimized flags an
 | `<leader>cr` | Compile & run current C/C++ file (`g++ -std=c++17 -O2 -Wall -Wextra -Wshadow`) |
 | `<leader>cb` | Alias of compile & run (build) |
 | `<leader>ce` | Execute last built binary (no rebuild) |
-| `<leader>ci` | Open `input.txt` in a vertical split (create if missing) |
-| `<leader>ct` | Run last binary with `input.txt` as stdin (`binary < input.txt`) |
+| `<leader>ci` | Run C++ with input.txt in terminal (creates file if missing) |
+| `<leader>ct` | Build & run C++ in floating terminal |
 | `<leader>ctt` | Run all tests in `tests/*.in` comparing outputs with matching `.out` |
 | `<leader>co` | Cycle optimization profile (O2 ↔ Ofast) |
-| `<C-A-n>` | **NEW**: Run C++ with input.txt → output.txt (auto-creates files, opens output split) |
+| `<C-A-n>` | **NEW**: Run C++ with input.txt → output.txt (auto-creates files) |
 | `<leader>ha` | Harpoon add current file |
 | `<leader>hm` | Harpoon quick menu |
 | `<leader>h1..h4` | Harpoon jump slots 1–4 |
 | `<leader>h` / `<leader>v` | **CHANGED**: Focus left/right split (was terminal) |
 | `<A-h>` / `<A-v>` | **NEW**: Toggle horizontal/vertical terminal |
+| `<leader>ft` | **NEW**: Toggle floating terminal |
 | `<leader>tt` | Toggle terminal split (legacy) |
 | `<leader>td` | Trouble diagnostics toggle |
 | `<leader>tq` | Trouble quickfix toggle |
@@ -144,10 +145,15 @@ These come from upstream NvChad (`nvchad/mappings.lua`). Only the most commonly 
 |-----|--------|
 | `<A-h>` / `<A-v>` | Toggle horizontal / vertical persistent terminal |
 | `<A-i>` | Toggle floating terminal |
+| `<leader>ft` | Toggle floating terminal (alternative) |
 | `<leader>tt` | Toggle terminal split (custom) |
 | Terminal mode: `<C-x>` | Exit to normal mode |
 
 **Note**: Default `<leader>h` / `<leader>v` terminal mappings disabled in favor of split navigation.
+
+**Closing terminals without exit:**
+- Press `<C-\><C-n>` to enter Normal mode, then `:q` to close the terminal window
+- Or use the same toggle key again (`<A-i>`, `<leader>ft`, etc.) to hide floating/persistent terminals
 
 ### LSP (Core subset)
 | Key | Action |

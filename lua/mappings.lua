@@ -31,12 +31,9 @@ local function open_cp_term(cmd)
 	vim.cmd("botright 15split")
 	vim.cmd("enew")
 	local buf = vim.api.nvim_get_current_buf()
-	-- termopen executes immediately; pass list for safety (handles spaces)
-	if type(cmd) == 'string' then
-		vim.fn.termopen(cmd)
-	else
-		vim.fn.termopen(cmd)
-	end
+	
+	-- Run command directly without any wrapper
+	vim.fn.termopen(cmd)
 	vim.cmd("startinsert")
 	vim.g.cp_term_buf = buf
 end
@@ -115,31 +112,73 @@ map('n', '<leader>cr', build_and_run_cpp, { desc = 'C/C++ Compile & Run (profile
 map('n', '<leader>cb', build_and_run_cpp, { desc = 'C/C++ Build alias' })
 map('n', '<leader>ce', run_only, { desc = 'C/C++ Execute last build' })
 
--- Quick create input.txt for manual IO during contests
+-- Create input.txt and run program with it (shows output in terminal)
 map('n', '<leader>ci', function()
+	local ft = vim.bo.filetype
+	if ft ~= 'cpp' and ft ~= 'c' then
+		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
+		return
+	end
+	
 	local input_file = 'input.txt'
+	local bin = vim.fn.getcwd() .. '/.build/' .. vim.fn.expand('%:t:r')
+	
+	-- Create input.txt if it doesn't exist
 	if vim.fn.filereadable(input_file) == 0 then
 		vim.fn.writefile({''}, input_file)
-		vim.notify('Created input.txt', vim.log.levels.INFO)
-	else
-		vim.notify('input.txt already exists', vim.log.levels.INFO)
+		vim.notify('Created empty input.txt', vim.log.levels.INFO)
 	end
-end, { desc = 'Create input.txt file' })
-
--- Feed input.txt to last built binary (if exists)
-map('n', '<leader>ct', function()
-	local base = vim.fn.expand('%:t:r')
-	local bin = vim.fn.getcwd() .. '/.build/' .. base
+	
+	-- Check if binary exists, build if needed
 	if vim.fn.filereadable(bin) == 0 then
-		vim.notify('Binary not found. Build first (<leader>cr)', vim.log.levels.WARN)
+		vim.notify('Binary not found. Building first...', vim.log.levels.INFO)
+		compile_cpp({
+			run = false,
+			on_success = function(new_bin)
+				open_cp_term(string.format('%s < %s', new_bin, input_file))
+			end,
+		})
+	else
+		-- Run with input.txt in terminal
+		open_cp_term(string.format('%s < %s', bin, input_file))
+	end
+end, { desc = 'Run C++ with input.txt in terminal' })
+
+-- Build and run C++ in floating terminal
+map('n', '<leader>ct', function()
+	local ft = vim.bo.filetype
+	if ft ~= 'cpp' and ft ~= 'c' then
+		vim.notify('Not a C/C++ file', vim.log.levels.WARN)
 		return
 	end
-	if vim.fn.filereadable('input.txt') == 0 then
-		vim.notify('input.txt missing in cwd', vim.log.levels.WARN)
-		return
-	end
-	open_cp_term(string.format('%s < input.txt', bin))
-end, { desc = 'Run binary with input.txt redirected' })
+
+	local filename = vim.fn.expand('%:t')
+	local filepath = vim.fn.expand('%:p')
+	local base = vim.fn.expand('%:t:r')
+	local outdir = vim.fn.getcwd() .. '/.build'
+	vim.fn.mkdir(outdir, 'p')
+	local bin = outdir .. '/' .. base
+
+	local profile = opt_profiles[current_profile]
+	local flags = ft == 'cpp' and profile.cpp or profile.c
+	local compiler = ft == 'cpp' and 'g++' or 'gcc'
+	local cmd = string.format('%s %s "%s" -o "%s"', compiler, flags, filepath, bin)
+
+	vim.notify(string.format('Building (%s): %s', profile.name, filename), vim.log.levels.INFO)
+	vim.fn.jobstart(cmd, {
+		stdout_buffered = true,
+		stderr_buffered = true,
+		on_exit = function(_, code)
+			if code == 0 then
+				vim.notify('Build success → running in floating terminal', vim.log.levels.INFO)
+				-- Open floating terminal and run the binary
+				require("nvchad.term").toggle { pos = "float", id = "floatTerm", cmd = bin }
+			else
+				vim.notify('Build failed (code ' .. code .. ')', vim.log.levels.ERROR)
+			end
+		end,
+	})
+end, { desc = 'Build & run C++ in floating terminal' })
 
 -- =============================================
 -- Harpoon (file marks) - requires harpoon2
@@ -339,16 +378,21 @@ end, { desc = 'Toggle shell zsh<->fish (nvim term)' })
 -- Old override removed; compile_cpp now handles profiles and running
 
 -- =============================================
+-- Additional terminal toggle
+-- =============================================
+map('n', '<leader>ft', function()
+  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
+end, { desc = 'Toggle floating terminal' })
+
+-- =============================================
 -- LuaSnip navigation (if using luasnip)
 -- =============================================
 map({ 'i', 's' }, '<C-j>', function()
-	local ls = require('luasnip')
 	if ls.expand_or_jumpable() then ls.expand_or_jump() end
-end, { desc = 'Snippet expand/jump forward' })
+end, { desc = 'LuaSnip expand or jump forward' })
 map({ 'i', 's' }, '<C-k>', function()
-	local ls = require('luasnip')
 	if ls.jumpable(-1) then ls.jump(-1) end
-end, { desc = 'Snippet jump backward' })
+end, { desc = 'LuaSnip jump backward' })
 
 -- =============================================
 -- Terminal toggle (Alt-h / Alt-v) and leader h/v for window navigation

@@ -31,14 +31,14 @@ Optional (installed/managed automatically when configured): LSP servers, linters
 
 Guides: [User Manual](./guide/USERMANUAL.md) · [Snippets](./guide/SNIPPETS.md) · [Motions](./guide/MOTIONS.md)
 
-## � Screenshots
+## 📷 Screenshots
 
 Dashboard (Alpha) | Editing (Normal) | Transparent UI
 :--:|:--:|:--:
 ![Dashboard](./screenshots/dashboard.png) | ![Normal](./screenshots/normal.png) | ![Transparent](./screenshots/transparent.png)
 
 
-## �📦 Installation Options
+## 📦 Installation Options
 
 ### Option A: Fresh Install (Replace Existing Config)
 ```bash
@@ -87,13 +87,14 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_STATE_HOME="$TMPDIR/s
 ## 🧠 Competitive Programming Toolkit
 Feature | Keymaps
 --------|--------
-Compile & Run | `<leader>cr` / `<leader>cb`
+Compile & Run (Split) | `<leader>cr` / `<leader>cb`
+Compile & Run (Float) | `<leader>ct` (**NEW**: floating terminal)
 Run last binary | `<leader>ce`
 Run tests (tests/*.in) | `<leader>ctt`
-Run with I/O files | `<C-A-n>` (**NEW**: input.txt → output.txt)
+Run with I/O files | `<C-A-n>` (input.txt → output.txt)
 Optimization profile cycle | `<leader>co`
-Redirect input.txt | `<leader>ct`
-Open input.txt | `<leader>ci`
+Run with input.txt | `<leader>ci`
+Float terminal toggle | `<leader>ft`
 Templates | `cp` (full competitive), `cb` (simple boilerplate)
 
 ## 🔧 Customization Tips
@@ -121,6 +122,7 @@ Formatter not running | `<leader>fm` / check filetype mapping
 LSP inactive | `:LspInfo` / `:Mason`
 Test harness mismatch | Ensure `tests/*.out` files exist
 Icons wrong | Install & select a Nerd Font in terminal
+No output from `<leader>ci` | Check if `input.txt` has content and binary compiled
 
 ## 🔌 Plugins Used
 

@@ -72,15 +72,21 @@ All LuaSnip triggers defined in `lua/configs/cp_snippets.lua` plus the basic `cp
 | `rng` | Random generator + helper lambda |
 | `scan` | Fast integer scanner (GNU / POSIX getchar_unlocked) |
 
-## Usage Notes
-1. **`cp`** - Full competitive template with solve() structure, typedefs (ll, pii, vi), loop macros (FOR, FORE), constants (MOD, INF)
-2. **`cb`** - Simple boilerplate for basic C++ coding practice
-3. Some snippets assume variables: `n`, `g` (adjacency), `a` (array), `MOD` defined externally.
-4. `comb` requires an `inv()` modular inverse (already provided by `modops`). Expand `modops` first or adapt.
-5. `lca` expects `g` as `vector<vector<int>>` and builds from root `0`; adjust as needed.
-6. `dijk` assumes `g[v]` holds `pair<int,long long>` (to, weight); adapt for other weight types.
-7. `LOCAL` debug macro: compile with `-DLOCAL` to enable `dbg(x)` prints.
-8. For very large constraints, consider adding custom allocators or iterative DFS to avoid stack limits.
+## Usage Examples
+
+1. **Create new C++ file**: `nvim main.cpp`
+2. **Insert full template**: Type `cp` + `<Tab>` 
+3. **Insert simple template**: Type `cb` + `<Tab>`
+4. **Add for-loop**: Type `for` + `<Tab>` (or `fori` + `<Tab>`)
+5. **Range-based loop**: Type `forr` + `<Tab>`
+6. **Quick algorithm**: Type `dsu` + `<Tab>`, `seg` + `<Tab>`, etc.
+
+### Workflow Integration
+- **Compile & Run**: `<leader>cr` (interactive terminal)
+- **Floating Terminal**: `<leader>ct` (overlay terminal)  
+- **File I/O**: `<leader>ci` (input.txt → terminal output)
+- **Silent I/O**: `<C-A-n>` (input.txt → output.txt)
+- **Batch Testing**: `<leader>ctt` (tests/*.in vs tests/*.out)
 
 ## Customizing
 Add or edit snippets in `lua/configs/cp_snippets.lua` then reload Neovim or run:
