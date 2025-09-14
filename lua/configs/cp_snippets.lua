@@ -159,25 +159,61 @@ for(int i=0;i<n;++i) pref[i+1]=pref[i]+{};]], { i(1, "a[i]") })),
 
 -- Keep original simple cp snippet
 ls.add_snippets("cpp", {
-  s("cp", t {
-    "#include <bits/stdc++.h>",
-    "using namespace std;",
-    "",
-    "#define fast_io ios::sync_with_stdio(false); cin.tie(nullptr);",
-    "#define all(x) (x).begin(), (x).end()",
-    "#define sz(x) (int)(x).size()",
-    "using ll = long long;",
-    "",
-    "int main() {",
-    "    fast_io;",
-    "    int T = 1;",
-    "    // cin >> T;",
-    "    while (T--) {",
-    "        ",
-    "    }",
-    "    return 0;",
-    "}",
-  }),
+  -- samonide CP template
+  s("cp", fmt([[#include <bits/stdc++.h>
+using namespace std;
+
+// Competitive Programming Template
+// Author: samonide
+// Date: {}
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<int> vi;
+typedef vector<ll> vll;
+typedef vector<pii> vpii;
+
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define sz(x) (int)(x).size()
+#define pb push_back
+#define mp make_pair
+#define fi first
+#define se second
+#define endl '\n'
+
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define FORE(i, a, b) for (int i = (a); i <= (b); i++)
+#define RFOR(i, a, b) for (int i = (a); i > (b); i--)
+#define RFORE(i, a, b) for (int i = (a); i >= (b); i--)
+
+const int MOD = 1e9 + 7;
+const int INF = 1e9;
+const ll LINF = 1e18;
+
+void fast_io() {{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
+}}
+
+void solve() {{}}
+
+int main() {{
+  fast_io();
+
+  int t = 1;
+  cin >> t; // Comment for multiple test cases
+
+  while (t--) {{
+    solve();
+  }}
+
+  return 0;
+}}
+]], { f(date) })),
 })
 
 -- =====================================================================
