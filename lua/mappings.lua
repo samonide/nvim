@@ -107,7 +107,7 @@ local function toggle_floating_bash()
 	buf = vim.api.nvim_create_buf(false, true)
 	vim.g._float_bash_buf = buf
 	vim.g._float_bash_win = make_float_win(buf)
-	vim.fn.termopen({ 'bash', '--noprofile', '--norc' })
+	vim.fn.termopen({ 'bash', '--noprofile' })
 	vim.cmd('startinsert')
 end
 
@@ -116,11 +116,11 @@ local function open_fresh_floating_bash(cmd)
 	local buf = vim.api.nvim_create_buf(false, true)
 	local win = make_float_win(buf)
 	if type(cmd) == 'string' and #cmd > 0 then
-		vim.fn.termopen({ 'bash', '--noprofile', '--norc', '-lc', cmd })
+		vim.fn.termopen({ 'bash', '--noprofile', '-lc', cmd })
 	elseif type(cmd) == 'table' then
 		vim.fn.termopen(cmd)
 	else
-		vim.fn.termopen({ 'bash', '--noprofile', '--norc' })
+		vim.fn.termopen({ 'bash', '--noprofile' })
 	end
 	vim.cmd('startinsert')
 	return buf, win
@@ -504,7 +504,7 @@ local function toggle_term(dir)
 		if dir == 'v' then vim.cmd('botright vsplit') else vim.cmd('botright 15split') end
 	vim.cmd('enew')
 	local new_buf = vim.api.nvim_get_current_buf()
-	vim.fn.termopen({ 'bash', '--noprofile', '--norc' })
+	vim.fn.termopen({ 'bash', '--noprofile'})
 	vim.g.toggle_term_buf = new_buf
 	vim.cmd('startinsert')
 end
