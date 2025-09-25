@@ -1,6 +1,7 @@
 -- =====================================================================
 --  configs/lspconfig.lua
---  Custom LSP server configurations layered after NvChad defaults.
+--  Custom LSP server configurations using vim.lsp.config (Nvim 0.11+)
+--  Migrated from legacy lspconfig to new vim.lsp.config API.
 --  Adjust server list & per-server settings here.
 -- =====================================================================
 
@@ -8,11 +9,10 @@ local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
-local lspconfig = require("lspconfig")
-
 -- list of all servers configured.
 -- Master list of desired servers (Mason installer consumes this via mason-lspconfig)
-lspconfig.servers = {
+-- Note: This is now a module-level table since we're not using lspconfig object
+local servers = {
     "lua_ls",
     -- "clangd",
     -- "gopls",
@@ -21,6 +21,10 @@ lspconfig.servers = {
     -- "pyright",
 }
 
+-- Export servers list for mason-lspconfig compatibility
+-- This maintains compatibility with your existing mason setup
+_G.lspconfig_servers = servers
+
 -- list of servers configured with default config.
 -- Servers using default setup (loop below)
 local default_servers = {
@@ -28,16 +32,20 @@ local default_servers = {
     -- "pyright",
 }
 
--- lsps with default config
+-- Configure servers with default config using vim.lsp.config
 for _, lsp in ipairs(default_servers) do
-    lspconfig[lsp].setup({
+    vim.lsp.config(lsp, {
         on_attach = on_attach,
         on_init = on_init,
         capabilities = capabilities,
     })
+    vim.lsp.enable(lsp)
 end
 
--- lspconfig.clangd.setup({
+-- Example server configurations using vim.lsp.config (commented for reference)
+-- Uncomment and modify as needed
+
+-- vim.lsp.config('clangd', {
 --     on_attach = function(client, bufnr)
 --         client.server_capabilities.documentFormattingProvider = false
 --         client.server_capabilities.documentRangeFormattingProvider = false
@@ -46,8 +54,9 @@ end
 --     on_init = on_init,
 --     capabilities = capabilities,
 -- })
+-- vim.lsp.enable('clangd')
 
--- lspconfig.gopls.setup({
+-- vim.lsp.config('gopls', {
 --     on_attach = function(client, bufnr)
 --         client.server_capabilities.documentFormattingProvider = false
 --         client.server_capabilities.documentRangeFormattingProvider = false
@@ -57,7 +66,10 @@ end
 --     capabilities = capabilities,
 --     cmd = { "gopls" },
 --     filetypes = { "go", "gomod", "gotmpl", "gowork" },
---     root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+--     root_dir = function(fname)
+--         local util = require('lspconfig.util')
+--         return util.root_pattern("go.work", "go.mod", ".git")(fname)
+--     end,
 --     settings = {
 --         gopls = {
 --             analyses = {
@@ -69,24 +81,24 @@ end
 --         },
 --     },
 -- })
+-- vim.lsp.enable('gopls')
 
--- lspconfig.hls.setup({
+-- vim.lsp.config('hls', {
 --     on_attach = function(client, bufnr)
 --         client.server_capabilities.documentFormattingProvider = false
 --         client.server_capabilities.documentRangeFormattingProvider = false
 --         on_attach(client, bufnr)
 --     end,
---
 --     on_init = on_init,
 --     capabilities = capabilities,
 -- })
+-- vim.lsp.enable('hls')
 
 -- lua_ls customized (diagnostics disabled; can re-enable if desired)
-lspconfig.lua_ls.setup({
+vim.lsp.config('lua_ls', {
     on_attach = on_attach,
     on_init = on_init,
     capabilities = capabilities,
-
     settings = {
         Lua = {
             diagnostics = {
@@ -107,3 +119,4 @@ lspconfig.lua_ls.setup({
         },
     },
 })
+vim.lsp.enable('lua_ls')
