@@ -99,6 +99,7 @@ Added functions to compile & run the current C/C++ file using optimized flags an
 | `<leader>gd` | Git diff view |
 | `<leader>gh` | Git file history |
 | `<leader>gH` | Git branch history |
+| `<leader>cd` | Toggle Discord Rich Presence |
 
 ### Flash Navigation (NEW)
 | Key | Action |
@@ -437,8 +438,9 @@ Reload them after editing with:
 - Persistent undo, better defaults (scrolloff, updatetime, etc.)
 
 ### Commands to Explore
+- `:Noice` or `:Noice history` - View all notifications/messages history
 - `:TodoTelescope` - Search all TODO comments
-- `:Cord toggle presence` - Toggle Discord Rich Presence
+- `:Cord toggle presence` or `<leader>cd` - Toggle Discord Rich Presence
 - `:DiffviewOpen` - Open git diff view
 - `:DiffviewFileHistory %` - See current file's history
 - Use `<leader>ch` to see the full cheatsheet

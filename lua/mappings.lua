@@ -566,3 +566,19 @@ end, { desc = 'Previous todo comment' })
 map('n', '<leader>gd', '<cmd>DiffviewOpen<cr>', { desc = 'Git diff view' })
 map('n', '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'Git file history' })
 map('n', '<leader>gH', '<cmd>DiffviewFileHistory<cr>', { desc = 'Git branch history' })
+
+-- Discord Rich Presence toggle
+map('n', '<leader>cd', function()
+    local server = require('cord.server')
+    local is_paused = server.manager and server.manager.is_paused or false
+    
+    -- Toggle presence
+    require('cord.api.command').toggle_presence()
+    
+    -- Show notification based on the toggle (opposite of current state)
+    if is_paused then
+        vim.notify('Discord Rich Presence: Enabled 🎮', vim.log.levels.INFO)
+    else
+        vim.notify('Discord Rich Presence: Disabled 🔇', vim.log.levels.INFO)
+    end
+end, { desc = 'Toggle Discord Rich Presence' })
