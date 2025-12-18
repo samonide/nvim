@@ -10,6 +10,9 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         config = function()
             require("configs.treesitter")
         end,
@@ -228,6 +231,126 @@ return {
         cmd = { "Trouble", "TroubleToggle" },
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = {},
+    },
+
+    -- Discord Rich Presence
+    {
+        "vyfor/cord.nvim",
+        build = ":Cord update",
+        event = "VeryLazy",
+        opts = {
+            enabled = true,
+            editor = {
+                client = "neovim",
+                tooltip = "The Superior Text Editor",
+            },
+            display = {
+                theme = "default",
+                flavor = "dark",
+            },
+            idle = {
+                enabled = true,
+                timeout = 300000, -- 5 minutes
+                show_status = true,
+            },
+        },
+    },
+
+    -- Surround operations (add/change/delete surrounding pairs)
+    {
+        "kylechui/nvim-surround",
+        version = "*",
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({})
+        end,
+    },
+
+    -- Enhanced commenting with treesitter integration
+    {
+        "numToStr/Comment.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("Comment").setup({
+                padding = true,
+                sticky = true,
+                ignore = "^$", -- ignore empty lines
+                toggler = {
+                    line = "gcc",
+                    block = "gbc",
+                },
+                opleader = {
+                    line = "gc",
+                    block = "gb",
+                },
+            })
+        end,
+    },
+
+    -- Highlight and navigate TODO comments
+    {
+        "folke/todo-comments.nvim",
+        event = "VeryLazy",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+            signs = true,
+            keywords = {
+                FIX = { icon = " ", color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+                TODO = { icon = " ", color = "info" },
+                HACK = { icon = " ", color = "warning" },
+                WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+                PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+                NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+                TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+            },
+        },
+    },
+
+    -- Flash for quick navigation (better than default f/t)
+    {
+        "folke/flash.nvim",
+        event = "VeryLazy",
+        opts = {
+            modes = {
+                char = {
+                    jump_labels = true, -- show labels for f/F/t/T
+                },
+            },
+        },
+        keys = {
+            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+            { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+            { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+            { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+            { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+        },
+    },
+
+    -- Better quickfix/location list
+    {
+        "kevinhwang91/nvim-bqf",
+        ft = "qf",
+        opts = {},
+    },
+
+    -- Git blame and history viewer
+    {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+        opts = {},
+    },
+
+    -- Better LSP UI
+    {
+        "stevearc/dressing.nvim",
+        event = "VeryLazy",
+        opts = {
+            input = { enabled = true },
+            select = {
+                enabled = true,
+                backend = { "telescope", "builtin" },
+            },
+        },
     },
 
     -- Snippets: LuaSnip + community snippets + custom CP snippet

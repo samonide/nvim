@@ -510,3 +510,59 @@ local function toggle_term(dir)
 end
 	map('n', '<A-h>', function() toggle_term('h') end, { desc = 'Toggle horizontal terminal' })
 	map('n', '<A-v>', function() toggle_term('v') end, { desc = 'Toggle vertical terminal' })
+
+-- =============================================
+-- Additional Productivity Keymaps
+-- =============================================
+
+-- Better movement in wrapped lines
+map('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Move down (wrap-aware)' })
+map('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Move up (wrap-aware)' })
+
+-- Quick save
+map('n', '<leader>w', '<cmd>w<cr>', { desc = 'Save file' })
+
+-- Better indenting (stay in visual mode)
+map('v', '<', '<gv', { desc = 'Indent left' })
+map('v', '>', '>gv', { desc = 'Indent right' })
+
+-- Move lines up/down in visual mode
+map('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
+map('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
+
+-- Keep cursor centered on search/jumps
+map('n', 'n', 'nzzzv', { desc = 'Next search (centered)' })
+map('n', 'N', 'Nzzzv', { desc = 'Prev search (centered)' })
+map('n', '<C-d>', '<C-d>zz', { desc = 'Half page down (centered)' })
+map('n', '<C-u>', '<C-u>zz', { desc = 'Half page up (centered)' })
+
+-- Better paste (don't lose register in visual mode)
+map('x', '<leader>p', '"_dP', { desc = 'Paste without yanking' })
+
+-- Delete to void register (don't pollute clipboard)
+map({ 'n', 'v' }, '<leader>d', '"_d', { desc = 'Delete to void' })
+
+-- Quick quit/close
+map('n', '<leader>q', '<cmd>q<cr>', { desc = 'Quit window' })
+map('n', '<leader>Q', '<cmd>qa<cr>', { desc = 'Quit all' })
+
+-- Clear search highlighting
+map('n', '<Esc>', '<cmd>nohlsearch<cr>', { desc = 'Clear search highlight' })
+
+-- Diagnostic navigation
+map('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
+map('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
+
+-- Todo-comments navigation (if plugin installed)
+map('n', ']t', function()
+    require('todo-comments').jump_next()
+end, { desc = 'Next todo comment' })
+map('n', '[t', function()
+    require('todo-comments').jump_prev()
+end, { desc = 'Previous todo comment' })
+
+-- Diffview keymaps
+map('n', '<leader>gd', '<cmd>DiffviewOpen<cr>', { desc = 'Git diff view' })
+map('n', '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'Git file history' })
+map('n', '<leader>gH', '<cmd>DiffviewFileHistory<cr>', { desc = 'Git branch history' })

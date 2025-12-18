@@ -80,6 +80,64 @@ Added functions to compile & run the current C/C++ file using optimized flags an
 | `<leader>or` | Overseer run task |
 | `<C-j>` / `<C-k>` | LuaSnip expand/jump forward / backward (insert/select) |
 
+### Productivity Enhancements (NEW)
+| Key | Action |
+|-----|--------|
+| `j` / `k` | Smart movement (wrap-aware with count) |
+| `<leader>w` | Quick save file |
+| `<leader>q` / `<leader>Q` | Quit window / Quit all |
+| `<leader>d` | Delete to void register (don't pollute clipboard) |
+| `<leader>p` (visual) | Paste without yanking selection |
+| `<` / `>` (visual) | Indent and stay in visual mode |
+| `J` / `K` (visual) | Move selection down/up |
+| `n` / `N` | Next/prev search (centered) |
+| `<C-d>` / `<C-u>` | Half page scroll (centered) |
+| `<Esc>` | Clear search highlight |
+| `[d` / `]d` | Previous/next diagnostic |
+| `[t` / `]t` | Previous/next TODO comment |
+| `<leader>e` | Show diagnostic float |
+| `<leader>gd` | Git diff view |
+| `<leader>gh` | Git file history |
+| `<leader>gH` | Git branch history |
+
+### Flash Navigation (NEW)
+| Key | Action |
+|-----|--------|
+| `s` | Flash jump to any location |
+| `S` | Flash treesitter node selection |
+| `r` (operator) | Remote flash for operations |
+| `R` (visual/operator) | Treesitter search |
+
+### Surround Operations (NEW)
+| Key | Action |
+|-----|--------|
+| `ys{motion}{char}` | Add surrounding (e.g., `ysiw"` surrounds word with quotes) |
+| `cs{old}{new}` | Change surrounding (e.g., `cs"'` changes " to ') |
+| `ds{char}` | Delete surrounding (e.g., `ds"` removes quotes) |
+| `yss{char}` | Surround entire line |
+
+### Smart Commenting (NEW)
+| Key | Action |
+|-----|--------|
+| `gcc` | Toggle line comment |
+| `gbc` | Toggle block comment |
+| `gc{motion}` | Comment motion (e.g., `gcap` for paragraph) |
+| `gb{motion}` | Block comment motion |
+
+### Treesitter Text Objects (NEW)
+| Key | Action |
+|-----|--------|
+| `<CR>` | Expand selection incrementally (press repeatedly) |
+| `<BS>` | Shrink selection |
+| `af` / `if` | Select outer/inner function |
+| `ac` / `ic` | Select outer/inner class |
+| `al` / `il` | Select outer/inner loop |
+| `aa` / `ia` | Select outer/inner parameter |
+| `]f` / `[f` | Next/previous function |
+| `]c` / `[c` | Next/previous class |
+| `]F` / `[F` | Next/previous function end |
+| `[C` / `]C` | Previous/next class end |
+
 Build artifacts go into a `.build/` folder inside the current working directory. The terminal buffer id used: `cp_run_term` (reused each run).
 
 ---
@@ -182,6 +240,7 @@ These come from upstream NvChad (`nvchad/mappings.lua`). Only the most commonly 
 
 Defined in `lua/plugins/init.lua`:
 * `nvim-treesitter` – Syntax highlighting & indent
+* `nvim-treesitter-textobjects` – Smart text objects for code navigation
 * `nvim-lspconfig` – Base LSP client setups
 * `mason-lspconfig.nvim` – Ensures LSP servers installation
 * `nvim-lint` + `mason-nvim-lint` – Linting layer
@@ -193,6 +252,14 @@ Defined in `lua/plugins/init.lua`:
 * `overseer.nvim` – Task orchestration (compile/run/test integration base)
 * `trouble.nvim` – Diagnostics & references list UI
 * `LuaSnip` + `friendly-snippets` – Snippet engine + community snippets (custom C++ snippets: `cp` for full competitive template, `cb` for simple boilerplate)
+* **NEW**: `cord.nvim` – Discord Rich Presence integration
+* **NEW**: `nvim-surround` – Add/change/delete surrounding pairs (quotes, brackets, tags)
+* **NEW**: `Comment.nvim` – Enhanced commenting with treesitter integration
+* **NEW**: `todo-comments.nvim` – Highlight & navigate TODO/FIXME/NOTE/HACK/PERF comments
+* **NEW**: `flash.nvim` – Lightning-fast navigation with label jumps
+* **NEW**: `nvim-bqf` – Better quickfix list with preview
+* **NEW**: `diffview.nvim` – Git diff and file history viewer
+* **NEW**: `dressing.nvim` – Better UI for vim.ui.select/input (prettier LSP actions)
 
 NvChad core already brings: telescope, nvim-tree, bufferline (tabufline), statusline, themes, terminal manager, which-key integration, commenting, etc.
 
@@ -216,9 +283,18 @@ Example pattern (already shown in comments): set `client.server_capabilities.doc
 ## 8. Treesitter
 
 Configured languages (`ensure_installed` in `configs/treesitter.lua`):
-`bash`, `fish`, `lua`, `luadoc`, `markdown`, `printf`, `toml`, `vim`, `vimdoc`, `yaml`.
+`bash`, `fish`, `lua`, `luadoc`, `markdown`, `markdown_inline`, `printf`, `toml`, `vim`, `vimdoc`, `yaml`.
 
 Enable more by adding to the list. Remove a language by deleting it.
+
+### NEW: Treesitter Text Objects & Incremental Selection
+
+The config now includes:
+* **Incremental selection**: Press `<CR>` to expand selection, `<BS>` to shrink
+* **Smart text objects**: `af`/`if` (function), `ac`/`ic` (class), `al`/`il` (loop), `aa`/`ia` (parameter)
+* **Navigation**: `]f`/`[f` (next/prev function), `]c`/`[c` (next/prev class)
+
+These work automatically with supported languages (C, C++, Python, Lua, etc.).
 
 ---
 ## 9. Formatting (`conform.nvim`)
@@ -334,6 +410,38 @@ Reload them after editing with:
 ```
 :lua package.loaded["configs.cp_snippets"] = nil; require("configs.cp_snippets")
 ```
+
+---
+## 20. NEW Features Summary (Latest Update)
+
+### Enhanced Productivity
+- **Discord Rich Presence**: Show what you're coding in Discord (auto-enabled)
+- **Flash Navigation**: Jump anywhere with `s` + character labels
+- **Smart Surround**: Easily manipulate quotes, brackets, tags with `ys`/`cs`/`ds`
+- **Better Commenting**: Treesitter-aware commenting with `gcc`/`gbc`
+- **TODO Highlighting**: Automatic highlighting of TODO/FIXME/NOTE/HACK/PERF comments
+- **Treesitter Text Objects**: Select/navigate functions, classes with `af`, `if`, `]f`, etc.
+- **Incremental Selection**: Press `<CR>` repeatedly to expand selection intelligently
+- **Git Integration**: View diffs and history with `<leader>gd`, `<leader>gh`
+- **Better Quickfix**: Enhanced quickfix list with preview
+- **Prettier UI**: Better dialogs for LSP actions and inputs
+
+### Quality of Life Improvements
+- Cursor stays centered on jumps/searches (`n`, `N`, `<C-d>`, `<C-u>`)
+- Better visual mode (indent without losing selection)
+- Move lines in visual mode with `J`/`K`
+- Smart paste that doesn't yank (`<leader>p` in visual)
+- Wrap-aware j/k movement
+- Quick save with `<leader>w`
+- Better split navigation (`<leader>h`, `<leader>v`)
+- Persistent undo, better defaults (scrolloff, updatetime, etc.)
+
+### Commands to Explore
+- `:TodoTelescope` - Search all TODO comments
+- `:Cord toggle presence` - Toggle Discord Rich Presence
+- `:DiffviewOpen` - Open git diff view
+- `:DiffviewFileHistory %` - See current file's history
+- Use `<leader>ch` to see the full cheatsheet
 
 ---
 Happy hacking! Customize boldly—this setup is purposely minimal so you can grow it organically.

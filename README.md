@@ -28,6 +28,12 @@ Optional (installed/managed automatically when configured): LSP servers, linters
 * Diagnostics UI (trouble.nvim) & Quick Navigation (harpoon)
 * Tasks (overseer.nvim) & Formatting/Linting (conform + nvim-lint + mason bridges)
 * Snippets (LuaSnip + friendly-snippets + custom `cp` C++ template)
+* Discord Rich Presence (cord.nvim) - Show coding activity in Discord
+* Lightning-fast navigation (flash.nvim) & Smart surround operations (nvim-surround)
+* Enhanced commenting (Comment.nvim) & TODO highlighting (todo-comments.nvim)
+* Treesitter text objects for intelligent code selection & navigation
+* Better git diffs & history (diffview.nvim) & quickfix list (nvim-bqf)
+* Prettier LSP UI (dressing.nvim)
 
 Guides: [User Manual](./guide/USERMANUAL.md) · [Snippets](./guide/SNIPPETS.md) · [Motions](./guide/MOTIONS.md)
 
@@ -150,6 +156,15 @@ No output from `<leader>ci` | Check if `input.txt` has content and binary compil
 | | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native FZF sorter (faster) |
 | | [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | Snippet engine |
 | | [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Community snippet collection |
+| **✨ Navigation** | [flash.nvim](https://github.com/folke/flash.nvim) | Jump to any location with labels |
+| | [nvim-surround](https://github.com/kylechui/nvim-surround) | Add/change/delete surrounding pairs |
+| | [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) | Smart text objects (functions, classes, etc.) |
+| **💬 Comments** | [Comment.nvim](https://github.com/numToStr/Comment.nvim) | Smart commenting with treesitter |
+| | [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight & navigate TODO/FIXME |
+| **🎮 Integration** | [cord.nvim](https://github.com/vyfor/cord.nvim) | Discord Rich Presence |
+| | [diffview.nvim](https://github.com/sindrets/diffview.nvim) | Git diff & history viewer |
+| | [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf) | Better quickfix list |
+| | [dressing.nvim](https://github.com/stevearc/dressing.nvim) | Better UI for selections/inputs |
 
 ## 📜 License
 See [`LICENSE`](./LICENSE).
