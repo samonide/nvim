@@ -225,6 +225,49 @@ return {
         end,
     },
 
+    -- Runner for quick code execution
+    {
+        "samonide/runner.nvim",
+        config = function()
+            require("runner").setup({
+                -- Build directory for compiled languages
+                build_dir = ".build",
+
+                -- Test directory
+                test_dir = "tests",
+
+                -- Input/output files
+                input_file = "input.txt",
+                output_file = "output.txt",
+
+                -- Show execution time after running
+                show_time = true,
+
+                -- Clean build artifacts after successful run
+                clean_after_run = false,
+
+                -- Terminal configuration
+                terminal = {
+                    split_height = 15,
+                    position = "botright",
+                },
+            })
+        end,
+        keys = {
+            { "<leader>cr", "<cmd>RunCode<cr>", desc = "Run code" },
+            { "<leader>cb", "<cmd>RunBuild<cr>", desc = "Build only" },
+            { "<leader>ce", "<cmd>RunLast<cr>", desc = "Run last build" },
+            { "<leader>ci", "<cmd>RunWithInput<cr>", desc = "Run with input.txt" },
+            { "<leader>ct", "<cmd>RunFloat<cr>", desc = "Run in floating terminal" },
+            { "<leader>ctt", "<cmd>RunTests<cr>", desc = "Run all tests" },
+            { "<leader>co", "<cmd>RunProfile<cr>", desc = "Cycle optimization profile" },
+            { "<leader>cw", "<cmd>RunWatch<cr>", desc = "Toggle watch mode" },
+            { "<leader>ch", "<cmd>RunHistory<cr>", desc = "Show run history" },
+            { "<leader>cc", "<cmd>RunClean<cr>", desc = "Clean build directory" },
+            { "<C-A-n>", "<cmd>RunIOFiles<cr>", desc = "Run with input.txt -> output.txt" },
+        },
+    },
+
     -- Trouble diagnostics UI
     {
         "folke/trouble.nvim",
