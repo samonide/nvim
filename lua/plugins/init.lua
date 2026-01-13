@@ -225,6 +225,16 @@ return {
         end,
     },
 
+    -- Timesense for complexity analysis and coding stats
+    {
+        "samonide/timesense.nvim",
+        config = function()
+            require("timesense").setup()
+        end,
+        cmd = "Timesense",
+        ft = { "cpp", "c" },
+    },
+
     -- Runner for quick code execution
     {
         "samonide/runner.nvim",

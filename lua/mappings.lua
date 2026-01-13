@@ -298,3 +298,9 @@ map("n", "<leader>cd", function()
         vim.notify("Discord Rich Presence: Disabled 🔇", vim.log.levels.INFO)
     end
 end, { desc = "Toggle Discord Rich Presence" })
+
+-- =============================================
+-- Timesense (complexity analysis & stats)
+-- =============================================
+map("n", "<leader>tc", "<cmd>Timesense complexity<cr>", { desc = "Timesense complexity analysis" })
+map("n", "<leader>tx", "<cmd>Timesense stats<cr>", { desc = "Timesense coding stats" })

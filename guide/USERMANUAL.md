@@ -66,6 +66,8 @@ Added functions to compile & run the current C/C++ file using optimized flags an
 | `<leader>ctt` | Run all tests in `tests/*.in` comparing outputs with matching `.out` |
 | `<leader>co` | Cycle optimization profile (O2 ↔ Ofast) |
 | `<C-A-n>` | **NEW**: Run C++ with input.txt → output.txt (auto-creates files) |
+| `<leader>tc` | **NEW**: Analyze code complexity (timesense) |
+| `<leader>tx` | **NEW**: View coding statistics (timesense) |
 | `<leader>ha` | Harpoon add current file |
 | `<leader>hm` | Harpoon quick menu |
 | `<leader>h1..h4` | Harpoon jump slots 1–4 |
@@ -251,6 +253,8 @@ Defined in `lua/plugins/init.lua`:
 * `harpoon` – Rapid file mark & jump navigation
 * `telescope-fzf-native` – Native fzf sorter for faster Telescope search
 * `overseer.nvim` – Task orchestration (compile/run/test integration base)
+* **NEW**: `runner.nvim` – Fast code execution with test harness, I/O files, and multiple terminal modes
+* **NEW**: `timesense.nvim` – Code complexity analysis (inline O(n) hints) & coding statistics tracker
 * `trouble.nvim` – Diagnostics & references list UI
 * `LuaSnip` + `friendly-snippets` – Snippet engine + community snippets (custom C++ snippets: `cp` for full competitive template, `cb` for simple boilerplate)
 * **NEW**: `cord.nvim` – Discord Rich Presence integration

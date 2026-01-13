@@ -23,6 +23,7 @@ Optional (installed/managed automatically when configured): LSP servers, linters
 
 * NvChad core (theme system, statusline, bufferline, tree, telescope)
 * Competitive Programming helpers (compile/run, test harness, optimization profile cycling, reusable terminal)
+* Code complexity analysis & stats (timesense.nvim) - inline O(n) hints & STL function detection
 * Auto‑insert C++ template on new `*.cpp` file + `cp` snippet
 * Dashboard (alpha.nvim) + Enhanced UI & command popup border feedback (noice.nvim)
 * Diagnostics UI (trouble.nvim) & Quick Navigation (harpoon)
@@ -101,6 +102,8 @@ Run with I/O files | `<C-A-n>` (input.txt → output.txt)
 Optimization profile cycle | `<leader>co`
 Run with input.txt | `<leader>ci`
 Float terminal toggle | `<leader>ft`
+**Complexity Analysis** | `<leader>tc` (analyze time complexity)
+**Coding Stats** | `<leader>tx` (view coding statistics)
 Templates | `cp` (full competitive), `cb` (simple boilerplate)
 
 ## 🔧 Customization Tips
@@ -153,6 +156,8 @@ No output from `<leader>ci` | Check if `input.txt` has content and binary compil
 | | [trouble.nvim](https://github.com/folke/trouble.nvim) | Diagnostics & quickfix UI |
 | | [harpoon](https://github.com/ThePrimeagen/harpoon) | Quick file navigation marks |
 | **🔧 Tools** | [overseer.nvim](https://github.com/stevearc/overseer.nvim) | Task runner & build system |
+| | [runner.nvim](https://github.com/samonide/runner.nvim) | Fast code execution with test harness |
+| | [timesense.nvim](https://github.com/samonide/timesense.nvim) | Complexity analysis & coding stats |
 | | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native FZF sorter (faster) |
 | | [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | Snippet engine |
 | | [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Community snippet collection |
@@ -165,9 +170,21 @@ No output from `<leader>ci` | Check if `input.txt` has content and binary compil
 | | [diffview.nvim](https://github.com/sindrets/diffview.nvim) | Git diff & history viewer |
 | | [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf) | Better quickfix list |
 | | [dressing.nvim](https://github.com/stevearc/dressing.nvim) | Better UI for selections/inputs |
+| **🏃 Competitive Programming** | [runner.nvim](https://github.com/samonide/runner.nvim) | Fast compile & run with test harness & I/O files |
+| | [timesense.nvim](https://github.com/samonide/timesense.nvim) | Code complexity hints (O(n), O(n²)) & stats tracking |
 
 ## 📜 License
 See [`LICENSE`](./LICENSE).
+
+---
+
+<div align="center">
+
+## 🤖 Disclaimer
+
+*Parts of this documentation and guides were created with AI assistance for code comments, structure, and documentation clarity.*
+
+</div>
 
 ---
 Happy hacking! For deep usage details, read the full manual in [guide/USERMANUAL.md](./guide/USERMANUAL.md).
