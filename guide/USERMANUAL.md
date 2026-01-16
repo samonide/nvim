@@ -1,6 +1,14 @@
    # Neovim Config Usage Guide
 
-This setup is based on **NvChad v2.5** with a minimal layer of customizations. This document lists the key plugins, keymaps (both custom & important NvChad defaults), and how to extend the configuration.
+This setup is based on **NvChad v2.5** with customizations for competitive programming and productivity. This document covers plugins, keymaps, and configuration details.
+
+> **Note**: For complete Vim motions and operators reference, see [MOTIONS.md](./MOTIONS.md) which includes all keybinds and a comprehensive guide.
+
+## Quick Navigation
+
+- **All Keybinds**: See [MOTIONS.md](./MOTIONS.md) for complete keybind reference
+- **Snippets**: See [SNIPPETS.md](./SNIPPETS.md) for C++ competitive programming snippets
+- **In-Editor Help**: Press `<Space>fk` to search all keymaps interactively
 
 ---
 ## 1. Prerequisites
@@ -29,7 +37,7 @@ nvim
 On first launch `lazy.nvim` & plugins will bootstrap automatically.
 
 ---
-## 3. Directory Structure (Relevant Files)
+## 3. Directory Structure
 
 | Path | Purpose |
 |------|---------|
@@ -42,234 +50,239 @@ On first launch `lazy.nvim` & plugins will bootstrap automatically.
 | `lazy-lock.json` | Lock file for plugin versions |
 
 ---
-## 4. Custom Keymaps (Defined in `lua/mappings.lua`)
+## 4. Essential Keybinds Reference
 
-| Mode | LHS | RHS | Description |
-|------|-----|-----|-------------|
-| Normal | `;` | `:` | Enter command mode (faster than Shift-;) |
-| Insert | `jk` | `<Esc>` | Quick escape |
+> **Leader Key**: `Space` | **Full Reference**: [MOTIONS.md](./MOTIONS.md)
 
-Your `<leader>` is set to: **Space** (`vim.g.mapleader = ' '`).
+### Quick Access
+| Key | Action | Description |
+|-----|--------|-------------|
+| `<Space>fk` | Search Keymaps | Find any keybind interactively (Telescope) |
+| `;` | Enter Command | Faster than Shift+: |
+| `jk` | Exit Insert | Quick escape from insert mode |
 
-> The `<C-s>` mapping for save is commented out; uncomment if you want Ctrl+S across modes.
-
-### Competitive Programming Helpers
-Added functions to compile & run the current C/C++ file using optimized flags and open a reusable terminal.
-
+### Most Used Daily
 | Key | Action |
 |-----|--------|
-| `<leader>cr` | Compile & run current C/C++ file (`g++ -std=c++17 -O2 -Wall -Wextra -Wshadow`) |
-| `<leader>cb` | Alias of compile & run (build) |
-| `<leader>ce` | Execute last built binary (no rebuild) |
-| `<leader>ci` | Run C++ with input.txt in terminal (creates file if missing) |
-| `<leader>ct` | Build & run C++ in floating terminal |
-| `<leader>ctt` | Run all tests in `tests/*.in` comparing outputs with matching `.out` |
-| `<leader>co` | Cycle optimization profile (O2 ↔ Ofast) |
-| `<C-A-n>` | **NEW**: Run C++ with input.txt → output.txt (auto-creates files) |
-| `<leader>tc` | **NEW**: Analyze code complexity (timesense) |
-| `<leader>tx` | **NEW**: View coding statistics (timesense) |
-| `<leader>ha` | Harpoon add current file |
-| `<leader>hm` | Harpoon quick menu |
-| `<leader>h1..h4` | Harpoon jump slots 1–4 |
-| `<leader>h` / `<leader>v` | **CHANGED**: Focus left/right split (was terminal) |
-| `<A-h>` / `<A-v>` | **NEW**: Toggle horizontal/vertical terminal |
-| `<leader>ft` | **NEW**: Toggle floating terminal |
-| `<leader>tt` | Toggle terminal split (legacy) |
-| `<leader>td` | Trouble diagnostics toggle |
-| `<leader>tq` | Trouble quickfix toggle |
-| `<leader>tr` | Trouble LSP references toggle |
-| `<leader>ot` | Overseer task list |
-| `<leader>or` | Overseer run task |
-| `<C-j>` / `<C-k>` | LuaSnip expand/jump forward / backward (insert/select) |
+| `<Space>ff` | Find files (fuzzy search) |
+| `<Space>fg` | Live grep (search text in project) |
+| `<Space>fb` | Find buffers (open files) |
+| `<C-h/j/k/l>` | Navigate between splits |
+| `<C-Tab>` | Next buffer (file) |
+| `<C-Shift-Tab>` | Previous buffer |
+| `<Space>bd` | Close current buffer (`:bd`) |
 
-### Productivity Enhancements (NEW)
+### Terminal Management
 | Key | Action |
 |-----|--------|
-| `j` / `k` | Smart movement (wrap-aware with count) |
-| `<leader>w` | Quick save file |
-| `<leader>q` / `<leader>Q` | Quit window / Quit all |
-| `<leader>d` | Delete to void register (don't pollute clipboard) |
-| `<leader>p` (visual) | Paste without yanking selection |
-| `<` / `>` (visual) | Indent and stay in visual mode |
-| `J` / `K` (visual) | Move selection down/up |
-| `n` / `N` | Next/prev search (centered) |
-| `<C-d>` / `<C-u>` | Half page scroll (centered) |
-| `<Esc>` | Clear search highlight |
+| `Alt+i` | Toggle floating terminal |
+| `Alt+h` | Toggle horizontal terminal |
+| `Alt+v` | Toggle vertical terminal |
+| `<Space>ft` | Toggle floating terminal (alternative) |
+
+**Note**: Alt+h and Alt+v work in both normal and terminal mode for easy toggling.
+
+### Competitive Programming
+| Key | Action |
+|-----|--------|
+| `<Space>cr` | Compile & run C++ |
+| `<Space>cb` | Build only (compile) |
+| `<Space>ci` | Run with input.txt |
+| `<C-A-n>` | Run input.txt → output.txt |
+| `<Space>ct` | Run in floating terminal |
+| `<Space>ctt` | Run all tests (tests/*.in) |
+| `<Space>co` | Cycle optimization profile |
+| `<Space>cw` | Toggle watch mode |
+| `<Space>ch` | Run history |
+| `<Space>cc` | Clean build directory |
+| `<Space>tc` | Analyze complexity (timesense) |
+| `<Space>tx` | View coding stats |
+
+### Harpoon (Quick File Marks)
+| Key | Action |
+|-----|--------|
+| `<Space>ha` | Add file to marks |
+| `<Space>hh` | Show marks menu |
+| `<Space>1-4` | Jump to mark 1-4 |
+
+### LSP (Code Intelligence)
+| Key | Action |
+|-----|--------|
+| `gd` | Go to definition |
+| `gr` | Show references |
+| `gi` | Go to implementation |
+| `gD` | Go to declaration |
+| `K` | Hover documentation |
+| `<Space>rn` | Rename symbol |
+| `<Space>ca` | Code actions |
+| `<Space>lf` | Format document |
+| `<Space>ls` | LSP info |
+| `<Space>lr` | Restart LSP |
 | `[d` / `]d` | Previous/next diagnostic |
-| `[t` / `]t` | Previous/next TODO comment |
-| `<leader>e` | Show diagnostic float |
-| `<leader>gd` | Git diff view |
-| `<leader>gh` | Git file history |
-| `<leader>gH` | Git branch history |
-| `<leader>cd` | Toggle Discord Rich Presence |
 
-### Flash Navigation (NEW)
+### Trouble (Diagnostics UI)
 | Key | Action |
 |-----|--------|
-| `s` | Flash jump to any location |
-| `S` | Flash treesitter node selection |
-| `r` (operator) | Remote flash for operations |
-| `R` (visual/operator) | Treesitter search |
+| `<Space>td` | Toggle diagnostics |
+| `<Space>tq` | Toggle quickfix |
+| `<Space>tr` | Toggle references |
 
-### Surround Operations (NEW)
+### Git Integration
 | Key | Action |
 |-----|--------|
-| `ys{motion}{char}` | Add surrounding (e.g., `ysiw"` surrounds word with quotes) |
-| `cs{old}{new}` | Change surrounding (e.g., `cs"'` changes " to ') |
-| `ds{char}` | Delete surrounding (e.g., `ds"` removes quotes) |
-| `yss{char}` | Surround entire line |
+| `<Space>gd` | Git diff view |
+| `<Space>gh` | Git file history |
+| `<Space>gH` | Git branch history |
+| `<Space>gs` | Git status (Telescope) |
+| `<Space>gc` | Git commits |
+| `<Space>gb` | Git branches |
 
-### Smart Commenting (NEW)
+### Splits & Windows
+| Key | Action |
+|-----|--------|
+| `<Space>sv` | Vertical split |
+| `<Space>sh` | Horizontal split |
+| `<Space>sx` | Close split |
+| `<Space>se` | Equalize splits |
+| `<C-Arrow>` | Resize splits |
+
+### Editing Enhancements
 | Key | Action |
 |-----|--------|
 | `gcc` | Toggle line comment |
-| `gbc` | Toggle block comment |
-| `gc{motion}` | Comment motion (e.g., `gcap` for paragraph) |
-| `gb{motion}` | Block comment motion |
+| `gc{motion}` | Comment motion |
+| `s` | Flash jump |
+| `ys{motion}{char}` | Add surrounding |
+| `cs{old}{new}` | Change surrounding |
+| `ds{char}` | Delete surrounding |
+| `<` / `>` (visual) | Indent (stays in visual) |
+| `J` / `K` (visual) | Move lines up/down |
+| `<Space>w` | Quick save |
+| `<Space>q` | Quit window |
 
-### Treesitter Text Objects (NEW)
+### Telescope Additions
 | Key | Action |
 |-----|--------|
-| `<CR>` | Expand selection incrementally (press repeatedly) |
-| `<BS>` | Shrink selection |
-| `af` / `if` | Select outer/inner function |
-| `ac` / `ic` | Select outer/inner class |
-| `al` / `il` | Select outer/inner loop |
-| `aa` / `ia` | Select outer/inner parameter |
-| `]f` / `[f` | Next/previous function |
-| `]c` / `[c` | Next/previous class |
-| `]F` / `[F` | Next/previous function end |
-| `[C` / `]C` | Previous/next class end |
+| `<Space>fh` | Help tags |
+| `<Space>fo` | Recent files |
+| `<Space>fw` | Find word under cursor |
+| `<Space>fc` | Find commands |
+| `<Space>fk` | Find keymaps |
+| `<Space>fs` | Document symbols |
 
-Build artifacts go into a `.build/` folder inside the current working directory. The terminal buffer id used: `cp_run_term` (reused each run).
+### File Explorer
+| Key | Action |
+|-----|--------|
+| `<Space>e` | Toggle NvimTree |
+| `<Space>ef` | Focus NvimTree |
+
+### Miscellaneous
+| Key | Action |
+|-----|--------|
+| `<Space>cd` | Toggle Discord Rich Presence |
+| `<Space>ts` | Toggle shell (zsh ↔ fish) |
+| `<Esc>` | Clear search highlight |
+| `[t` / `]t` | Previous/next TODO comment |
+
+> **Complete Reference**: All keybinds with descriptions are in [MOTIONS.md](./MOTIONS.md)
 
 ---
-## 5. Essential NvChad Default Keymaps (Quick Reference)
+## 5. Custom Keymaps Details
 
-These come from upstream NvChad (`nvchad/mappings.lua`). Only the most commonly used are listed here. Use `<leader>ch` (cheatsheet) or `<leader>wK` (WhichKey all) for a full in-editor list.
+**Key Philosophy**:
+- **No Conflicts**: All keybinds have been refactored to eliminate duplicates
+- **Prefix System**: Organized by prefix (`<Space>f` for find, `<Space>c` for code, etc.)
+- **Vim Standard**: Uses standard Vim conventions where applicable (`<C-hjkl>` for navigation)
 
-### General
+**Clipboard Integration**:
+- All yank operations automatically copy to system clipboard (`clipboard=unnamedplus`)
+- Paste outside Neovim with system paste (Ctrl+V)
+
+**Terminal Toggles**:
+- Each terminal type (floating, horizontal, vertical) maintains separate sessions
+- Terminals properly toggle (open/close) from both normal and terminal mode
+- Press the same key again to close the terminal
+
+**Buffer vs Window**:
+- Buffer = file in memory (use `<Space>bd` to close)
+- Window = viewport (use `<Space>sx` or `:q` to close)
+- `;q` closes window, not buffer (use `<Space>bd` to close the file)
+
+---
+## 6. NvChad Default Keymaps (Selected)
+
+These are inherited from NvChad core. For complete list, press `<Space>ch` (cheatsheet) in Neovim.
+
+### Core Navigation
 | Key | Action |
 |-----|--------|
-| `<Esc>` | Clear search highlight |
-| `<C-s>` | Save buffer (normal mode) |
-| `<C-c>` | Yank entire file to system clipboard |
-| `<leader>n` | Toggle absolute line numbers |
-| `<leader>rn` | Toggle relative line numbers |
-| `<leader>ch` | NvChad cheatsheet popup |
-| `<leader>fm` | Format buffer via `conform` (LSP fallback) |
-
-### Window & Cursor Movement
-| Key | Action |
-|-----|--------|
-| `<C-h/j/k/l>` | Move between windows |
-| In insert: `<C-b>` / `<C-e>` | Start / end of line |
-| In insert: `<C-h/j/k/l>` | Cursor move directions |
-
-### Buffers / Tabs
-| Key | Action |
-|-----|--------|
-| `<tab>` / `<S-tab>` | Next / previous buffer (tabufline) |
-| `<leader>b` | New empty buffer |
-| `<leader>x` | Close current buffer |
-
-### File Tree (nvim-tree)
-| Key | Action |
-|-----|--------|
-| `<C-n>` | Toggle tree |
-| `<leader>e` | Focus tree window |
-
-### Telescope (Fuzzy Finder)
-| Key | Action |
-|-----|--------|
-| `<leader>ff` | Find files (respects ignores) |
-| `<leader>fa` | Find all files (including hidden & ignored) |
-| `<leader>fw` | Live grep (ripgrep required) |
-| `<leader>fb` | Buffers list |
-| `<leader>fh` | Help tags |
-| `<leader>fo` | Old files |
-| `<leader>fz` | Fuzzy find in current buffer |
-| `<leader>cm` | Git commits |
-| `<leader>gt` | Git status |
-| `<leader>ma` | Marks |
-| `<leader>pt` | Toggle / pick hidden terminals |
-| `<leader>th` | Theme selector |
-
-### Commenting (mini-comment / ts-context aware)
-| Key | Action |
-|-----|--------|
-| `<leader>/` (normal) | Toggle line comment |
-| `<leader>/` (visual) | Toggle selection comment |
-
-### Terminals
-| Key | Action |
-|-----|--------|
-| `<A-h>` / `<A-v>` | Toggle horizontal / vertical persistent terminal |
-| `<A-i>` | Toggle floating terminal |
-| `<leader>ft` | Toggle floating terminal (alternative) |
-| `<leader>tt` | Toggle terminal split (custom) |
-| Terminal mode: `<C-x>` | Exit to normal mode |
-
-**Note**: Default `<leader>h` / `<leader>v` terminal mappings disabled in favor of split navigation.
-
-**Closing terminals without exit:**
-- Press `<C-\><C-n>` to enter Normal mode, then `:q` to close the terminal window
-- Or use the same toggle key again (`<A-i>`, `<leader>ft`, etc.) to hide floating/persistent terminals
-
-### LSP (Core subset)
-| Key | Action |
-|-----|--------|
-| `gd` | Goto definition |
-| `gD` | Goto declaration |
-| `gr` | References |
-| `gi` | Goto implementation |
-| `K` | Hover docs |
-| `<leader>ra` | Code action (rename if configured) |
-| `<leader>ca` | Code action menu |
-| `[d` / `]d` | Previous / next diagnostic |
-| `<leader>ds` | Populate loclist with diagnostics |
-| `<leader>fm` | Format buffer (see Formatting section) |
-
-> Exact LSP mappings come from NvChad defaults; if you need the full list open the cheatsheet.
+| `<C-n>` | Toggle file tree |
+| `<C-s>` | Save file |
+| `<C-c>` | Copy entire file |
 
 ### WhichKey
 | Key | Action |
 |-----|--------|
-| `<leader>wK` | Show all registered keymaps |
-| `<leader>wk` | Prompted WhichKey lookup |
+| `<Space>wK` | Show all keymaps |
+| `<Space>wk` | WhichKey lookup |
+
+### Theme
+| Key | Action |
+|-----|--------|
+| `<Space>th` | Theme picker |
 
 ---
-## 6. Plugins Included (Custom Layer)
+## 7. Plugins Included
 
-Defined in `lua/plugins/init.lua`:
-* `nvim-treesitter` – Syntax highlighting & indent
-* `nvim-treesitter-textobjects` – Smart text objects for code navigation
-* `nvim-lspconfig` – Base LSP client setups
-* `mason-lspconfig.nvim` – Ensures LSP servers installation
-* `nvim-lint` + `mason-nvim-lint` – Linting layer
-* `conform.nvim` + `mason-conform.nvim` – Formatting layer with format-on-save
-* `alpha-nvim` – Startup dashboard (ASCII header, quick buttons)
-* `noice.nvim` – Enhanced UI for messages, cmdline, LSP popups
-* `harpoon` – Rapid file mark & jump navigation
-* `telescope-fzf-native` – Native fzf sorter for faster Telescope search
-* `overseer.nvim` – Task orchestration (compile/run/test integration base)
-* **NEW**: `runner.nvim` – Fast code execution with test harness, I/O files, and multiple terminal modes
-* **NEW**: `timesense.nvim` – Code complexity analysis (inline O(n) hints) & coding statistics tracker
-* `trouble.nvim` – Diagnostics & references list UI
-* `LuaSnip` + `friendly-snippets` – Snippet engine + community snippets (custom C++ snippets: `cp` for full competitive template, `cb` for simple boilerplate)
-* **NEW**: `cord.nvim` – Discord Rich Presence integration
-* **NEW**: `nvim-surround` – Add/change/delete surrounding pairs (quotes, brackets, tags)
-* **NEW**: `Comment.nvim` – Enhanced commenting with treesitter integration
-* **NEW**: `todo-comments.nvim` – Highlight & navigate TODO/FIXME/NOTE/HACK/PERF comments
-* **NEW**: `flash.nvim` – Lightning-fast navigation with label jumps
-* **NEW**: `nvim-bqf` – Better quickfix list with preview
-* **NEW**: `diffview.nvim` – Git diff and file history viewer
-* **NEW**: `dressing.nvim` – Better UI for vim.ui.select/input (prettier LSP actions)
+### Core Framework
+* `NvChad` – Base UI framework with themes, statusline, bufferline
+* `lazy.nvim` – Modern plugin manager
+* `telescope.nvim` + `telescope-fzf-native` – Fuzzy finder with native FZF sorter
+* `which-key.nvim` – Keybinding discovery UI
+* `nvim-tree.lua` – File explorer
 
-NvChad core already brings: telescope, nvim-tree, bufferline (tabufline), statusline, themes, terminal manager, which-key integration, commenting, etc.
+### Language & Syntax
+* `nvim-treesitter` + `nvim-treesitter-textobjects` – Syntax highlighting & smart text objects
+* `nvim-lspconfig` – LSP client configurations
+* `mason.nvim` + `mason-lspconfig.nvim` – LSP server auto-installer
+
+### Formatting & Linting
+* `conform.nvim` + `mason-conform.nvim` – Fast async formatting with format-on-save
+* `nvim-lint` + `mason-nvim-lint` – Async linting engine
+
+### UI & Experience
+* `alpha-nvim` – Beautiful startup dashboard
+* `noice.nvim` + `nvim-notify` – Enhanced UI for messages, cmdline, and notifications
+* `dressing.nvim` – Better UI for inputs and selections
+* `trouble.nvim` – Diagnostics & quickfix UI
+
+### Competitive Programming
+* `runner.nvim` – Fast code execution with test harness, I/O files, optimization profiles
+* `timesense.nvim` – Code complexity analysis (O(n) hints) & coding statistics
+
+### Navigation & Editing
+* `harpoon` (v2) – Quick file marks and navigation
+* `flash.nvim` – Lightning-fast label-based navigation
+* `nvim-surround` – Add/change/delete surrounding pairs
+* `Comment.nvim` – Treesitter-aware commenting
+* `todo-comments.nvim` – Highlight & navigate TODO/FIXME/NOTE comments
+
+### Snippets
+* `LuaSnip` + `friendly-snippets` – Snippet engine with community snippets
+* Custom C++ snippets (`cp` full template, `cb` simple boilerplate)
+
+### Git Integration
+* `diffview.nvim` – Git diff and file history viewer
+
+### Optional
+* `cord.nvim` – Discord Rich Presence (toggle with `<Space>cd`)
+
+**Removed Plugins** (from previous versions):
+- `overseer.nvim` – Replaced by runner.nvim for CP use cases
+- `nvim-bqf` – Replaced by trouble.nvim's superior quickfix UI
 
 ---
-## 7. LSP Setup
+## 8. LSP Setup
 
 Current configured server in `configs/lspconfig.lua`:
 * `lua_ls` (Lua language server) – Diagnostics explicitly disabled (`diagnostics.enable = false`).
@@ -285,7 +298,7 @@ If you want automatic installation toggle `automatic_installation = true` in `co
 Example pattern (already shown in comments): set `client.server_capabilities.documentFormattingProvider = false` in a server-specific `on_attach` wrapper when you rely solely on `conform`.
 
 ---
-## 8. Treesitter
+## 9. Treesitter
 
 Configured languages (`ensure_installed` in `configs/treesitter.lua`):
 `bash`, `fish`, `lua`, `luadoc`, `markdown`, `markdown_inline`, `printf`, `toml`, `vim`, `vimdoc`, `yaml`.
@@ -302,7 +315,7 @@ The config now includes:
 These work automatically with supported languages (C, C++, Python, Lua, etc.).
 
 ---
-## 9. Formatting (`conform.nvim`)
+## 10. Formatting (`conform.nvim`)
 
 Defined in `configs/conform.lua`:
 * Filetype formatter map: `lua -> stylua`, `c/cpp -> clang-format` (others commented for reference).
@@ -314,7 +327,7 @@ To customize `stylua` args: uncomment & adjust the `stylua` section in `formatte
 Add new filetypes by editing `formatters_by_ft`.
 
 ---
-## 10. Linting (`nvim-lint`)
+## 11. Linting (`nvim-lint`)
 
 Configured in `configs/lint.lua`:
 * Active: `lua` uses `luacheck` (args customized to treat `love`, `vim` as globals; outputs codes & ranges).
@@ -323,13 +336,13 @@ Configured in `configs/lint.lua`:
 * Installation of underlying linters can be automated via `mason-nvim-lint` (ensure the linter name matches a supported Mason package).
 
 ---
-## 11. Indentation & Options
+## 12. Indentation & Options
 
 In `options.lua`: sets `shiftwidth`, `tabstop`, `softtabstop` to **4**.
 Add further overrides there (cursorline, custom autocmds, etc.).
 
 ---
-## 12. Theme & UI
+## 13. Theme & UI
 
 Current theme: `bearded-arc` (set in `chadrc.lua`).
 Change theme: edit that file & set another valid NvChad theme name, or run `<leader>th` to preview & then persist the choice manually.
@@ -341,7 +354,7 @@ Configured in `lua/configs/alpha.lua` with an ASCII header & buttons for common 
 `noice.nvim` improves message routing, cmdline UI, and LSP markdown rendering. Presets enabled: bottom search, command palette, long messages to split, bordered docs. Customize in the spec inside `lua/plugins/init.lua`.
 
 ---
-## 13. Adding New Keymaps
+## 14. Adding New Keymaps
 
 Place them in `lua/mappings.lua` after the `require "nvchad.mappings"` line. Example:
 
@@ -353,7 +366,7 @@ map("n", "<leader>qq", ":qa!<CR>", { desc = "Quit all" })
 Use `desc` so WhichKey & the cheatsheet show them.
 
 ---
-## 14. Adding Plugins
+## 15. Adding Plugins
 
 Add a spec to `lua/plugins/init.lua`:
 ```lua
@@ -368,7 +381,7 @@ Add a spec to `lua/plugins/init.lua`:
 Restart or run `:Lazy sync`.
 
 ---
-## 15. Managing Plugins
+## 16. Managing Plugins
 Useful commands:
 | Command | Purpose |
 |---------|---------|
@@ -380,7 +393,7 @@ Useful commands:
 `lazy-lock.json` pins versions; commit changes for reproducibility.
 
 ---
-## 16. Troubleshooting
+## 17. Troubleshooting
 | Symptom | Tip |
 |---------|-----|
 | Treesitter highlight missing | Run `:TSInstall <lang>` or ensure language in list |
@@ -390,7 +403,7 @@ Useful commands:
 | Icons broken | Install a Nerd Font & enable it in your terminal |
 
 ---
-## 17. Extending Further
+## 18. Extending Further
 * Add statusline tweaks via NvChad UI overrides
 * Configure diagnostics signs if re-enabling diagnostics for `lua_ls`
 * Add judge integration script to auto-produce expected outputs
@@ -398,7 +411,7 @@ Useful commands:
 * Add test generation or random stress testing harness (A/B testing)
 
 ---
-## 18. Quick Start Recap
+## 19. Quick Start Recap
 1. Clone repo
 2. Open Neovim (`nvim`)
 3. Wait for bootstrap
@@ -406,7 +419,7 @@ Useful commands:
 5. Start coding 🎯
 
 ---
-## 19. Snippets Reference
+## 20. Snippets Reference
 See `SNIPPETS.md` for the full list of competitive programming C++ snippets (templates, DS, graphs, math, strings, utilities). Key snippets:
 - **`cp`** - Full competitive programming template (typedefs, macros, solve function structure)
 - **`cb`** - Simple C++ boilerplate for basic coding
@@ -417,40 +430,54 @@ Reload them after editing with:
 ```
 
 ---
-## 20. NEW Features Summary (Latest Update)
+## 21. Configuration Philosophy
 
-### Enhanced Productivity
-- **Discord Rich Presence**: Show what you're coding in Discord (auto-enabled)
-- **Flash Navigation**: Jump anywhere with `s` + character labels
-- **Smart Surround**: Easily manipulate quotes, brackets, tags with `ys`/`cs`/`ds`
-- **Better Commenting**: Treesitter-aware commenting with `gcc`/`gbc`
-- **TODO Highlighting**: Automatic highlighting of TODO/FIXME/NOTE/HACK/PERF comments
-- **Treesitter Text Objects**: Select/navigate functions, classes with `af`, `if`, `]f`, etc.
-- **Incremental Selection**: Press `<CR>` repeatedly to expand selection intelligently
-- **Git Integration**: View diffs and history with `<leader>gd`, `<leader>gh`
-- **Better Quickfix**: Enhanced quickfix list with preview
-- **Prettier UI**: Better dialogs for LSP actions and inputs
+This setup follows these principles:
 
-### Quality of Life Improvements
-- Cursor stays centered on jumps/searches (`n`, `N`, `<C-d>`, `<C-u>`)
-- Better visual mode (indent without losing selection)
-- Move lines in visual mode with `J`/`K`
-- Smart paste that doesn't yank (`<leader>p` in visual)
-- Wrap-aware j/k movement
-- Quick save with `<leader>w`
-- Better split navigation (`<leader>h`, `<leader>v`)
-- Persistent undo, better defaults (scrolloff, updatetime, etc.)
+1. **Conflict-Free Keybinds**: No duplicate or overlapping keybinds
+2. **Prefix Organization**: Logical grouping (`<Space>f` = find, `<Space>c` = code, etc.)
+3. **Vim Standards**: Uses standard Vim conventions where applicable
+4. **Clipboard Integration**: System clipboard sync enabled by default
+5. **Smart Defaults**: Sensible options for productivity and competitive programming
+6. **Minimal But Complete**: Essential plugins without bloat
 
-### Commands to Explore
-- `:Noice` or `:Noice history` - View all notifications/messages history
-- `:TodoTelescope` - Search all TODO comments
-- `:Cord toggle presence` or `<leader>cd` - Toggle Discord Rich Presence
-- `:DiffviewOpen` - Open git diff view
-- `:DiffviewFileHistory %` - See current file's history
-- Use `<leader>ch` to see the full cheatsheet
+### Recent Improvements (v2024.1)
+- Fixed all keybind conflicts (no more duplicates)
+- Removed redundant plugins (overseer, nvim-bqf)
+- Improved terminal toggle behavior (separate buffers for each type)
+- Added system clipboard sync
+- Standardized window navigation to `<C-hjkl>`
+- Changed buffer switching from Tab to `<C-Tab>`
+- Updated LuaSnip navigation to `<C-n/p>` (no conflict with window nav)
+- Simplified Harpoon shortcuts (`<Space>1-4` instead of `<Space>h1-4`)
 
 ---
-Happy hacking! Customize boldly—this setup is purposely minimal so you can grow it organically.
+## 22. Tips & Best Practices
+
+### Learning the Setup
+1. Start with `<Space>fk` to explore keybinds interactively
+2. Press `<Space>` and wait – WhichKey shows available options
+3. See [MOTIONS.md](./MOTIONS.md) for complete reference
+4. Practice one prefix at a time (`<Space>f` for finding, `<Space>c` for code)
+
+### Workflow Optimization
+1. **File Navigation**: Use Harpoon for frequently-used files
+   - `<Space>ha` to add file
+   - `<Space>1-4` to jump instantly
+2. **Searching**: `<Space>ff` for files, `<Space>fg` for text
+3. **Terminals**: Alt+h/v for quick terminals (toggle from anywhere)
+4. **Buffer Management**: `<C-Tab>` to cycle, `<Space>bd` to close
+
+### Competitive Programming Workflow
+1. Create `main.cpp`, type `cp<Tab>` for template
+2. Write solution
+3. Press `<Space>cr` to compile and run
+4. Use `<Space>ci` with `input.txt` for testing
+5. Run all tests with `<Space>ctt` (requires `tests/*.in` and `tests/*.out`)
+6. Analyze complexity with `<Space>tc`
+
+---
+Happy hacking! Customize to your heart's content.
 
 ---
 Navigation: [Snippets](./SNIPPETS.md) · [Motions](./MOTIONS.md)
