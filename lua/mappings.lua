@@ -5,11 +5,14 @@
 --  Sections:
 --    * Core quality-of-life
 --    * Terminal toggles
---    * Harpoon, Trouble, Overseer, Snippets
+--    * Harpoon, Trouble, Runner, Snippets
 -- =====================================================================
 
 require("nvchad.mappings") -- load NvChad defaults first
 pcall(require, "configs.disable_signature") -- ensure signature popups are disabled early
+
+-- Enable system clipboard sync
+vim.opt.clipboard = "unnamedplus"
 
 -- Always enable line numbers + relative numbers on startup
 vim.opt.number = true
@@ -99,11 +102,11 @@ map("n", "<leader>ha", function()
     require("harpoon"):list():add()
     vim.notify("Added to Harpoon list")
 end, { desc = "Harpoon add file" })
-map("n", "<leader>hm", function()
+map("n", "<leader>hh", function()
     require("harpoon").ui:toggle_quick_menu(require("harpoon"):list())
 end, { desc = "Harpoon menu" })
 for i = 1, 4 do
-    map("n", string.format("<leader>h%d", i), function()
+    map("n", string.format("<leader>%d", i), function()
         require("harpoon"):list():select(i)
     end, { desc = "Harpoon select #" .. i })
 end
@@ -114,12 +117,6 @@ end
 map("n", "<leader>td", "<cmd>Trouble diagnostics toggle focus=true<CR>", { desc = "Trouble diagnostics" })
 map("n", "<leader>tq", "<cmd>Trouble qflist toggle<CR>", { desc = "Trouble quickfix" })
 map("n", "<leader>tr", "<cmd>Trouble lsp_references toggle focus=true<CR>", { desc = "Trouble references" })
-
--- =============================================
--- Overseer tasks (compile / run orchestrator)
--- =============================================
-map("n", "<leader>ot", "<cmd>OverseerToggle<CR>", { desc = "Overseer task list" })
-map("n", "<leader>or", "<cmd>OverseerRun<CR>", { desc = "Overseer run task" })
 
 -- =============================================
 -- Toggle shell between zsh and fish (Neovim internal terminal only)
@@ -144,41 +141,45 @@ end, { desc = "Toggle shell zsh<->fish (nvim term)" })
 -- =============================================
 -- Terminal toggles
 -- =============================================
-map("n", "<leader>ft", function()
-    -- Toggle a shared floating bash terminal (identical to Alt-i)
+-- Alt-i toggles floating bash terminal
+map({ "n", "t" }, "<A-i>", function()
     toggle_floating_bash()
 end, { desc = "Toggle floating bash terminal" })
 
--- Alt-i should behave exactly like <leader>ft (toggle open/close)
-map({ "n", "t" }, "<A-i>", function()
+-- Leader ft also toggles floating bash terminal
+map("n", "<leader>ft", function()
     toggle_floating_bash()
 end, { desc = "Toggle floating bash terminal" })
 
 -- =============================================
 -- LuaSnip navigation (if using luasnip)
 -- =============================================
-map({ "i", "s" }, "<C-j>", function()
+map({ "i", "s" }, "<C-n>", function()
+    local ls = require("luasnip")
     if ls.expand_or_jumpable() then
         ls.expand_or_jump()
     end
 end, { desc = "LuaSnip expand or jump forward" })
-map({ "i", "s" }, "<C-k>", function()
+map({ "i", "s" }, "<C-p>", function()
+    local ls = require("luasnip")
     if ls.jumpable(-1) then
         ls.jump(-1)
     end
 end, { desc = "LuaSnip jump backward" })
 
 -- =============================================
--- Terminal toggle (Alt-h / Alt-v) and leader h/v for window navigation
+-- Window Navigation
 -- =============================================
-
--- Repurpose leader h/v to navigate splits
-map("n", "<leader>h", "<C-w>h", { desc = "Focus left split" })
-map("n", "<leader>v", "<C-w>l", { desc = "Focus right split" })
+map("n", "<C-h>", "<C-w>h", { desc = "Focus left split" })
+map("n", "<C-j>", "<C-w>j", { desc = "Focus down split" })
+map("n", "<C-k>", "<C-w>k", { desc = "Focus up split" })
+map("n", "<C-l>", "<C-w>l", { desc = "Focus right split" })
 
 -- Horizontal terminal toggle (Alt-h) and Vertical (Alt-v)
 local function toggle_term(dir)
-    local buf = vim.g.toggle_term_buf
+    -- Use separate buffers for horizontal and vertical
+    local buf_var = dir == "v" and "toggle_term_buf_v" or "toggle_term_buf_h"
+    local buf = vim.g[buf_var]
     local buf_valid = buf and vim.api.nvim_buf_is_valid(buf)
     local win_with_buf
     if buf_valid then
@@ -217,13 +218,13 @@ local function toggle_term(dir)
     vim.cmd("enew")
     local new_buf = vim.api.nvim_get_current_buf()
     vim.fn.termopen({ "bash", "--noprofile" })
-    vim.g.toggle_term_buf = new_buf
+    vim.g[buf_var] = new_buf
     vim.cmd("startinsert")
 end
-map("n", "<A-h>", function()
+map({ "n", "t" }, "<A-h>", function()
     toggle_term("h")
 end, { desc = "Toggle horizontal terminal" })
-map("n", "<A-v>", function()
+map({ "n", "t" }, "<A-v>", function()
     toggle_term("v")
 end, { desc = "Toggle vertical terminal" })
 
@@ -304,3 +305,75 @@ end, { desc = "Toggle Discord Rich Presence" })
 -- =============================================
 map("n", "<leader>tc", "<cmd>Timesense complexity<cr>", { desc = "Timesense complexity analysis" })
 map("n", "<leader>tx", "<cmd>Timesense stats<cr>", { desc = "Timesense coding stats" })
+
+-- =============================================
+-- Buffer Management
+-- =============================================
+map("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
+map("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+map("n", "<leader>ba", "<cmd>%bd|e#|bd#<cr>", { desc = "Close all buffers except current" })
+map("n", "<C-Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<C-S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+
+-- =============================================
+-- Split Management
+-- =============================================
+map("n", "<leader>sv", "<cmd>vsplit<cr>", { desc = "Vertical split" })
+map("n", "<leader>sh", "<cmd>split<cr>", { desc = "Horizontal split" })
+map("n", "<leader>sx", "<C-w>q", { desc = "Close split" })
+map("n", "<leader>se", "<C-w>=", { desc = "Equalize split sizes" })
+
+-- Resize splits with arrow keys
+map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+
+-- =============================================
+-- Telescope (fuzzy finder) shortcuts
+-- =============================================
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
+map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Live grep" })
+map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find buffers" })
+map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Help tags" })
+map("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", { desc = "Recent files" })
+map("n", "<leader>fw", "<cmd>Telescope grep_string<cr>", { desc = "Find word under cursor" })
+map("n", "<leader>fc", "<cmd>Telescope commands<cr>", { desc = "Find commands" })
+map("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "Find keymaps" })
+map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "Document symbols" })
+
+-- =============================================
+-- LSP Keybindings
+-- =============================================
+map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+map("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
+map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
+map("n", "<leader>lf", vim.lsp.buf.format, { desc = "Format document" })
+map("n", "<leader>ls", "<cmd>LspInfo<cr>", { desc = "LSP info" })
+map("n", "<leader>lr", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
+
+-- =============================================
+-- Quick commands
+-- =============================================
+map("n", "<leader>nh", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
+map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New file" })
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
+map("n", "<leader>wa", "<cmd>wa<cr>", { desc = "Save all" })
+
+-- =============================================
+-- File Explorer (NvimTree/Oil)
+-- =============================================
+map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
+map("n", "<leader>ef", "<cmd>NvimTreeFocus<cr>", { desc = "Focus file explorer" })
+
+-- =============================================
+-- Git shortcuts (additional to existing diffview)
+-- =============================================
+map("n", "<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Git status" })
+map("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Git commits" })
+map("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Git branches" })

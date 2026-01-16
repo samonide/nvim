@@ -214,17 +214,6 @@ return {
         end,
     },
 
-    -- Overseer for task management (compile/run/test)
-    {
-        "stevearc/overseer.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("overseer").setup({
-                task_list = { direction = "bottom", min_height = 8, max_height = 20 },
-            })
-        end,
-    },
-
     -- Timesense for complexity analysis and coding stats
     {
         "samonide/timesense.nvim",
@@ -377,13 +366,6 @@ return {
             { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
             { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
         },
-    },
-
-    -- Better quickfix/location list
-    {
-        "kevinhwang91/nvim-bqf",
-        ft = "qf",
-        opts = {},
     },
 
     -- Git blame and history viewer
