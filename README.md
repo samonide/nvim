@@ -292,30 +292,6 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 
 ---
 
-## 🔄 Recent Changes (v2024.1)
-
-### ✅ Keybind Refactoring
-- **Fixed all conflicts**: No more duplicate or overlapping keybinds
-- **Harpoon**: Changed from `<leader>hm` → `<leader>hh` for menu
-- **Harpoon marks**: Simplified from `<leader>h1-4` → `<leader>1-4`
-- **Buffer switching**: Changed from `Tab/Shift-Tab` → `<C-Tab>/<C-S-Tab>`
-- **LuaSnip**: Changed from `<C-j/k>` → `<C-n/p>` (no window nav conflict)
-- **Window navigation**: Standardized to `<C-h/j/k/l>` (Vim standard)
-- **Terminal toggles**: Fixed Alt+h and Alt+v to properly toggle (separate buffers)
-- **Added**: `<leader>ft` for floating terminal (alternative to Alt+i)
-- **Added**: 40+ new keybinds for LSP, Telescope, splits, buffers, Git
-
-### 🗑️ Plugin Removals
-- **Removed overseer.nvim**: Redundant with runner.nvim for CP use cases
-- **Removed nvim-bqf**: Replaced by more powerful trouble.nvim
-
-### ⚙️ Configuration Changes
-- **Clipboard**: Enabled system clipboard sync (`clipboard=unnamedplus`)
-- **Terminal modes**: Alt+h/v now work in both normal and terminal mode
-- **Documentation**: Merged cheatsheet into guide/MOTIONS.md
-
----
-
 ## 🛠️ Customization
 
 ### Add LSP Server
@@ -396,15 +372,6 @@ The `lazy-lock.json` file locks plugin versions. Commit it to your repo to ensur
 
 ---
 
-## 🎓 Learning Path
-
-1. **Week 1**: Learn basic motions (`hjkl`, `w/b`, `f/t`, `%`) - See [MOTIONS.md](./guide/MOTIONS.md)
-2. **Week 2**: Master file navigation (`<Space>ff`, `<Space>fb`, Harpoon marks)
-3. **Week 3**: Learn LSP commands (`gd`, `gr`, `K`, `<Space>ca`)
-4. **Week 4**: Explore advanced features (Flash navigation, Telescope live grep, Trouble)
-5. **Week 5+**: Customize to your workflow (add plugins, change keybinds, create snippets)
-
----
 
 ## 📜 License
 
