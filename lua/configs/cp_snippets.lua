@@ -20,7 +20,7 @@ end
 ls.add_snippets("cpp", {
   -- Simple classic for-loop: for (int i = 0; i < n; ++i) { ... }
   s("for", fmt([[for (int {} = {}; {} < {}; ++{}) {{
-    {}
+        {}
 }}]], {
     i(1, "i"),
     c(2, { t"0", i(nil, "start") }),
@@ -32,7 +32,7 @@ ls.add_snippets("cpp", {
 
   -- Alias trigger for convenience
   s("fori", fmt([[for (int {} = {}; {} < {}; ++{}) {{
-    {}
+        {}
 }}]], {
     i(1, "i"),
     c(2, { t"0", i(nil, "start") }),
@@ -44,13 +44,14 @@ ls.add_snippets("cpp", {
 
   -- Range-based for: for (auto &x : a) { ... }
   s("forr", fmt([[for (auto{} {} : {}) {{
-    {}
+        {}
 }}]], {
     c(1, { t"&", t"" }),
     i(2, "x"),
     i(3, "a"),
     i(0),
   })),
+
   s("main", fmt([[{}
 using namespace std;
 
@@ -89,7 +90,7 @@ int main() {{
 
   s("dbg", t {
     "#ifdef LOCAL",
-    "#define dbg(x) cerr << __LINE__ << ":" << #x << " = " << (x) << '\n'",
+    [[#define dbg(x) cerr << __LINE__ << ":" << #x << " = " << (x) << '\n']],
     "#else",
     "#define dbg(x) (void)0",
     "#endif",
@@ -131,21 +132,21 @@ void sieve(int N) {{
   s("bfs", fmt([[queue<int> q; q.push({});
 vector<int> dist(n, -1); dist[{}]=0;
 while(!q.empty()) {{
-  int v=q.front(); q.pop();
-  for(int to: g[v]) if(dist[to]==-1) {{ dist[to]=dist[v]+1; q.push(to); }}
+    int v=q.front(); q.pop();
+    for(int to: g[v]) if(dist[to]==-1) {{ dist[to]=dist[v]+1; q.push(to); }}
 }}]], { i(1, "start"), i(2, "start") })),
 
   s("dfs", fmt([[function<void(int,int)> dfs = [&](int v,int p) {{
-  {} // body
-  for(int to: g[v]) if(to!=p) dfs(to,v);
+    {} // body
+    for(int to: g[v]) if(to!=p) dfs(to,v);
 }}; dfs({}, -1);]], { i(1, "// process v"), i(2, "root") })),
 
-  s("v2", fmt([[vector<vector<{}>> {}({},{ vector<{}>({}) });]], {
+  s("v2", fmt([[vector<vector<{}>> {}({}, vector<{}>({}) );]], {
     c(1, { t "int", t "long long", t "char" }),
     i(2, "grid"),
     i(3, "n"),
-    c(4, { t "int", t "long long", t "char" }),
-    i(5, "m"),
+    rep(1),
+    i(4, "m"),
   })),
 
   s("pref", fmt([[vector<long long> pref(n+1,0);
@@ -194,26 +195,28 @@ const int INF = 1e9;
 const ll LINF = 1e18;
 
 void fast_io() {{
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  cout.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 }}
 
-void solve() {{}}
+void solve() {{
+    {}
+}}
 
 int main() {{
-  fast_io();
+    fast_io();
 
-  int t = 1;
-  cin >> t; // Comment for multiple test cases
+    int t = 1;
+    cin >> t; // Comment for multiple test cases
 
-  while (t--) {{
-    solve();
-  }}
+    while (t--) {{
+        solve();
+    }}
 
-  return 0;
+    return 0;
 }}
-]], { f(date) })),
+]], { f(date), i(0) })),
 })
 
 -- =====================================================================
@@ -246,21 +249,29 @@ ls.add_snippets("cpp", {
 }};]], {})),
 
   -- KMP prefix function
-  s("kmp", fmt([[vector<int> pi({});
-for(int i=1;i<{};++i) {{
-  int j=pi[i-1];
-  while(j>0 && {}[i]!= {}[j]) j=pi[j-1];
-  if({}[i]=={}[j]) ++j;
-  pi[i]=j;
-}}]], { i(1,"n"), rep(1), i(2,"s"), i(2), i(2), i(2) })),
+  s("kmp", {
+    t {
+      "vector<int> pi(n);",
+      "for(int i=1;i<n;++i) {",
+      "    int j=pi[i-1];",
+      "    while(j>0 && s[i]!=s[j]) j=pi[j-1];",
+      "    if(s[i]==s[j]) ++j;",
+      "    pi[i]=j;",
+      "}",
+    },
+  }),
 
   -- Z-function
-  s("zfn", fmt([[vector<int> z({}); z[0]=0; int l=0,r=0;
-for(int i=1;i<{};++i) {{
-  if(i<=r) z[i]=min(r-i+1,z[i-l]);
-  while(i+z[i]<{} && {}[z[i]]=={}[i+z[i]]) ++z[i];
-  if(i+z[i]-1>r) l=i, r=i+z[i]-1;
-}}]], { i(1,"n"), rep(1), rep(1), i(2,"s"), i(2) })),
+  s("zfn", {
+    t {
+      "vector<int> z(n); z[0]=0; int l=0,r=0;",
+      "for(int i=1;i<n;++i) {",
+      "    if(i<=r) z[i]=min(r-i+1,z[i-l]);",
+      "    while(i+z[i]<n && s[z[i]]==s[i+z[i]]) ++z[i];",
+      "    if(i+z[i]-1>r) l=i, r=i+z[i]-1;",
+      "}",
+    },
+  }),
 
   -- Binary search on answer
   s("binans", fmt([[long long lo={}, hi={}, ans=-1; while(lo<=hi) {{ long long mid=(lo+hi)/2; if({}) ans=mid, hi=mid-1; else lo=mid+1; }}]], { i(1,"0"), i(2,"1e12"), i(3,"check(mid)") })),
@@ -284,22 +295,26 @@ for(int k=1;k<K;++k) for(int i=0;i + (1<<k) <= n; ++i) st[k][i]=min(st[k-1][i], 
 auto qry = [&](int l,int r) {{ int k=31-__builtin_clz(r-l+1); return min(st[k][l], st[k][r-(1<<k)+1]); }};]], {})),
 
   -- LIS n log n
-  s("lis", t {
-    "vector<int> d; vector<int> pos, par;",
-    "int n = a.size(); pos.assign(n,-1); par.assign(n,-1);",
-    "for(int i=0;i<n;++i){",
-    "  int x=a[i]; auto it=lower_bound(d.begin(), d.end(), x); int idx=it-d.begin();",
-    "  if(it==d.end()) d.push_back(x); else *it=x;",
-    "  pos[idx]=i; if(idx) par[i]=pos[idx-1];",
-    "}",
-    "// length d.size(), reconstruct:",
-    "vector<int> seq; int cur=pos[d.size()-1]; while(cur!=-1){ seq.push_back(a[cur]); cur=par[cur]; } reverse(seq.begin(), seq.end());",
+  s("lis", {
+    t {
+      "vector<int> d; vector<int> pos, par;",
+      "int n = a.size(); pos.assign(n,-1); par.assign(n,-1);",
+      "for(int i=0;i<n;++i){",
+      "    int x=a[i]; auto it=lower_bound(d.begin(), d.end(), x); int idx=it-d.begin();",
+      "    if(it==d.end()) d.push_back(x); else *it=x;",
+      "    pos[idx]=i; if(idx) par[i]=pos[idx-1];",
+      "}",
+      "// length d.size(), reconstruct:",
+      "vector<int> seq; int cur=pos[d.size()-1]; while(cur!=-1){ seq.push_back(a[cur]); cur=par[cur]; } reverse(seq.begin(), seq.end());",
+    },
   }),
 
   -- Coordinate compression
-  s("ccmp", t {
-    "vector<int> vals = a; sort(all(vals)); vals.erase(unique(all(vals)), vals.end());",
-    "for(int &x: a) x = lower_bound(all(vals), x) - vals.begin();",
+  s("ccmp", {
+    t {
+      "vector<int> vals = a; sort(all(vals)); vals.erase(unique(all(vals)), vals.end());",
+      "for(int &x: a) x = lower_bound(all(vals), x) - vals.begin();",
+    },
   }),
 
   -- Precompute factorial & inverse factorial (mod)
@@ -309,27 +324,38 @@ ifact[{}]=inv(fact[{}]); for(int i={} ; i>0; --i) ifact[i-1]=1LL*ifact[i]*i%MOD;
 auto C = [&](int n,int k)->int{{ if(k<0||k>n) return 0; return 1LL*fact[n]*ifact[k]%MOD*ifact[n-k]%MOD; }};]], { i(1,"N"), rep(1), rep(1), rep(1), rep(1), rep(1) })),
 
   -- LCA (binary lifting skeleton)
-  s("lca", t {
-    "int LOG = 32-__builtin_clz(n);",
-    "vector<vector<int>> up(LOG, vector<int>(n,-1)); vector<int> depth(n);",
-    "function<void(int,int)> dfs = [&](int v,int p){ up[0][v]=p; for(int k=1;k<LOG;++k) up[k][v]= (up[k-1][v]<0?-1: up[k-1][ up[k-1][v] ]); for(int to: g[v]) if(to!=p){ depth[to]=depth[v]+1; dfs(to,v);} };",
-    "dfs(0,-1);",
-    "auto lift = [&](int v,int d){ for(int k=0;k<LOG;++k) if(d>>k & 1) v = (v<0?-1: up[k][v]); return v; };",
-    "auto lca = [&](int a,int b){ if(depth[a]<depth[b]) swap(a,b); a=lift(a, depth[a]-depth[b]); if(a==b) return a; for(int k=LOG-1;k>=0;--k) if(up[k][a]!=up[k][b]) a=up[k][a], b=up[k][b]; return up[0][a]; };",
+  s("lca", {
+    t {
+      "int LOG = 32-__builtin_clz(n);",
+      "vector<vector<int>> up(LOG, vector<int>(n,-1)); vector<int> depth(n);",
+      "function<void(int,int)> dfs = [&](int v,int p){ up[0][v]=p; for(int k=1;k<LOG;++k) up[k][v]= (up[k-1][v]<0?-1: up[k-1][ up[k-1][v] ]); for(int to: g[v]) if(to!=p){ depth[to]=depth[v]+1; dfs(to,v);} };",
+      "dfs(0,-1);",
+      "auto lift = [&](int v,int d){ for(int k=0;k<LOG;++k) if(d>>k & 1) v = (v<0?-1: up[k][v]); return v; };",
+      "auto lca = [&](int a,int b){ if(depth[a]<depth[b]) swap(a,b); a=lift(a, depth[a]-depth[b]); if(a==b) return a; for(int k=LOG-1;k>=0;--k) if(up[k][a]!=up[k][b]) a=up[k][a], b=up[k][b]; return up[0][a]; };",
+    },
   }),
 
   -- Matrix fast exponent (square matrix n x n)
-  s("matpow", t {
-    "using Mat = vector<vector<long long>>;",
-    "Mat mul(const Mat &A,const Mat &B){ int n=A.size(); Mat C(n, vector<long long>(n)); for(int i=0;i<n;++i) for(int k=0;k<n;++k) if(A[i][k]) for(int j=0;j<n;++j) C[i][j]=(C[i][j]+A[i][k]*B[k][j])%MOD; return C; }",
-    "Mat mpow(Mat A,long long e){ int n=A.size(); Mat R(n, vector<long long>(n)); for(int i=0;i<n;++i) R[i][i]=1; while(e){ if(e&1) R=mul(R,A); A=mul(A,A); e>>=1; } return R; }",
+  s("matpow", {
+    t {
+      "using Mat = vector<vector<long long>>;",
+      "Mat mul(const Mat &A,const Mat &B){ int n=A.size(); Mat C(n, vector<long long>(n)); for(int i=0;i<n;++i) for(int k=0;k<n;++k) if(A[i][k]) for(int j=0;j<n;++j) C[i][j]=(C[i][j]+A[i][k]*B[k][j])%MOD; return C; }",
+      "Mat mpow(Mat A,long long e){ int n=A.size(); Mat R(n, vector<long long>(n)); for(int i=0;i<n;++i) R[i][i]=1; while(e){ if(e&1) R=mul(R,A); A=mul(A,A); e>>=1; } return R; }",
+    },
   }),
 
   -- RNG helper
-  s("rng", t {"mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());","auto rnd = [&](long long l,long long r){ return uniform_int_distribution<long long>(l,r)(rng); };"}),
+  s("rng", {
+    t {
+      "mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());",
+      "auto rnd = [&](long long l,long long r){ return uniform_int_distribution<long long>(l,r)(rng); };",
+    },
+  }),
 
   -- Fast scanner (int)
-  s("scan", t {"auto readInt=[&](){ int x=0,c=getchar_unlocked(),s=1; while(c<'0'||c>'9'){ if(c=='-') s=-1; c=getchar_unlocked(); } while(c>='0'&&c<='9'){ x=x*10+c-'0'; c=getchar_unlocked(); } return x*s; };"}),
+  s("scan", {
+    t "auto readInt=[&](){ int x=0,c=getchar_unlocked(),s=1; while(c<'0'||c>'9'){ if(c=='-') s=-1; c=getchar_unlocked(); } while(c>='0'&&c<='9'){ x=x*10+c-'0'; c=getchar_unlocked(); } return x*s; };",
+  }),
 
   -- Bitset usage example
   s("bs", fmt([[bitset<{}> {};]], { i(1, "N"), i(2, "bs") })),
