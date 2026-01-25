@@ -74,7 +74,7 @@ local function make_float_win(buf)
     })
 end
 
--- Toggle a single shared floating bash terminal (no rc/history)
+-- Toggle a single shared floating zsh terminal (no rc/history)
 local function toggle_floating_bash()
     local win = vim.g._float_bash_win
     local buf = vim.g._float_bash_buf
@@ -91,7 +91,7 @@ local function toggle_floating_bash()
     buf = vim.api.nvim_create_buf(false, true)
     vim.g._float_bash_buf = buf
     vim.g._float_bash_win = make_float_win(buf)
-    vim.fn.termopen({ "bash", "--noprofile" })
+    vim.fn.termopen({ "zsh" })
     vim.cmd("startinsert")
 end
 
@@ -141,15 +141,15 @@ end, { desc = "Toggle shell zsh<->fish (nvim term)" })
 -- =============================================
 -- Terminal toggles
 -- =============================================
--- Alt-i toggles floating bash terminal
+-- Alt-i toggles floating zsh terminal
 map({ "n", "t" }, "<A-i>", function()
     toggle_floating_bash()
-end, { desc = "Toggle floating bash terminal" })
+end, { desc = "Toggle floating zsh terminal" })
 
--- Leader ft also toggles floating bash terminal
+-- Leader ft also toggles floating zsh terminal
 map("n", "<leader>ft", function()
     toggle_floating_bash()
-end, { desc = "Toggle floating bash terminal" })
+end, { desc = "Toggle floating zsh terminal" })
 
 -- =============================================
 -- LuaSnip navigation (if using luasnip)
@@ -209,7 +209,7 @@ local function toggle_term(dir)
         return
     end
 
-    -- Create new terminal buffer (use bash without rc to avoid neofetch/history)
+    -- Create new terminal buffer (use zsh)
     if dir == "v" then
         vim.cmd("botright vsplit")
     else
@@ -217,7 +217,7 @@ local function toggle_term(dir)
     end
     vim.cmd("enew")
     local new_buf = vim.api.nvim_get_current_buf()
-    vim.fn.termopen({ "bash", "--noprofile" })
+    vim.fn.termopen({ "zsh" })
     vim.g[buf_var] = new_buf
     vim.cmd("startinsert")
 end

@@ -10,9 +10,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
+        build = ":TSUpdate",
         config = function()
             require("configs.treesitter")
         end,
@@ -198,6 +196,15 @@ return {
         end,
     },
 
+    -- Telescope (fuzzy finder)
+    {
+        "nvim-telescope/telescope.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("configs.telescope")
+        end,
+    },
+
     -- Telescope fzf native for speed
     {
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -206,6 +213,7 @@ return {
             return vim.fn.executable("make") == 1
         end,
         event = "VeryLazy",
+        dependencies = { "telescope.nvim" },
         config = function()
             local ok, telescope = pcall(require, "telescope")
             if ok then

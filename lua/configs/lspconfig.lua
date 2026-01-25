@@ -14,7 +14,7 @@ local capabilities = require("nvchad.configs.lspconfig").capabilities
 -- Note: This is now a module-level table since we're not using lspconfig object
 local servers = {
     "lua_ls",
-    -- "clangd",
+    "clangd",
     -- "gopls",
     -- "hls",
     -- "ols",
@@ -45,16 +45,16 @@ end
 -- Example server configurations using vim.lsp.config (commented for reference)
 -- Uncomment and modify as needed
 
--- vim.lsp.config('clangd', {
---     on_attach = function(client, bufnr)
---         client.server_capabilities.documentFormattingProvider = false
---         client.server_capabilities.documentRangeFormattingProvider = false
---         on_attach(client, bufnr)
---     end,
---     on_init = on_init,
---     capabilities = capabilities,
--- })
--- vim.lsp.enable('clangd')
+vim.lsp.config('clangd', {
+    on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+        on_attach(client, bufnr)
+    end,
+    on_init = on_init,
+    capabilities = capabilities,
+})
+vim.lsp.enable('clangd')
 
 -- vim.lsp.config('gopls', {
 --     on_attach = function(client, bufnr)
