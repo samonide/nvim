@@ -71,11 +71,10 @@ return {
 
     -- Dashboard (welcome screen)
     {
-        "goolord/alpha-nvim",
+        "echasnovski/mini.starter",
         event = "VimEnter",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
-            require("configs.alpha")
+            require("configs.starter")
         end,
     },
 
@@ -269,7 +268,7 @@ return {
             { "<leader>ctt", "<cmd>RunTests<cr>", desc = "Run all tests" },
             { "<leader>co", "<cmd>RunProfile<cr>", desc = "Cycle optimization profile" },
             { "<leader>cw", "<cmd>RunWatch<cr>", desc = "Toggle watch mode" },
-            { "<leader>ch", "<cmd>RunHistory<cr>", desc = "Show run history" },
+            { "<leader>cx", "<cmd>RunHistory<cr>", desc = "Show run history" },
             { "<leader>cc", "<cmd>RunClean<cr>", desc = "Clean build directory" },
             { "<C-A-n>", "<cmd>RunIOFiles<cr>", desc = "Run with input.txt -> output.txt" },
         },
@@ -288,22 +287,24 @@ return {
         "vyfor/cord.nvim",
         build = ":Cord update",
         event = "VeryLazy",
-        opts = {
-            enabled = true,
-            editor = {
-                client = "neovim",
-                tooltip = "The Superior Text Editor",
-            },
-            display = {
-                theme = "default",
-                flavor = "dark",
-            },
-            idle = {
+        config = function()
+            require("cord").setup({
                 enabled = true,
-                timeout = 300000, -- 5 minutes
-                show_status = true,
-            },
-        },
+                editor = {
+                    client = "neovim",
+                    tooltip = "The Superior Text Editor",
+                },
+                display = {
+                    theme = "default",
+                    flavor = "dark",
+                },
+                idle = {
+                    enabled = true,
+                    timeout = 300000, -- 5 minutes
+                    show_status = true,
+                },
+            })
+        end,
     },
 
     -- Surround operations (add/change/delete surrounding pairs)

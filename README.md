@@ -47,7 +47,7 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 * **Watch Mode**: Auto-recompile on file save with `<leader>cw`
 
 ### 🎨 UI & Navigation
-* **Dashboard**: Beautiful startup screen (alpha.nvim)
+* **Dashboard**: Minimalistic startup screen (mini.starter)
 * **Enhanced Command Line**: Centered popup with dynamic border colors (noice.nvim)
 * **Smart Notifications**: Non-intrusive notifications (nvim-notify)
 * **Diagnostics UI**: Beautiful error/warning display (trouble.nvim)
@@ -69,7 +69,7 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 
 ## 📷 Screenshots
 
-Dashboard (Alpha) | Editing (Normal) | Transparent UI
+Dashboard (mini.starter) | Editing (Normal) | Transparent UI
 :--:|:--:|:--:
 ![Dashboard](./screenshots/dashboard.png) | ![Normal](./screenshots/normal.png) | ![Transparent](./screenshots/transparent.png)
 
@@ -183,7 +183,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 ### 🎯 UI & Experience
 | Plugin | Purpose |
 |--------|---------|
-| [alpha-nvim](https://github.com/goolord/alpha-nvim) | Beautiful dashboard |
+| [mini.starter](https://github.com/echasnovski/mini.starter) | Minimalistic dashboard |
 | [noice.nvim](https://github.com/folke/noice.nvim) | Enhanced cmdline/messages UI |
 | [nvim-notify](https://github.com/rcarriga/nvim-notify) | Beautiful notifications |
 | [dressing.nvim](https://github.com/stevearc/dressing.nvim) | Better UI for inputs/selects |

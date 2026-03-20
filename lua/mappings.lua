@@ -28,19 +28,19 @@ local function hide_nums()
 end
 vim.api.nvim_create_autocmd("FileType", {
     group = hidegrp,
-    pattern = { "alpha", "dashboard", "nvdash", "starter" },
+    pattern = { "dashboard", "nvdash", "starter", "ministarter" },
     callback = hide_nums,
 })
 vim.api.nvim_create_autocmd("User", {
     group = hidegrp,
-    pattern = { "AlphaReady", "NvDashReady" },
+    pattern = { "MiniStarterOpened", "NvDashReady" },
     callback = hide_nums,
 })
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = hidegrp,
     callback = function(args)
         local ft = vim.bo[args.buf].filetype
-        if ft == "alpha" or ft == "dashboard" or ft == "nvdash" or ft == "starter" then
+        if ft == "dashboard" or ft == "nvdash" or ft == "starter" or ft == "ministarter" then
             hide_nums()
         end
     end,
@@ -286,18 +286,8 @@ map("n", "<leader>gH", "<cmd>DiffviewFileHistory<cr>", { desc = "Git branch hist
 
 -- Discord Rich Presence toggle
 map("n", "<leader>cd", function()
-    local server = require("cord.server")
-    local is_paused = server.manager and server.manager.is_paused or false
-
-    -- Toggle presence
-    require("cord.api.command").toggle_presence()
-
-    -- Show notification based on the toggle (opposite of current state)
-    if is_paused then
-        vim.notify("Discord Rich Presence: Enabled 🎮", vim.log.levels.INFO)
-    else
-        vim.notify("Discord Rich Presence: Disabled 🔇", vim.log.levels.INFO)
-    end
+    vim.cmd("Cord toggle")
+    vim.notify("Discord Rich Presence: Toggled", vim.log.levels.INFO)
 end, { desc = "Toggle Discord Rich Presence" })
 
 -- =============================================

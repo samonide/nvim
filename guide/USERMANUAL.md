@@ -251,7 +251,7 @@ These are inherited from NvChad core. For complete list, press `<Space>ch` (chea
 * `nvim-lint` + `mason-nvim-lint` – Async linting engine
 
 ### UI & Experience
-* `alpha-nvim` – Beautiful startup dashboard
+* `mini.starter` – Minimalistic startup dashboard
 * `noice.nvim` + `nvim-notify` – Enhanced UI for messages, cmdline, and notifications
 * `dressing.nvim` – Better UI for inputs and selections
 * `trouble.nvim` – Diagnostics & quickfix UI
@@ -347,8 +347,8 @@ Add further overrides there (cursorline, custom autocmds, etc.).
 Current theme: `bearded-arc` (set in `chadrc.lua`).
 Change theme: edit that file & set another valid NvChad theme name, or run `<leader>th` to preview & then persist the choice manually.
 
-### Dashboard (alpha.nvim)
-Configured in `lua/configs/alpha.lua` with an ASCII header & buttons for common actions (find files, recent, grep, new file, projects, config, update plugins, quit). Loads automatically on `VimEnter` when no file args.
+### Dashboard (mini.starter)
+Configured in `lua/configs/starter.lua` with an ASCII header & buttons for common actions (find files, recent, grep, new file, projects, config, update plugins, quit). Loads automatically on `VimEnter` when no file args.
 
 ### Notifications & LSP UI (noice.nvim)
 `noice.nvim` improves message routing, cmdline UI, and LSP markdown rendering. Presets enabled: bottom search, command palette, long messages to split, bordered docs. Customize in the spec inside `lua/plugins/init.lua`.
