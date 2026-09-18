@@ -223,6 +223,8 @@ end, { desc = "Next todo comment" })
 map("n", "[t", function()
     require("todo-comments").jump_prev()
 end, { desc = "Previous todo comment" })
+map("n", "<leader>xt", "<cmd>Trouble todo toggle<cr>", { desc = "Todo list (trouble)" })
+map("n", "<leader>xf", "<cmd>TodoTelescope<cr>", { desc = "Todo search (telescope)" })
 
 -- Diffview keymaps
 map("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git diff view" })

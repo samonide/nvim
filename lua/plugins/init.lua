@@ -63,11 +63,31 @@ return {
 
     {
         "folke/which-key.nvim",
-        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+        event = "VeryLazy",
         cmd = "WhichKey",
-        config = function()
+        opts = {
+            preset = "helix",
+            delay = 300,
+            expand = 1,
+            spec = {
+                { "<leader>b", group = "Buffer", icon = "󰓩" },
+                { "<leader>c", group = "Code / Runner", icon = "󰘐" },
+                { "<leader>d", group = "Diagnostics", icon = "󰒡" },
+                { "<leader>e", group = "Explorer", icon = "󰙅" },
+                { "<leader>f", group = "Find / File", icon = "" },
+                { "<leader>g", group = "Git", icon = "" },
+                { "<leader>h", group = "Harpoon / Term", icon = "󰛢" },
+                { "<leader>l", group = "LSP", icon = "󰒋" },
+                { "<leader>q", group = "Quit", icon = "󰗼" },
+                { "<leader>s", group = "Split", icon = "󰤼" },
+                { "<leader>t", group = "Tools / Trouble", icon = "󰒓" },
+                { "<leader>w", group = "Save / Keys", icon = "󰆓" },
+                { "<leader>x", group = "Todo / Quickfix", icon = "󰷈" },
+            },
+        },
+        config = function(_, opts)
             pcall(dofile, vim.g.base46_cache .. "whichkey")
-            require("which-key").setup({})
+            require("which-key").setup(opts)
         end,
     },
 
