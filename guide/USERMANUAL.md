@@ -360,7 +360,7 @@ Place them in `lua/mappings.lua` after the `require "nvchad.mappings"` line. Exa
 
 ```lua
 local map = vim.keymap.set
-map("n", "<leader>qq", ":qa!<CR>", { desc = "Quit all" })
+map("n", "<leader>Q", ":qa<CR>", { desc = "Quit all" })
 ```
 
 Use `desc` so WhichKey & the cheatsheet show them.
@@ -415,7 +415,7 @@ Useful commands:
 1. Clone repo
 2. Open Neovim (`nvim`)
 3. Wait for bootstrap
-4. Press `<leader>ch` or `<leader>wK` to explore mappings
+4. Press `<leader>ch` or `<leader>?` to explore mappings
 5. Start coding 🎯
 
 ---

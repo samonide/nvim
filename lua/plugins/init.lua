@@ -454,7 +454,7 @@ return {
                 desc = "Toggle floating terminal",
             },
             {
-                "<leader>ftn",
+                "<leader>tn",
                 function()
                     -- new_term needs initialized state; open the UI first
                     local floaterm = require("floaterm")

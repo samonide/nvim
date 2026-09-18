@@ -84,10 +84,7 @@ map(
 map("n", "<leader>th", "<cmd>colorscheme caelestia<cr>", { desc = "Refresh caelestia theme" })
 
 -- WhichKey
-map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "Whichkey all keymaps" })
-map("n", "<leader>wk", function()
-    vim.cmd("WhichKey " .. vim.fn.input("WhichKey: "))
-end, { desc = "Whichkey query lookup" })
+map("n", "<leader>?", "<cmd>WhichKey <CR>", { desc = "Whichkey all keymaps" })
 
 -- ---------- Core QoL --------------------------------------------------
 map("n", ";", ":", { desc = "CMD enter command mode" })
@@ -212,7 +209,7 @@ map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
 -- Notification history (noice)
-map("n", "<leader>nl", "<cmd>Noice<cr>", { desc = "Notification history" })
+map("n", "<leader>N", "<cmd>Noice<cr>", { desc = "Notification history" })
 
 -- Todo-comments navigation (if plugin installed)
 map("n", "]t", function()
@@ -301,14 +298,13 @@ map("n", "<leader>lr", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
 -- Quick commands
 -- =============================================
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New file" })
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
-map("n", "<leader>wa", "<cmd>wa<cr>", { desc = "Save all" })
+map("n", "<leader>W", "<cmd>wa<cr>", { desc = "Save all" })
 
 -- =============================================
 -- File Explorer (NvimTree/Oil)
 -- =============================================
 map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
-map("n", "<leader>ef", "<cmd>NvimTreeFocus<cr>", { desc = "Focus file explorer" })
+map("n", "<leader>E", "<cmd>NvimTreeFocus<cr>", { desc = "Focus file explorer" })
 
 -- =============================================
 -- Git shortcuts (additional to existing diffview)

@@ -182,12 +182,10 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | `;` | Normal | `:` | Enter command mode |
 | `jk` | Insert | `<ESC>` | Exit insert mode |
 | `<leader>w` | Normal | Save | Write current buffer |
+| `<leader>W` | Normal | Save All | Write all buffers |
 | `<leader>q` | Normal | Quit | Quit current window |
 | `<leader>Q` | Normal | Quit All | Quit all windows |
-| `<leader>wa` | Normal | Save All | Write all buffers |
-| `<leader>qq` | Normal | Quit All | Quit all (shortcut) |
 | `<Esc>` | Normal | Clear Highlight | Clear search highlighting |
-| `<leader>nh` | Normal | No Highlight | Clear search highlight |
 
 ---
 
@@ -416,7 +414,7 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | Key | Mode | Action |
 |-----|------|--------|
 | `<leader>e` | Normal | Toggle file explorer |
-| `<leader>ef` | Normal | Focus file explorer |
+| `<leader>E` | Normal | Focus file explorer |
 
 ---
 

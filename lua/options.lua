@@ -75,7 +75,7 @@ o.splitright = true -- Vertical splits go right
 
 -- Performance
 o.updatetime = 250 -- Faster completion (default 4000ms)
-o.timeoutlen = 300 -- Faster key sequences
+o.timeoutlen = 1000 -- Patience for multi-key sequences (WhichKey readers)
 
 -- Better backup/undo
 o.undofile = true -- Persistent undo
