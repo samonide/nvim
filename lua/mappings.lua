@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 
 local map = vim.keymap.set
 
--- ---------------- Base defaults (ex-NvChad) ----------------
+-- ---------------- Base defaults ----------------
 -- Insert-mode cursor movement
 map("i", "<C-b>", "<ESC>^i", { desc = "Move beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "Move end of line" })
@@ -231,10 +231,7 @@ vim.g.cord_enabled = true
 map("n", "<leader>cd", function()
     vim.g.cord_enabled = not vim.g.cord_enabled
     vim.cmd("Cord " .. (vim.g.cord_enabled and "enable" or "disable"))
-    vim.notify(
-        "Discord RPC " .. (vim.g.cord_enabled and "ON" or "OFF"),
-        vim.log.levels.INFO
-    )
+    vim.notify("Discord RPC " .. (vim.g.cord_enabled and "ON" or "OFF"), vim.log.levels.INFO)
 end, { desc = "Toggle Discord Rich Presence" })
 
 -- =============================================

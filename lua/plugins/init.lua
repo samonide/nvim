@@ -365,6 +365,7 @@ return {
     -- Telescope (fuzzy finder)
     {
         "nvim-telescope/telescope.nvim",
+        cmd = "Telescope",
         event = "VeryLazy",
         config = function()
             require("configs.telescope")
