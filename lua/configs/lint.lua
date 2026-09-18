@@ -18,8 +18,11 @@ lint.linters.luacheck.args = {
     "-",
 }
 
--- Trigger lint on common editing events
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+-- Trigger lint on save and when leaving insert mode
+-- (BufEnter intentionally excluded: it fires on split navigation too)
+vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+    group = vim.api.nvim_create_augroup("NvimLint", { clear = true }),
+    desc = "Run linter",
     callback = function()
         lint.try_lint()
     end,

@@ -60,6 +60,8 @@ function M.new(opts)
         vim.cmd("botright vsplit")
     end
     vim.cmd("enew")
+    local fresh = vim.api.nvim_get_current_buf()
+    vim.bo[fresh].bufhidden = "wipe" -- no orphan buffers when the window closes
     vim.fn.termopen({ shell() })
     vim.cmd("startinsert")
 end

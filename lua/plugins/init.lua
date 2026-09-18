@@ -582,6 +582,7 @@ return {
         dependencies = {
             "MeanderingProgrammer/render-markdown.nvim",
         },
+        cmd = { "Pi", "PiNewTab", "PiSessions", "PiTree" },
         keys = {
             {
                 "<leader>ap",
