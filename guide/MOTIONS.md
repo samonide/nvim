@@ -185,6 +185,10 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | `<leader>W` | Normal | Save All | Write all buffers |
 | `<leader>q` | Normal | Quit | Quit current window |
 | `<leader>Q` | Normal | Quit All | Quit all windows |
+| `<leader>n` | Normal | Toggle line numbers | Turn line numbers on/off |
+| `<leader>N` | Normal | Notification history | Browse past messages (noice) |
+| `<leader>?` | Normal | Show all keymaps | WhichKey popup |
+| `<leader>th` | Normal | Refresh theme | Re-apply Caelestia scheme |
 | `<Esc>` | Normal | Clear Highlight | Clear search highlighting |
 
 ---
@@ -244,6 +248,9 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | `<leader>fk` | Normal | Find keymaps |
 | `<leader>fs` | Normal | Document symbols (LSP) |
 | `<leader>fn` | Normal | New file |
+| `<leader>ma` | Normal | Marks |
+| `<leader>fz` | Normal | Fuzzy find in current buffer |
+| `<leader>fa` | Normal | Find all files (incl. hidden/ignored) |
 
 ---
 
@@ -260,13 +267,39 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 
 ---
 
+## 🤖 Pi Agent Sidebar
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `<leader>ap` | Normal | Toggle pi sidebar |
+| `<leader>aP` | Normal | Pi in a new tab |
+
+Inside pi buffers: `<C-g>s/n/m/h/p/t/c/e` for session, new, model, history, prompt, tree, tab, sessions bar. Needs the `pi` CLI installed.
+
+---
+
+## 🗺️ Outline & Breadcrumbs
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `<F6>` | Normal | Toggle code outline (aerial) |
+
+Breadcrumbs (dropbar) and sticky context (treesitter-context) are automatic — no keys.
+
+---
+
 ## 💻 Terminal
 
 | Key | Mode | Action |
 |-----|------|--------|
-| `<A-i>` | Normal/Terminal | Toggle floating bash terminal |
-| `<A-h>` | Normal | Toggle horizontal terminal |
-| `<A-v>` | Normal | Toggle vertical terminal |
+| `<leader>ft` | Normal/Terminal | Toggle floating terminal |
+| `<leader>tn` | Normal | New floating terminal |
+| `<Esc><Esc>` | Terminal | Back to normal mode |
+| `<Esc>` | Normal (in float) | Close floating terminal |
+| `<leader>h` | Normal | New horizontal split terminal |
+| `<leader>v` | Normal | New vertical split terminal |
+| `<A-h>` | Normal/Terminal | Toggle horizontal terminal |
+| `<A-v>` | Normal/Terminal | Toggle vertical terminal |
 | `<leader>ts` | Normal | Toggle shell (zsh ↔ fish) |
 
 ---
@@ -282,12 +315,14 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | `K` | Normal | Hover documentation |
 | `<leader>rn` | Normal | Rename symbol |
 | `<leader>ca` | Normal | Code actions |
-| `<leader>lf` | Normal | Format document |
+| `<leader>fm` | Normal/Visual | Format file (conform) |
+| `<leader>lf` | Normal | Format document (LSP) |
 | `<leader>ls` | Normal | LSP info |
 | `<leader>lr` | Normal | Restart LSP |
 | `[d` | Normal | Previous diagnostic |
 | `]d` | Normal | Next diagnostic |
-| `<leader>e` | Normal | Show diagnostic float |
+| `<leader>de` | Normal | Show diagnostic float |
+| `<leader>ds` | Normal | Diagnostics to loclist |
 
 ---
 
@@ -365,18 +400,18 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 | Key | Mode | Action |
 |-----|------|--------|
 | `<leader>p` | Visual | Paste without yanking |
-| `<leader>d` | Normal/Visual | Delete to void register |
+| `d` / `x` | Normal/Visual | Delete to void register (clipboard untouched) |
+| `y` | Normal/Visual | Yank to system clipboard |
 
 ---
 
-## 💬 Comments (Comment.nvim)
+## 💬 Comments (native `gc`)
 
 | Key | Mode | Action |
 |-----|------|--------|
+| `<leader>/` | Normal/Visual | Toggle comment |
 | `gcc` | Normal | Toggle line comment |
-| `gbc` | Normal | Toggle block comment |
-| `gc` | Visual/Normal | Comment operator |
-| `gb` | Visual/Normal | Block comment operator |
+| `gc{motion}` | Normal | Comment over motion |
 
 ---
 
@@ -398,6 +433,8 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 |-----|------|--------|
 | `]t` | Normal | Next todo comment |
 | `[t` | Normal | Previous todo comment |
+| `<leader>xt` | Normal | Todo list (trouble) |
+| `<leader>xf` | Normal | Todo search (telescope) |
 
 ---
 
@@ -457,10 +494,10 @@ Default keybinds:
 
 ### Essential Daily Shortcuts
 ```
-Navigation:       Ctrl+h/j/k/l (splits), Tab/Shift+Tab (buffers)
+Navigation:       Ctrl+h/j/k/l (splits), Ctrl+Tab (buffers)
 Finding:          Space+ff (files), Space+fg (grep), Space+fb (buffers)
 Harpoon:          Space+ha (add), Space+1/2/3/4 (jump to mark)
-Terminal:         Alt+i (floating)
+Terminal:         Space+ft (floating), Esc Esc then Esc (exit)
 LSP:              gd (definition), gr (references), K (hover), Space+rn (rename)
 Save/Quit:        Space+w (save), Space+q (quit)
 ```
@@ -480,20 +517,20 @@ Save/Quit:        Space+w (save), Space+q (quit)
 1. **Muscle Memory Priority:** Learn `Ctrl+hjkl` first, then `Space+ff` and `Space+fg`, then Harpoon marks
 2. **Workflow:** Mark 4 key files with `Space+ha`, jump between them with `Space+1234`
 3. **When Lost:** Press `Space` and wait → WhichKey shows options, or use `Space+fk` to search keymaps
-4. **Terminal:** `Alt+i` for quick commands, exit with `exit` or `Ctrl+d`
+4. **Terminal:** `Space+ft` for a floating shell, `Esc Esc` then `Esc` to get out
 5. **Flash Navigation:** Use `s` for quick cursor jumps instead of multiple `w`/`b` motions
 
 ---
 
 ## 📚 Additional Resources
 
-- NvChad defaults: `:NvCheatsheet`
-- All keymaps: `<leader>fk` (Telescope keymaps)
+- All keymaps: `<leader>fk` (Telescope keymaps) or `<leader>?` (WhichKey)
 - Help system: `<leader>fh` (Telescope help tags)
 - Command palette: `<leader>fc` (Telescope commands)
+- Message history: `<leader>N` (noice) or `:Noice errors`
 - Vim help: `:h motion.txt`, `:h operator`, `:h text-objects`
 
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: September 2026  
 **Config Location**: `~/.config/nvim/`

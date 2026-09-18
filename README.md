@@ -36,7 +36,8 @@ The ones I use constantly:
 | `<leader>ff` / `fg` / `fw` | find files / grep / live grep |
 | `<leader>e` / `<C-n>` | file tree |
 | `<leader>ap` | pi agent sidebar |
-| `<A-i>` | floating terminal |
+| `<leader>ft` / `<leader>tn` | floating terminal (toggle / new; `Esc Esc`, `Esc` to exit) |
+| `<leader>N` | message history |
 | `s` | flash jump |
 | `<F6>` | code outline |
 
@@ -86,5 +87,6 @@ Formatters go in `configs/conform.lua`, linters in `configs/lint.lua`.
 | LSP missing | `:Mason`, install it; check `:LspInfo` |
 | broken icons | terminal font must be a Nerd Font |
 | plugin errors at start | `:Lazy sync`, restart |
+| need old messages | `<leader>N` or `:Noice errors` |
 
 Unlicense — do whatever you want with it.
