@@ -447,7 +447,12 @@ return {
         dependencies = { "nvzone/volt" },
         cmd = { "FloatermToggle" },
         keys = {
-            { "<leader>ft", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
+            {
+                "<leader>ft",
+                "<cmd>FloatermToggle<cr>",
+                mode = { "n", "t" },
+                desc = "Toggle floating terminal",
+            },
             {
                 "<leader>ftn",
                 function()
