@@ -38,3 +38,34 @@ autocmd("FileType", {
         pcall(vim.treesitter.start)
     end,
 })
+
+-- Flash yanked text
+autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+    desc = "Flash yanked text",
+    callback = function()
+        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
+    end,
+})
+
+-- Restore cursor to last position when reopening a file
+autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("LastPlace", { clear = true }),
+    desc = "Restore cursor to last known position",
+    callback = function(args)
+        local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
+        local lines = vim.api.nvim_buf_line_count(args.buf)
+        if mark[1] > 1 and mark[1] <= lines then
+            pcall(vim.api.nvim_win_set_cursor, 0, mark)
+        end
+    end,
+})
+
+-- Keep splits proportional when the terminal is resized (tiling WMs)
+autocmd("VimResized", {
+    group = vim.api.nvim_create_augroup("EqualizeSplits", { clear = true }),
+    desc = "Equalize split sizes on resize",
+    callback = function()
+        vim.cmd("wincmd =")
+    end,
+})

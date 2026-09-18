@@ -53,8 +53,13 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 -- Only show starter if opening without file args
+-- (skip when stdin was piped in: the buffer already has content)
 if vim.fn.argc() == 0 and vim.api.nvim_buf_get_name(0) == "" then
   vim.defer_fn(function()
+    local first = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
+    if first ~= "" then
+      return
+    end
     starter.open()
   end, 0)
 end
