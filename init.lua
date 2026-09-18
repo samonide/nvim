@@ -37,9 +37,7 @@ if ok_cael then
     cael.setup()
 end
 
--- Defer custom mappings & CP template autocmd so core is initialized
-vim.schedule(function()
-    require("mappings") -- user + extended keymaps
-    pcall(require, "configs.cp_template") -- competitive programming file template
-    pcall(require, "configs.terms") -- split terminal toggles
-end)
+-- Keymaps + helpers load synchronously: pure definitions, no reason to defer
+require("mappings")
+pcall(require, "configs.cp_template") -- competitive programming file template
+pcall(require, "configs.terms") -- split terminal toggles

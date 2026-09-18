@@ -8,10 +8,11 @@
 return {
 
     -- ---------------- Core ----------------
-    { "nvim-lua/plenary.nvim", lazy = false },
+    { "nvim-lua/plenary.nvim" },
 
     {
         "nvim-tree/nvim-web-devicons",
+        event = "VeryLazy",
         config = function(_, opts)
             require("nvim-web-devicons").setup(opts)
         end,
@@ -152,7 +153,6 @@ return {
     {
         "Bekaboo/dropbar.nvim",
         event = { "BufReadPost", "BufNewFile" },
-        dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
         config = function()
             require("dropbar").setup()
         end,
@@ -598,10 +598,12 @@ return {
         end,
     },
 
-    -- Keycast (show pressed keys)
+    -- Keycast (show pressed keys, opt-in via key)
     {
         "nvzone/showkeys",
-        lazy = false,
+        keys = {
+            { "<leader>uk", "<cmd>ShowkeysToggle<cr>", desc = "Toggle keycast" },
+        },
         opts = {
             position = "top-right",
             maxkeys = 3,
@@ -618,9 +620,6 @@ return {
         },
         config = function(_, opts)
             require("showkeys").setup(opts)
-            vim.schedule(function()
-                vim.cmd("ShowkeysToggle")
-            end)
         end,
     },
 
