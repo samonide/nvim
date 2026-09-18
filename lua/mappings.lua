@@ -203,6 +203,9 @@ map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit all" })
 -- Clear search highlighting
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 
+-- Double-Esc leaves terminal mode (single Esc still reaches the shell app)
+map("t", "<Esc><Esc>", "<C-\\><C-N>", { desc = "Exit terminal mode" })
+
 -- Diagnostic navigation
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })

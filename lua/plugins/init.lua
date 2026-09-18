@@ -470,6 +470,9 @@ return {
             border = true,
             size = { h = 85, w = 90 },
         },
+        config = function(_, opts)
+            require("configs.floaterm").setup(opts)
+        end,
     },
 
     -- Trouble diagnostics UI
