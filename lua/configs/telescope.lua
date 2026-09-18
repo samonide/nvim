@@ -1,7 +1,8 @@
 -- Telescope configuration
--- Extends NvChad's default config and disables treesitter in previewer to avoid API compatibility issues
+-- Standalone (ex-NvChad). Treesitter is disabled in the previewer to avoid
+-- ft_to_lang errors.
 
-dofile(vim.g.base46_cache .. "telescope")
+pcall(dofile, vim.g.base46_cache .. "telescope")
 
 local options = {
   defaults = {
@@ -26,7 +27,6 @@ local options = {
     },
   },
 
-  extensions_list = { "themes", "terms" },
   extensions = {},
 }
 

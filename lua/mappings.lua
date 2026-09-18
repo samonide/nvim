@@ -1,19 +1,14 @@
 -- =====================================================================
 --  mappings.lua
---  Extends NvChad default mappings. All custom keymaps are declared with
---  descriptive `desc` for WhichKey & cheatsheet visibility.
---  Sections:
---    * Core quality-of-life
---    * Harpoon, Trouble, Snippets
+--  Standalone keymaps (no NvChad dependency). Base defaults vendored
+--  from NvChad (nvchad.mappings); custom keymaps below.
+--  All custom keymaps carry `desc` for WhichKey visibility.
 -- =====================================================================
 
-require("nvchad.mappings") -- load NvChad defaults first
 pcall(require, "configs.disable_signature") -- ensure signature popups are disabled early
 
--- Enable system clipboard sync
-vim.opt.clipboard = "unnamedplus"
-
 -- Always enable line numbers + relative numbers on startup
+-- (clipboard = unnamedplus lives in options.lua)
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -50,6 +45,56 @@ pcall(vim.keymap.del, "n", "<A-i>")
 pcall(vim.keymap.del, "t", "<A-i>")
 
 local map = vim.keymap.set
+
+-- ---------------- Base defaults (ex-NvChad) ----------------
+-- Insert-mode cursor movement
+map("i", "<C-b>", "<ESC>^i", { desc = "Move beginning of line" })
+map("i", "<C-e>", "<End>", { desc = "Move end of line" })
+map("i", "<C-h>", "<Left>", { desc = "Move left" })
+map("i", "<C-l>", "<Right>", { desc = "Move right" })
+map("i", "<C-j>", "<Down>", { desc = "Move down" })
+map("i", "<C-k>", "<Up>", { desc = "Move up" })
+
+map("n", "<C-s>", "<cmd>w<CR>", { desc = "Save file" })
+map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "Copy whole file" })
+
+map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "Toggle line number" })
+map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "Toggle relative number" })
+
+map({ "n", "x" }, "<leader>fm", function()
+    require("conform").format({ lsp_fallback = true })
+end, { desc = "Format file" })
+
+-- Diagnostics loclist
+map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+
+-- Comment (native gc + remap)
+map("n", "<leader>/", "gcc", { desc = "Toggle comment", remap = true })
+map("v", "<leader>/", "gc", { desc = "Toggle comment", remap = true })
+
+-- File explorer
+map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree toggle window" })
+
+-- Extra telescope pickers
+map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "Telescope find marks" })
+map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "Telescope find in current buffer" })
+map(
+    "n",
+    "<leader>fa",
+    "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
+    { desc = "Telescope find all files" }
+)
+
+-- Theme picker (base46)
+map("n", "<leader>th", function()
+    require("configs.themes").open()
+end, { desc = "Pick theme" })
+
+-- WhichKey
+map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "Whichkey all keymaps" })
+map("n", "<leader>wk", function()
+    vim.cmd("WhichKey " .. vim.fn.input("WhichKey: "))
+end, { desc = "Whichkey query lookup" })
 
 -- ---------- Core QoL --------------------------------------------------
 map("n", ";", ":", { desc = "CMD enter command mode" })

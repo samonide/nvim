@@ -1,10 +1,133 @@
 -- =====================================================================
 --  plugins/init.lua
---  Additional plugin specifications layered on top of NvChad core.
---  Grouped logically (syntax/LSP, tooling, UI, CP helpers, snippets).
+--  Standalone plugin specifications (no NvChad dependency).
+--  base46 is kept for theming; everything else NvChad provided
+--  (completion, mason, tree, gitsigns, statusline, ...) is specced
+--  explicitly below.
+--  Grouped logically (core, syntax/LSP, tooling, UI, CP helpers).
 -- =====================================================================
 
 return {
+
+    -- ---------------- Core (ex-NvChad) ----------------
+    { "nvim-lua/plenary.nvim", lazy = false },
+
+    {
+        "nvchad/base46",
+        build = function()
+            require("base46").load_all_highlights()
+        end,
+    },
+
+    {
+        "nvim-tree/nvim-web-devicons",
+        config = function(_, opts)
+            pcall(dofile, vim.g.base46_cache .. "devicons")
+            require("nvim-web-devicons").setup(opts)
+        end,
+        opts = {
+            override = {
+                default_icon = { icon = "󰈚", name = "Default" },
+                js = { icon = "󰌞", name = "js" },
+                ts = { icon = "󰛦", name = "ts" },
+                lock = { icon = "󰌾", name = "lock" },
+                ["robots.txt"] = { icon = "󰚩", name = "robots" },
+            },
+        },
+    },
+
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        event = "User FilePost",
+        opts = {
+            indent = { char = "│", highlight = "IblChar" },
+            scope = { char = "│", highlight = "IblScopeChar" },
+        },
+        config = function(_, opts)
+            pcall(dofile, vim.g.base46_cache .. "blankline")
+            local hooks = require("ibl.hooks")
+            hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+            require("ibl").setup(opts)
+            pcall(dofile, vim.g.base46_cache .. "blankline")
+        end,
+    },
+
+    {
+        "nvim-tree/nvim-tree.lua",
+        cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("configs.nvimtree")
+        end,
+    },
+
+    {
+        "folke/which-key.nvim",
+        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+        cmd = "WhichKey",
+        config = function()
+            pcall(dofile, vim.g.base46_cache .. "whichkey")
+            require("which-key").setup({})
+        end,
+    },
+
+    {
+        "lewis6991/gitsigns.nvim",
+        event = "User FilePost",
+        config = function()
+            require("configs.gitsigns")
+        end,
+    },
+
+    {
+        "mason-org/mason.nvim",
+        cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+        config = function()
+            require("configs.mason")
+        end,
+    },
+
+    -- Completion engine + sources
+    {
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        dependencies = {
+            "saadparwaiz1/cmp_luasnip",
+            "hrsh7th/cmp-nvim-lua",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "https://codeberg.org/FelipeLema/cmp-async-path.git",
+        },
+        config = function()
+            require("configs.cmp")
+        end,
+    },
+
+    {
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
+        dependencies = { "hrsh7th/nvim-cmp" },
+        opts = {
+            fast_wrap = {},
+            disable_filetype = { "TelescopePrompt", "vim" },
+        },
+        config = function(_, opts)
+            require("nvim-autopairs").setup(opts)
+            -- autopairs <> cmp integration
+            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+            require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+    },
+
+    -- Statusline (replaces NvChad's built-in bar)
+    {
+        "nvim-lualine/lualine.nvim",
+        event = "VeryLazy",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("configs.lualine")
+        end,
+    },
 
     -- Syntax highlighting & incremental parsing
     {
@@ -21,7 +144,7 @@ return {
         "neovim/nvim-lspconfig",
         event = { "BufReadPost", "BufNewFile" },
         config = function()
-            require("nvchad.configs.lspconfig").defaults()
+            require("configs.lsp_helpers").defaults()
             require("configs.lspconfig")
         end,
     },
@@ -406,7 +529,13 @@ return {
     },
 
     -- Snippets: LuaSnip + community snippets + custom CP snippet
-    { "L3MON4D3/LuaSnip", event = "InsertEnter" },
+    {
+        "L3MON4D3/LuaSnip",
+        event = "InsertEnter",
+        config = function()
+            require("configs.luasnip")
+        end,
+    },
     {
         "rafamadriz/friendly-snippets",
         event = "InsertEnter",

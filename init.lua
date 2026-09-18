@@ -1,13 +1,14 @@
 -- =====================================================================
 --  Entry point for this Neovim configuration.
+--  Standalone setup (no NvChad dependency, base46 kept for theming).
 --  Responsibilities:
 --    * Define leader key & theme cache path
 --    * Bootstrap lazy.nvim plugin manager
---    * Load NvChad base + custom plugin specs (lua/plugins)
---    * Load user options and mappings
+--    * Load plugin specs (lua/plugins) + user options
+--    * Apply base46 theme highlights + statusline
 -- =====================================================================
 
-vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/" -- NvChad theme cache
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 vim.g.mapleader = " " -- Space as <leader>
 
 -- bootstrap lazy and all plugins
@@ -23,29 +24,28 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy_config = require("configs.lazy")
 
--- Load plugins (NvChad core + user additions in lua/plugins)
-require("lazy").setup({
-    {
-        "NvChad/NvChad",
-        lazy = false,
-        branch = "v2.5",
-        import = "nvchad.plugins",
-        config = function()
-            require("options")
-        end,
-    },
+require("lazy").setup({ import = "plugins" }, lazy_config)
 
-    { import = "plugins" },
-}, lazy_config)
+-- Options first so plugins see user settings
+require("options")
 
--- Load cached base46 theme highlights & statusline provided by NvChad
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
+-- Compile base46 theme cache on first run, then apply highlights.
+-- Recompile on demand via :lua require("base46").load_all_highlights()
+if not vim.uv.fs_stat(vim.g.base46_cache .. "defaults") then
+    local ok, base46 = pcall(require, "base46")
+    if ok then
+        base46.load_all_highlights()
+    end
+end
+pcall(dofile, vim.g.base46_cache .. "defaults")
+pcall(dofile, vim.g.base46_cache .. "syntax")
+pcall(dofile, vim.g.base46_cache .. "treesitter")
 
-require("nvchad.autocmds")
+require("configs.autocmds")
 
 -- Defer custom mappings & CP template autocmd so core is initialized
 vim.schedule(function()
     require("mappings") -- user + extended keymaps
     pcall(require, "configs.cp_template") -- competitive programming file template
+    pcall(require, "configs.terms") -- split terminal toggles
 end)

@@ -5,9 +5,9 @@
 --  Adjust server list & per-server settings here.
 -- =====================================================================
 
-local on_attach = require("nvchad.configs.lspconfig").on_attach
-local on_init = require("nvchad.configs.lspconfig").on_init
-local capabilities = require("nvchad.configs.lspconfig").capabilities
+local on_attach = require("configs.lsp_helpers").on_attach
+local on_init = require("configs.lsp_helpers").on_init
+local capabilities = require("configs.lsp_helpers").capabilities
 
 -- list of all servers configured.
 -- Master list of desired servers (Mason installer consumes this via mason-lspconfig)
@@ -97,7 +97,6 @@ vim.lsp.config('lua_ls', {
                 library = {
                     vim.fn.expand("$VIMRUNTIME/lua"),
                     vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
-                    vim.fn.stdpath("data") .. "/lazy/ui/nvchad_types",
                     vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy",
                     "${3rd}/love2d/library",
                 },

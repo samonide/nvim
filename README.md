@@ -1,11 +1,13 @@
 <div align="center">
 
-# Neovim Config (NvChad v2.5 Layer)
+# Neovim Config (Standalone, base46 Themed)
 
-Refined, fast, and competitive‑programming focused Neovim setup built on top of **NvChad v2.5**.
+Refined, fast, and competitive‑programming focused Neovim setup. Standalone
+lazy.nvim config — no distribution dependency. Theming via **base46**
+(52 bundled themes, transparency support, `<leader>th` picker).
 
 ![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
-![Neovim](https://img.shields.io/badge/Neovim-%3E=0.9-green?style=flat-square)
+![Neovim](https://img.shields.io/badge/Neovim-%3E=0.11-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-Unlicense-blue?style=flat-square)
 
 *Clean keybinds · No conflicts · Optimized for competitive programming*
@@ -17,7 +19,7 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 ## 📋 Prerequisites
 
 **Required:**
-* Neovim >= 0.9
+* Neovim >= 0.11 (`vim.lsp.config` API)
 * Git
 * A Nerd Font (for icons) – e.g. FiraCode Nerd Font, JetBrainsMono Nerd Font
 * `make` (for telescope-fzf-native compilation)
@@ -32,7 +34,8 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 ## ✨ Key Features
 
 ### 🎯 Core Highlights
-* **NvChad v2.5 Foundation**: Modern UI with theme system, statusline, bufferline, file explorer, and Telescope integration
+* **Standalone Foundation**: Pure lazy.nvim setup — zero distribution dependencies, only base46 kept for theming
+* **base46 Theme System**: 52 bundled themes, transparency support, `<leader>th` picker with persistence
 * **Conflict-Free Keybinds**: All keybinds refactored with no duplicates or conflicts
 * **Competitive Programming Optimized**: Fast compile/run, test harness, I/O file handling, and optimization profiles
 * **System Clipboard Integration**: Yank operations automatically sync to system clipboard
@@ -49,7 +52,7 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 ### 🎨 UI & Navigation
 * **Dashboard**: Minimalistic startup screen (mini.starter)
 * **Enhanced Command Line**: Centered popup with dynamic border colors (noice.nvim)
-* **Smart Notifications**: Non-intrusive notifications (nvim-notify)
+* **Smart Notifications**: Non-intrusive notifications (noice.nvim)
 * **Diagnostics UI**: Beautiful error/warning display (trouble.nvim)
 * **Quick File Marks**: Harpoon for instant navigation between 4 frequently-used files
 * **Flash Navigation**: Jump anywhere with labeled hints
@@ -60,7 +63,7 @@ Refined, fast, and competitive‑programming focused Neovim setup built on top o
 * **Treesitter**: Advanced syntax highlighting and text objects
 * **Auto-formatting**: Format on save with conform.nvim
 * **Async Linting**: Real-time error detection with nvim-lint
-* **Smart Commenting**: Context-aware commenting with treesitter
+* **Smart Commenting**: Native `gc` commenting (`<leader>/`)
 * **TODO Highlighting**: Highlight and navigate TODO/FIXME/NOTE comments
 * **Surround Operations**: Easy manipulation of quotes, brackets, tags
 * **Discord Rich Presence**: Show your coding activity (optional, toggle with `<leader>cd`)
@@ -129,11 +132,17 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 ├── init.lua                    # Entry point: bootstrap & load plugins
 ├── lazy-lock.json             # Plugin version lock file
 ├── lua/
-│   ├── chadrc.lua             # NvChad UI & theme config
-│   ├── options.lua            # Core Neovim options
-│   ├── mappings.lua           # All keybinds (refactored & conflict-free)
+│   ├── nvconfig.lua             # Theme & UI source of truth (edit theme here)
+│   ├── options.lua            # Core Neovim options (standalone)
+│   ├── mappings.lua           # All keybinds (standalone, conflict-free)
 │   ├── configs/               # Plugin configurations
+│   │   ├── lsp_helpers.lua    # LSP on_attach/capabilities/defaults
 │   │   ├── lspconfig.lua      # LSP server setup
+│   │   ├── servers.lua        # Single server list (mason + lspconfig share it)
+│   │   ├── cmp.lua            # Completion engine config
+│   │   ├── lualine.lua        # Statusline (transparent, base46 palette)
+│   │   ├── themes.lua         # Theme picker + transparency toggle
+│   │   ├── terms.lua          # Split terminal toggles
 │   │   ├── treesitter.lua     # Syntax highlighting
 │   │   ├── conform.lua        # Formatting rules
 │   │   ├── lint.lua           # Linting setup
@@ -141,7 +150,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 │   │   ├── cp_template.lua    # Auto-insert C++ template
 │   │   └── ...
 │   └── plugins/
-│       └── init.lua           # Additional plugin specs
+│       └── init.lua           # All plugin specs (explicit, no framework)
 ├── guide/                     # Documentation
 │   ├── MOTIONS.md            # Complete keybind reference + Vim motions
 │   ├── KEYBIND_CHANGES.md    # Changelog of refactoring
@@ -157,11 +166,12 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 ### 🎯 Core Framework
 | Plugin | Purpose |
 |--------|---------|
-| [NvChad](https://github.com/NvChad/NvChad) | Base framework (UI, theme system, statusline) |
-| [lazy.nvim](https://github.com/folke/lazy.nvim) | Modern plugin manager |
+| [lazy.nvim](https://github.com/folke/lazy.nvim) | Plugin manager (sole framework) |
+| [base46](https://github.com/nvchad/base46) | Theme engine only (52 themes, transparency) |
 | [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder & picker |
 | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native FZF sorter (faster) |
 | [which-key.nvim](https://github.com/folke/which-key.nvim) | Keybinding discovery UI |
+| [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) | Shared Lua utilities |
 
 ### 🎨 Language & Syntax
 | Plugin | Purpose |
@@ -169,7 +179,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 | [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting & parsing |
 | [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) | Smart text objects (functions, classes) |
 | [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP client configurations |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) | LSP/tool installer |
+| [mason.nvim](https://github.com/mason-org/mason.nvim) | LSP/tool installer |
 | [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) | Mason ↔ LSP bridge |
 
 ### ✨ Formatting & Linting
@@ -185,8 +195,10 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 |--------|---------|
 | [mini.starter](https://github.com/echasnovski/mini.starter) | Minimalistic dashboard |
 | [noice.nvim](https://github.com/folke/noice.nvim) | Enhanced cmdline/messages UI |
-| [nvim-notify](https://github.com/rcarriga/nvim-notify) | Beautiful notifications |
-| [dressing.nvim](https://github.com/stevearc/dressing.nvim) | Better UI for inputs/selects |
+| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | Statusline (transparent, follows base46) |
+| [nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua) | File explorer tree (`<C-n>` / `<leader>e`) |
+| [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git signs in gutter |
+| [indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim) | Indent guides |
 | [trouble.nvim](https://github.com/folke/trouble.nvim) | Diagnostics & quickfix UI |
 
 ### 🏃 Competitive Programming
@@ -201,8 +213,10 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 | [harpoon](https://github.com/ThePrimeagen/harpoon) | Quick file marks (v2) |
 | [flash.nvim](https://github.com/folke/flash.nvim) | Jump to any location with labels |
 | [nvim-surround](https://github.com/kylechui/nvim-surround) | Add/change/delete surrounding pairs |
-| [Comment.nvim](https://github.com/numToStr/Comment.nvim) | Smart commenting with treesitter |
+| [nvim-autopairs](https://github.com/windwp/nvim-autopairs) | Auto-close brackets (cmp-integrated) |
 | [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight & navigate TODOs |
+| [floaterm](https://github.com/nvzone/floaterm) | Floating terminal manager (`<A-i>`) |
+| [showkeys](https://github.com/nvzone/showkeys) | Keycast overlay |
 
 ### 📦 Snippets
 | Plugin | Purpose |
@@ -225,17 +239,23 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 ### 🔧 Completion
 | Plugin | Purpose |
 |--------|---------|
-| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Completion engine (NvChad core) |
+| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Completion engine (explicit spec) |
+| [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) | LSP completion source |
+| [cmp-buffer](https://github.com/hrsh7th/cmp-buffer) | Buffer completion source |
+| [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) | Neovim Lua API source |
+| [cmp-async-path](https://codeberg.org/FelipeLema/cmp-async-path) | Async path source |
+| [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) | Snippet source |
 
 ---
 
 ## 🛠️ Customization
 
 ### Add LSP Server
-Edit `lua/configs/lspconfig.lua`:
+Edit `lua/configs/servers.lua` (single shared list — mason auto-installs it):
 ```lua
-lspconfig.pyright.setup({ on_attach = on_attach, capabilities = capabilities })
+return { "lua_ls", "clangd", "pyright" }
 ```
+Per-server settings go in `lua/configs/lspconfig.lua` (uses `vim.lsp.config`).
 
 ### Add Formatter
 Edit `lua/configs/conform.lua`:
@@ -253,12 +273,15 @@ python = { "pylint" },
 Edit `lua/configs/cp_snippets.lua` or create snippets in VSCode JSON format.
 
 ### Change Theme
-Edit `lua/chadrc.lua`:
+Press `<leader>th` for the interactive picker (persists to `lua/nvconfig.lua`),
+or edit `lua/nvconfig.lua` directly:
 ```lua
-M.ui = {
-  theme = "onedark",  -- or "gruvbox", "catppuccin", etc.
+M.base46 = {
+  theme = "midnight_breeze",  -- any of 52 base46 themes
+  transparency = true,
 }
 ```
+Recompile highlights manually with `:lua require("base46").load_all_highlights()`.
 
 ---
 
