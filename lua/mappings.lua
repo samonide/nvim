@@ -229,10 +229,15 @@ map("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git diff view" })
 map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", { desc = "Git file history" })
 map("n", "<leader>gH", "<cmd>DiffviewFileHistory<cr>", { desc = "Git branch history" })
 
--- Discord Rich Presence toggle
+-- Discord Rich Presence toggle (starts ON, matches cord setup)
+vim.g.cord_enabled = true
 map("n", "<leader>cd", function()
-    vim.cmd("Cord toggle")
-    vim.notify("Discord Rich Presence: Toggled", vim.log.levels.INFO)
+    vim.g.cord_enabled = not vim.g.cord_enabled
+    vim.cmd("Cord " .. (vim.g.cord_enabled and "enable" or "disable"))
+    vim.notify(
+        "Discord RPC " .. (vim.g.cord_enabled and "ON" or "OFF"),
+        vim.log.levels.INFO
+    )
 end, { desc = "Toggle Discord Rich Presence" })
 
 -- =============================================

@@ -483,11 +483,11 @@ return {
         opts = {},
     },
 
-    -- Discord Rich Presence
+    -- Discord Rich Presence (starts automatically, on by default)
     {
         "vyfor/cord.nvim",
         build = ":Cord update",
-        cmd = "Cord",
+        event = "VeryLazy",
         config = function()
             require("cord").setup({
                 enabled = true,
