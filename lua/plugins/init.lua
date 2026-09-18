@@ -447,11 +447,15 @@ return {
         dependencies = { "nvzone/volt" },
         cmd = { "FloatermToggle" },
         keys = {
-            { "<A-i>", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
             { "<leader>ft", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
             {
                 "<leader>ftn",
                 function()
+                    -- new_term needs initialized state; open the UI first
+                    local floaterm = require("floaterm")
+                    if not require("floaterm.state").volt_set then
+                        floaterm.open()
+                    end
                     require("floaterm.api").new_term()
                 end,
                 desc = "New floating terminal",

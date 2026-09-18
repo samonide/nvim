@@ -40,10 +40,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end,
 })
 
--- Unmap any default Alt-i (floaterm takes over this key)
-pcall(vim.keymap.del, "n", "<A-i>")
-pcall(vim.keymap.del, "t", "<A-i>")
-
 local map = vim.keymap.set
 
 -- ---------------- Base defaults (ex-NvChad) ----------------
