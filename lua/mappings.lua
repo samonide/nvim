@@ -193,6 +193,9 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 -- Better paste (don't lose register in visual mode)
 map("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
 
+-- Mouse drag-select auto-copies on release (all visual modes)
+map("v", "<LeftRelease>", '"+y', { desc = "Copy selection on mouse release" })
+
 -- Quick quit/close
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit window" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit all" })
@@ -260,7 +263,25 @@ map("n", "<leader>bd", function()
 end, { desc = "Delete buffer (keep layout)" })
 map("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
-map("n", "<leader>ba", "<cmd>%bd|e#|bd#<cr>", { desc = "Close all buffers except current" })
+map("n", "<leader>ba", function()
+    -- close all listed buffers except current; skip live terminals (E89)
+    local cur = vim.api.nvim_get_current_buf()
+    local ok, MiniBufremove = pcall(require, "mini.bufremove")
+    for _, b in ipairs(vim.api.nvim_list_bufs()) do
+        if
+            b ~= cur
+            and vim.api.nvim_buf_is_valid(b)
+            and vim.bo[b].buflisted
+            and vim.bo[b].buftype ~= "terminal"
+        then
+            if ok then
+                MiniBufremove.delete(b, false)
+            else
+                pcall(vim.cmd, "bd " .. b)
+            end
+        end
+    end
+end, { desc = "Close all buffers except current" })
 map("n", "<C-Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<C-S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 

@@ -51,7 +51,7 @@ function M.setup()
         sessions_list = { auto_open = true },
         layout = {
             default = "side",
-            side = { position = "right", width = 0.38 },
+            side = { position = "right", width = 0.28 },
             float = { width = 120, height = 0.85, border = "rounded" },
         },
     })
