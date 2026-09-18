@@ -11,19 +11,7 @@ local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 -- list of all servers configured.
 -- Master list of desired servers (Mason installer consumes this via mason-lspconfig)
--- Note: This is now a module-level table since we're not using lspconfig object
-local servers = {
-    "lua_ls",
-    "clangd",
-    -- "gopls",
-    -- "hls",
-    -- "ols",
-    -- "pyright",
-}
-
--- Export servers list for mason-lspconfig compatibility
--- This maintains compatibility with your existing mason setup
-_G.lspconfig_servers = servers
+local servers = require("configs.servers")
 
 -- list of servers configured with default config.
 -- Servers using default setup (loop below)

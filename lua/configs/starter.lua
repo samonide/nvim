@@ -18,7 +18,7 @@ starter.setup({
     { name = "r  Recent files",    action = "Telescope oldfiles",   section = "" },
     { name = "g  Live grep",       action = "Telescope live_grep",  section = "" },
     { name = "e  New file",        action = "enew",                 section = "" },
-    { name = "p  Projects",        action = "Telescope projects",   section = "" },
+    { name = "p  Projects",        action = "Telescope oldfiles",   section = "" },
     { name = "c  Config",          action = "e $MYVIMRC",           section = "" },
     { name = "u  Update plugins",  action = "Lazy sync",            section = "" },
     { name = "q  Quit",            action = "qa",                   section = "" },

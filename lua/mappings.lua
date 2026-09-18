@@ -4,8 +4,7 @@
 --  descriptive `desc` for WhichKey & cheatsheet visibility.
 --  Sections:
 --    * Core quality-of-life
---    * Terminal toggles
---    * Harpoon, Trouble, Runner, Snippets
+--    * Harpoon, Trouble, Snippets
 -- =====================================================================
 
 require("nvchad.mappings") -- load NvChad defaults first
@@ -46,7 +45,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end,
 })
 
--- Unmap any default Alt-i to reuse as our floating terminal toggle
+-- Unmap any default Alt-i (floaterm takes over this key)
 pcall(vim.keymap.del, "n", "<A-i>")
 pcall(vim.keymap.del, "t", "<A-i>")
 
@@ -56,44 +55,6 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>", { desc = "Exit insert (jk)" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>") -- Uncomment for Ctrl+S save
-
--- =============================================
--- Floating terminal helper
--- =============================================
-local function make_float_win(buf)
-    local width = math.floor(vim.o.columns * 0.9)
-    local height = math.floor(vim.o.lines * 0.85)
-    return vim.api.nvim_open_win(buf, true, {
-        relative = "editor",
-        width = width,
-        height = height,
-        row = math.floor((vim.o.lines - height) / 2),
-        col = math.floor((vim.o.columns - width) / 2),
-        style = "minimal",
-        border = "rounded",
-    })
-end
-
--- Toggle a single shared floating zsh terminal (no rc/history)
-local function toggle_floating_bash()
-    local win = vim.g._float_bash_win
-    local buf = vim.g._float_bash_buf
-    if win and vim.api.nvim_win_is_valid(win) then
-        pcall(vim.api.nvim_win_close, win, true)
-        vim.g._float_bash_win = nil
-        return
-    end
-    if buf and vim.api.nvim_buf_is_valid(buf) then
-        vim.g._float_bash_win = make_float_win(buf)
-        vim.cmd("startinsert")
-        return
-    end
-    buf = vim.api.nvim_create_buf(false, true)
-    vim.g._float_bash_buf = buf
-    vim.g._float_bash_win = make_float_win(buf)
-    vim.fn.termopen({ "zsh" })
-    vim.cmd("startinsert")
-end
 
 -- =============================================
 -- Harpoon (file marks) - requires harpoon2
@@ -139,19 +100,6 @@ map("n", "<leader>ts", function()
 end, { desc = "Toggle shell zsh<->fish (nvim term)" })
 
 -- =============================================
--- Terminal toggles
--- =============================================
--- Alt-i toggles floating zsh terminal
-map({ "n", "t" }, "<A-i>", function()
-    toggle_floating_bash()
-end, { desc = "Toggle floating zsh terminal" })
-
--- Leader ft also toggles floating zsh terminal
-map("n", "<leader>ft", function()
-    toggle_floating_bash()
-end, { desc = "Toggle floating zsh terminal" })
-
--- =============================================
 -- LuaSnip navigation (if using luasnip)
 -- =============================================
 map({ "i", "s" }, "<C-n>", function()
@@ -175,59 +123,6 @@ map("n", "<C-j>", "<C-w>j", { desc = "Focus down split" })
 map("n", "<C-k>", "<C-w>k", { desc = "Focus up split" })
 map("n", "<C-l>", "<C-w>l", { desc = "Focus right split" })
 
--- Horizontal terminal toggle (Alt-h) and Vertical (Alt-v)
-local function toggle_term(dir)
-    -- Use separate buffers for horizontal and vertical
-    local buf_var = dir == "v" and "toggle_term_buf_v" or "toggle_term_buf_h"
-    local buf = vim.g[buf_var]
-    local buf_valid = buf and vim.api.nvim_buf_is_valid(buf)
-    local win_with_buf
-    if buf_valid then
-        for _, w in ipairs(vim.api.nvim_list_wins()) do
-            if vim.api.nvim_win_get_buf(w) == buf then
-                win_with_buf = w
-                break
-            end
-        end
-    end
-
-    -- If buffer is currently shown -> close the window (toggle off)
-    if buf_valid and win_with_buf then
-        pcall(vim.api.nvim_win_close, win_with_buf, true)
-        return
-    end
-
-    -- If buffer exists but not shown -> show it (direction respected)
-    if buf_valid then
-        if dir == "v" then
-            vim.cmd("botright vsplit")
-        else
-            vim.cmd("botright 15split")
-        end
-        vim.api.nvim_set_current_buf(buf)
-        vim.cmd("startinsert")
-        return
-    end
-
-    -- Create new terminal buffer (use zsh)
-    if dir == "v" then
-        vim.cmd("botright vsplit")
-    else
-        vim.cmd("botright 15split")
-    end
-    vim.cmd("enew")
-    local new_buf = vim.api.nvim_get_current_buf()
-    vim.fn.termopen({ "zsh" })
-    vim.g[buf_var] = new_buf
-    vim.cmd("startinsert")
-end
-map({ "n", "t" }, "<A-h>", function()
-    toggle_term("h")
-end, { desc = "Toggle horizontal terminal" })
-map({ "n", "t" }, "<A-v>", function()
-    toggle_term("v")
-end, { desc = "Toggle vertical terminal" })
-
 -- =============================================
 -- Additional Productivity Keymaps
 -- =============================================
@@ -235,6 +130,14 @@ end, { desc = "Toggle vertical terminal" })
 -- Better movement in wrapped lines
 map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = "Move down (wrap-aware)" })
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = "Move up (wrap-aware)" })
+
+-- Deletes go to black hole register (keep system clipboard for yanks only)
+map("n", "d", '"_d', { desc = "Delete (void register)" })
+map("n", "dd", '"_dd', { desc = "Delete line (void register)" })
+map("n", "D", '"_D', { desc = "Delete to EOL (void register)" })
+map("n", "x", '"_x', { desc = "Delete char (void register)" })
+map("v", "d", '"_d', { desc = "Delete selection (void register)" })
+map("v", "x", '"_x', { desc = "Delete selection (void register)" })
 
 -- Quick save
 map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save file" })
@@ -256,9 +159,6 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 -- Better paste (don't lose register in visual mode)
 map("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
 
--- Delete to void register (don't pollute clipboard)
-map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to void" })
-
 -- Quick quit/close
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit window" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit all" })
@@ -269,7 +169,7 @@ map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 -- Diagnostic navigation
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic" })
+map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
 -- Todo-comments navigation (if plugin installed)
 map("n", "]t", function()

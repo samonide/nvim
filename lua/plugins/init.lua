@@ -9,7 +9,7 @@ return {
     -- Syntax highlighting & incremental parsing
     {
         "nvim-treesitter/nvim-treesitter",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufReadPost", "BufNewFile" },
         build = ":TSUpdate",
         config = function()
             require("configs.treesitter")
@@ -19,7 +19,7 @@ return {
     -- LSP client configuration
     {
         "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
             require("nvchad.configs.lspconfig").defaults()
             require("configs.lspconfig")
@@ -37,7 +37,7 @@ return {
 
     {
         "mfussenegger/nvim-lint",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
             require("configs.lint")
         end,
@@ -78,25 +78,7 @@ return {
         end,
     },
 
-    -- Notifications (configure before noice so it reuses settings)
-    {
-        "rcarriga/nvim-notify",
-        event = "VeryLazy",
-        config = function()
-            local ok, notify = pcall(require, "notify")
-            if not ok then return end
-            notify.setup({
-                background_colour = "#1e2030", -- solid base behind transparent theme (adjust if you change colorscheme)
-                stages = "fade_in_slide_out",
-                timeout = 2000,
-                render = "compact",
-                top_down = false,
-            })
-            vim.notify = notify -- route vim.notify through nvim-notify
-        end,
-    },
-
-    -- UI/notifications enhancements (cmdline, LSP popups) via noice reusing nvim-notify
+    -- UI/notifications enhancements (cmdline, LSP popups)
     {
         "folke/noice.nvim",
         event = "VeryLazy",
@@ -188,7 +170,14 @@ return {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
         dependencies = { "nvim-lua/plenary.nvim" },
-        event = "VeryLazy",
+        keys = {
+            { "<leader>ha", mode = "n" },
+            { "<leader>hh", mode = "n" },
+            { "<leader>1", mode = "n" },
+            { "<leader>2", mode = "n" },
+            { "<leader>3", mode = "n" },
+            { "<leader>4", mode = "n" },
+        },
         config = function()
             local harpoon = require("harpoon")
             harpoon:setup()
@@ -211,7 +200,7 @@ return {
         cond = function()
             return vim.fn.executable("make") == 1
         end,
-        event = "VeryLazy",
+        cmd = "Telescope",
         dependencies = { "telescope.nvim" },
         config = function()
             local ok, telescope = pcall(require, "telescope")
@@ -274,6 +263,22 @@ return {
         },
     },
 
+    -- Floating terminal manager
+    {
+        "nvzone/floaterm",
+        dependencies = { "nvzone/volt" },
+        cmd = { "FloatermToggle", "FloatermNew", "FloatermNext", "FloatermPrev" },
+        keys = {
+            { "<A-i>", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
+            { "<leader>ft", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
+            { "<leader>ftn", "<cmd>FloatermNew<cr>", desc = "New floating terminal" },
+        },
+        opts = {
+            border = true,
+            size = { h = 0.85, w = 0.9 },
+        },
+    },
+
     -- Trouble diagnostics UI
     {
         "folke/trouble.nvim",
@@ -286,7 +291,7 @@ return {
     {
         "vyfor/cord.nvim",
         build = ":Cord update",
-        event = "VeryLazy",
+        cmd = "Cord",
         config = function()
             require("cord").setup({
                 enabled = true,
@@ -311,37 +316,27 @@ return {
     {
         "kylechui/nvim-surround",
         version = "*",
-        event = "VeryLazy",
+        keys = {
+            { "ys", mode = "n" },
+            { "yss", mode = "n" },
+            { "ds", mode = "n" },
+            { "cs", mode = "n" },
+            { "S", mode = "x" },
+        },
         config = function()
             require("nvim-surround").setup({})
-        end,
-    },
-
-    -- Enhanced commenting with treesitter integration
-    {
-        "numToStr/Comment.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("Comment").setup({
-                padding = true,
-                sticky = true,
-                ignore = "^$", -- ignore empty lines
-                toggler = {
-                    line = "gcc",
-                    block = "gbc",
-                },
-                opleader = {
-                    line = "gc",
-                    block = "gb",
-                },
-            })
         end,
     },
 
     -- Highlight and navigate TODO comments
     {
         "folke/todo-comments.nvim",
-        event = "VeryLazy",
+        keys = {
+            { "]t", mode = "n" },
+            { "[t", mode = "n" },
+            { "<leader>xt", mode = "n" },
+            { "<leader>xf", mode = "n" },
+        },
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = {
             signs = true,
@@ -384,17 +379,30 @@ return {
         opts = {},
     },
 
-    -- Better LSP UI
+    -- Keycast (show pressed keys)
     {
-        "stevearc/dressing.nvim",
-        event = "VeryLazy",
+        "nvzone/showkeys",
+        lazy = false,
         opts = {
-            input = { enabled = true },
-            select = {
-                enabled = true,
-                backend = { "telescope", "builtin" },
+            position = "top-right",
+            maxkeys = 3,
+            show_count = true,
+            winopts = {
+                focusable = false,
+                relative = "editor",
+                style = "minimal",
+                border = "single",
+                height = 1,
+                row = 1,
+                col = 0,
             },
         },
+        config = function(_, opts)
+            require("showkeys").setup(opts)
+            vim.schedule(function()
+                vim.cmd("ShowkeysToggle")
+            end)
+        end,
     },
 
     -- Snippets: LuaSnip + community snippets + custom CP snippet
@@ -409,73 +417,8 @@ return {
             local t = ls.text_node
             local i = ls.insert_node
             
-            -- Full competitive programming template (trigger: cp)
+            -- Simple C++ boilerplate (trigger: cb)
             ls.add_snippets("cpp", {
-                s("cp", {
-                    t({
-                        "#include <bits/stdc++.h>",
-                        "using namespace std;",
-                        "",
-                        "// Competitive Programming Template",
-                        "// Author: " .. vim.fn.expand("$USER"),
-                        "// Date: " .. os.date("%Y-%m-%d"),
-                        "",
-                        "typedef long long ll;",
-                        "typedef unsigned long long ull;",
-                        "typedef pair<int, int> pii;",
-                        "typedef pair<ll, ll> pll;",
-                        "typedef vector<int> vi;",
-                        "typedef vector<ll> vll;",
-                        "typedef vector<pii> vpii;",
-                        "",
-                        "#define all(x) (x).begin(), (x).end()",
-                        "#define rall(x) (x).rbegin(), (x).rend()",
-                        "#define sz(x) (int)(x).size()",
-                        "#define pb push_back",
-                        "#define mp make_pair",
-                        "#define fi first",
-                        "#define se second",
-                        "#define endl '\\n'",
-                        "",
-                        "#define FOR(i, a, b) for(int i = (a); i < (b); i++)",
-                        "#define FORE(i, a, b) for(int i = (a); i <= (b); i++)",
-                        "#define RFOR(i, a, b) for(int i = (a); i > (b); i--)",
-                        "#define RFORE(i, a, b) for(int i = (a); i >= (b); i--)",
-                        "",
-                        "const int MOD = 1e9 + 7;",
-                        "const int INF = 1e9;",
-                        "const ll LINF = 1e18;",
-                        "",
-                        "void fast_io() {",
-                        "    ios::sync_with_stdio(false);",
-                        "    cin.tie(nullptr);",
-                        "    cout.tie(nullptr);",
-                        "}",
-                        "",
-                        "void solve() {",
-                        "    ",
-                    }),
-                    i(1, "// Your solution here"),
-                    t({
-                        "",
-                        "}",
-                        "",
-                        "int main() {",
-                        "    fast_io();",
-                        "    ",
-                        "    int t = 1;",
-                        "    // cin >> t; // Uncomment for multiple test cases",
-                        "    ",
-                        "    while(t--) {",
-                        "        solve();",
-                        "    }",
-                        "    ",
-                        "    return 0;",
-                        "}",
-                    }),
-                }),
-                
-                -- Simple C++ boilerplate (trigger: cb)
                 s("cb", {
                     t({
                         "#include <iostream>",

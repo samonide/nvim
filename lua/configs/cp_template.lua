@@ -28,6 +28,12 @@ api.nvim_create_autocmd("BufNewFile", {
       '',
     }
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-    vim.api.nvim_win_set_cursor(0, {13, 8}) -- place cursor inside loop body
+    -- Place cursor inside loop body (last non-empty line)
+    for i = #lines, 1, -1 do
+      if lines[i]:match("%S") then
+        vim.api.nvim_win_set_cursor(0, { i, #lines[i] })
+        break
+      end
+    end
   end,
 })
