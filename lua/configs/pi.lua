@@ -48,7 +48,7 @@ function M.setup()
         show_thinking = true,
         expand_startup_details = false,
         render = { engine = "render-markdown" },
-        sessions_list = { auto_open = true },
+        sessions_list = { auto_open = false }, -- open on demand (:PiSessions)
         layout = {
             default = "side",
             side = { position = "right", width = 0.28 },
