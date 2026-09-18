@@ -85,6 +85,14 @@ function M.apply_extras()
     hl("LspReferenceRead", { bg = ref_bg })
     hl("LspReferenceWrite", { bg = ref_bg, bold = true })
     hl("LspInlayHint", { fg = c.onSurfaceVariant, italic = true })
+
+    -- dashboard (mini.starter)
+    hl("MiniStarterCurrent", { fg = c.onPrimaryContainer, bg = c.primaryContainer, bold = true })
+    hl("MiniStarterItemPrefix", { fg = c.primary, bold = true })
+    hl("MiniStarterHeader", { fg = c.primary, bold = true })
+    hl("MiniStarterFooter", { fg = c.onSurfaceVariant })
+    hl("MiniStarterQuery", { fg = c.primary })
+    hl("MiniStarterInactive", { fg = c.outline })
 end
 
 function M.setup()

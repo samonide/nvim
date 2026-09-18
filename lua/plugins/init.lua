@@ -58,6 +58,7 @@ return {
             delay = 300,
             expand = 1,
             spec = {
+                { "<leader>a", group = "Agent", icon = "" },
                 { "<leader>b", group = "Buffer", icon = "󰓩" },
                 { "<leader>c", group = "Code / Runner", icon = "󰘐" },
                 { "<leader>d", group = "Diagnostics", icon = "󰒡" },
@@ -133,6 +134,53 @@ return {
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("configs.lualine")
+        end,
+    },
+
+    -- Smooth cursor without smear (README recipe)
+    {
+        "sphamba/smear-cursor.nvim",
+        event = "VeryLazy",
+        opts = {
+            stiffness = 0.5,
+            trailing_stiffness = 0.5,
+            matrix_pixel_threshold = 0.5,
+        },
+    },
+
+    -- Breadcrumb winbar (file path + code symbols)
+    {
+        "Bekaboo/dropbar.nvim",
+        event = { "BufReadPost", "BufNewFile" },
+        dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
+        config = function()
+            require("dropbar").setup()
+        end,
+    },
+
+    -- Code outline sidebar
+    {
+        "stevearc/aerial.nvim",
+        cmd = "AerialToggle",
+        keys = {
+            { "<F6>", "<cmd>AerialToggle!<CR>", desc = "Toggle outline" },
+        },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require("aerial").setup()
+        end,
+    },
+
+    -- Sticky scroll context (current function pinned at top)
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        event = "User FilePost",
+        cmd = { "TSContextEnable", "TSContextDisable", "TSContextToggle" },
+        config = function()
+            require("treesitter-context").setup()
         end,
     },
 
@@ -507,6 +555,27 @@ return {
         "sindrets/diffview.nvim",
         cmd = { "DiffviewOpen", "DiffviewFileHistory" },
         opts = {},
+    },
+
+    -- Pi coding agent (pi2.nvim). Requires `pi` CLI in $PATH.
+    {
+        "zgs225/pi2.nvim",
+        dependencies = {
+            "MeanderingProgrammer/render-markdown.nvim",
+        },
+        keys = {
+            {
+                "<leader>ap",
+                function()
+                    require("configs.pi").toggle()
+                end,
+                desc = "Toggle Pi",
+            },
+            { "<leader>aP", "<Cmd>PiNewTab<CR>", desc = "Pi (new tab)" },
+        },
+        config = function()
+            require("configs.pi").setup()
+        end,
     },
 
     -- Keycast (show pressed keys)

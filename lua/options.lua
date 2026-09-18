@@ -23,6 +23,7 @@ o.smartindent = true
 
 opt.fillchars = { eob = " " }
 o.mouse = "a"
+o.termguicolors = true -- 24-bit colour (foot, kitty, ghostty, wezterm)
 
 -- Numbers
 o.numberwidth = 2
