@@ -1,10 +1,10 @@
 <div align="center">
 
-# Neovim Config (Standalone, base46 Themed)
+# Neovim Config (Standalone, Caelestia Themed)
 
 Refined, fast, and competitive‑programming focused Neovim setup. Standalone
-lazy.nvim config — no distribution dependency. Theming via **base46**
-(52 bundled themes, transparency support, `<leader>th` picker).
+lazy.nvim config — no distribution dependency. Theming via **Caelestia**
+(`colors/caelestia.lua` reads `scheme.json`, live-updates on wallpaper change).
 
 ![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
 ![Neovim](https://img.shields.io/badge/Neovim-%3E=0.11-green?style=flat-square)
@@ -34,8 +34,8 @@ lazy.nvim config — no distribution dependency. Theming via **base46**
 ## ✨ Key Features
 
 ### 🎯 Core Highlights
-* **Standalone Foundation**: Pure lazy.nvim setup — zero distribution dependencies, only base46 kept for theming
-* **base46 Theme System**: 52 bundled themes, transparency support, `<leader>th` picker with persistence
+* **Standalone Foundation**: Pure lazy.nvim setup — zero distribution dependencies
+* **Caelestia Theme System**: Wallpaper-driven Material You scheme, live-updates Neovim with no restart
 * **Conflict-Free Keybinds**: All keybinds refactored with no duplicates or conflicts
 * **Competitive Programming Optimized**: Fast compile/run, test harness, I/O file handling, and optimization profiles
 * **System Clipboard Integration**: Yank operations automatically sync to system clipboard
@@ -132,16 +132,15 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 ├── init.lua                    # Entry point: bootstrap & load plugins
 ├── lazy-lock.json             # Plugin version lock file
 ├── lua/
-│   ├── nvconfig.lua             # Theme & UI source of truth (edit theme here)
 │   ├── options.lua            # Core Neovim options (standalone)
 │   ├── mappings.lua           # All keybinds (standalone, conflict-free)
 │   ├── configs/               # Plugin configurations
+│   │   ├── caelestia.lua      # Scheme reader: lualine theme + extra hl groups
 │   │   ├── lsp_helpers.lua    # LSP on_attach/capabilities/defaults
 │   │   ├── lspconfig.lua      # LSP server setup
 │   │   ├── servers.lua        # Single server list (mason + lspconfig share it)
 │   │   ├── cmp.lua            # Completion engine config
-│   │   ├── lualine.lua        # Statusline (transparent, base46 palette)
-│   │   ├── themes.lua         # Theme picker + transparency toggle
+│   │   ├── lualine.lua        # Statusline (transparent, Caelestia palette)
 │   │   ├── terms.lua          # Split terminal toggles
 │   │   ├── treesitter.lua     # Syntax highlighting
 │   │   ├── conform.lua        # Formatting rules
@@ -167,7 +166,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 | Plugin | Purpose |
 |--------|---------|
 | [lazy.nvim](https://github.com/folke/lazy.nvim) | Plugin manager (sole framework) |
-| [base46](https://github.com/nvchad/base46) | Theme engine only (52 themes, transparency) |
+| [caelestia](colors/caelestia.lua) | Wallpaper-driven colorscheme + live watcher |
 | [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder & picker |
 | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native FZF sorter (faster) |
 | [which-key.nvim](https://github.com/folke/which-key.nvim) | Keybinding discovery UI |
@@ -195,7 +194,7 @@ XDG_CONFIG_HOME="$TMPDIR" XDG_DATA_HOME="$TMPDIR/data" XDG_CACHE_HOME="$TMPDIR/c
 |--------|---------|
 | [mini.starter](https://github.com/echasnovski/mini.starter) | Minimalistic dashboard |
 | [noice.nvim](https://github.com/folke/noice.nvim) | Enhanced cmdline/messages UI |
-| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | Statusline (transparent, follows base46) |
+| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | Statusline (transparent, follows Caelestia) |
 | [nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua) | File explorer tree (`<C-n>` / `<leader>e`) |
 | [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git signs in gutter |
 | [indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim) | Indent guides |
@@ -273,15 +272,9 @@ python = { "pylint" },
 Edit `lua/configs/cp_snippets.lua` or create snippets in VSCode JSON format.
 
 ### Change Theme
-Press `<leader>th` for the interactive picker (persists to `lua/nvconfig.lua`),
-or edit `lua/nvconfig.lua` directly:
-```lua
-M.base46 = {
-  theme = "midnight_breeze",  -- any of 52 base46 themes
-  transparency = true,
-}
-```
-Recompile highlights manually with `:lua require("base46").load_all_highlights()`.
+The theme follows your Caelestia wallpaper automatically — change the wallpaper
+and Neovim re-themes live (statusline included), no restart needed.
+`<leader>th` manually re-applies the scheme as a fallback.
 
 ---
 

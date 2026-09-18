@@ -85,10 +85,8 @@ map(
     { desc = "Telescope find all files" }
 )
 
--- Theme picker (base46)
-map("n", "<leader>th", function()
-    require("configs.themes").open()
-end, { desc = "Pick theme" })
+-- Caelestia manual refresh (auto-updates via watcher; this is a fallback)
+map("n", "<leader>th", "<cmd>colorscheme caelestia<cr>", { desc = "Refresh caelestia theme" })
 
 -- WhichKey
 map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "Whichkey all keymaps" })

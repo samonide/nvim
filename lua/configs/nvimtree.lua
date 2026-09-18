@@ -1,9 +1,6 @@
 -- =====================================================================
 --  configs/nvimtree.lua
---  nvim-tree configuration. Vendored from NvChad (nvchad.configs.nvimtree).
 -- =====================================================================
-
-pcall(dofile, vim.g.base46_cache .. "nvimtree")
 
 require("nvim-tree").setup({
     filters = { dotfiles = false },

@@ -73,9 +73,8 @@ M.diagnostic_config = function()
     })
 end
 
--- Global LSP defaults (replaces nvchad.configs.lspconfig.defaults())
+-- Global LSP defaults
 M.defaults = function()
-    pcall(dofile, vim.g.base46_cache .. "lsp")
     M.diagnostic_config()
 
     vim.api.nvim_create_autocmd("LspAttach", {

@@ -1,14 +1,14 @@
 -- =====================================================================
 --  Entry point for this Neovim configuration.
---  Standalone setup (no NvChad dependency, base46 kept for theming).
+--  Standalone setup (no distribution dependency).
+--  Theming is owned by Caelestia (colors/caelestia.lua, applied on VimEnter
+--  and live-updated via a watcher on scheme.json).
 --  Responsibilities:
---    * Define leader key & theme cache path
+--    * Define leader key
 --    * Bootstrap lazy.nvim plugin manager
 --    * Load plugin specs (lua/plugins) + user options
---    * Apply base46 theme highlights + statusline
 -- =====================================================================
 
-vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 vim.g.mapleader = " " -- Space as <leader>
 
 -- bootstrap lazy and all plugins
@@ -29,19 +29,13 @@ require("lazy").setup({ import = "plugins" }, lazy_config)
 -- Options first so plugins see user settings
 require("options")
 
--- Compile base46 theme cache on first run, then apply highlights.
--- Recompile on demand via :lua require("base46").load_all_highlights()
-if not vim.uv.fs_stat(vim.g.base46_cache .. "defaults") then
-    local ok, base46 = pcall(require, "base46")
-    if ok then
-        base46.load_all_highlights()
-    end
-end
-pcall(dofile, vim.g.base46_cache .. "defaults")
-pcall(dofile, vim.g.base46_cache .. "syntax")
-pcall(dofile, vim.g.base46_cache .. "treesitter")
-
 require("configs.autocmds")
+
+-- Caelestia extras (lualine palette source + extra hl groups)
+local ok_cael, cael = pcall(require, "configs.caelestia")
+if ok_cael then
+    cael.setup()
+end
 
 -- Defer custom mappings & CP template autocmd so core is initialized
 vim.schedule(function()

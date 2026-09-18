@@ -2,8 +2,6 @@
 -- Standalone (ex-NvChad). Treesitter is disabled in the previewer to avoid
 -- ft_to_lang errors.
 
-pcall(dofile, vim.g.base46_cache .. "telescope")
-
 local options = {
   defaults = {
     prompt_prefix = "   ",

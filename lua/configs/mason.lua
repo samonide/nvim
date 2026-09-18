@@ -1,9 +1,6 @@
 -- =====================================================================
 --  configs/mason.lua
---  mason configuration. Vendored from NvChad (nvchad.configs.mason).
 -- =====================================================================
-
-pcall(dofile, vim.g.base46_cache .. "mason")
 
 require("mason").setup({
     PATH = "skip",

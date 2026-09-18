@@ -1,28 +1,18 @@
 -- =====================================================================
 --  plugins/init.lua
---  Standalone plugin specifications (no NvChad dependency).
---  base46 is kept for theming; everything else NvChad provided
---  (completion, mason, tree, gitsigns, statusline, ...) is specced
---  explicitly below.
+--  Standalone plugin specifications.
+--  Theming is owned by Caelestia (colors/caelestia.lua).
 --  Grouped logically (core, syntax/LSP, tooling, UI, CP helpers).
 -- =====================================================================
 
 return {
 
-    -- ---------------- Core (ex-NvChad) ----------------
+    -- ---------------- Core ----------------
     { "nvim-lua/plenary.nvim", lazy = false },
-
-    {
-        "nvchad/base46",
-        build = function()
-            require("base46").load_all_highlights()
-        end,
-    },
 
     {
         "nvim-tree/nvim-web-devicons",
         config = function(_, opts)
-            pcall(dofile, vim.g.base46_cache .. "devicons")
             require("nvim-web-devicons").setup(opts)
         end,
         opts = {
@@ -44,11 +34,9 @@ return {
             scope = { char = "│", highlight = "IblScopeChar" },
         },
         config = function(_, opts)
-            pcall(dofile, vim.g.base46_cache .. "blankline")
             local hooks = require("ibl.hooks")
             hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
             require("ibl").setup(opts)
-            pcall(dofile, vim.g.base46_cache .. "blankline")
         end,
     },
 
@@ -86,7 +74,6 @@ return {
             },
         },
         config = function(_, opts)
-            pcall(dofile, vim.g.base46_cache .. "whichkey")
             require("which-key").setup(opts)
         end,
     },
