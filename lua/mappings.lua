@@ -22,19 +22,19 @@ local function hide_nums()
 end
 vim.api.nvim_create_autocmd("FileType", {
     group = hidegrp,
-    pattern = { "dashboard", "nvdash", "starter", "ministarter" },
+    pattern = { "starter", "ministarter" },
     callback = hide_nums,
 })
 vim.api.nvim_create_autocmd("User", {
     group = hidegrp,
-    pattern = { "MiniStarterOpened", "NvDashReady" },
+    pattern = { "MiniStarterOpened" },
     callback = hide_nums,
 })
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = hidegrp,
     callback = function(args)
         local ft = vim.bo[args.buf].filetype
-        if ft == "dashboard" or ft == "nvdash" or ft == "starter" or ft == "ministarter" then
+        if ft == "starter" or ft == "ministarter" then
             hide_nums()
         end
     end,
@@ -59,7 +59,6 @@ map("n", "<C-s>", "<cmd>w<CR>", { desc = "Save file" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "Copy whole file" })
 
 map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "Toggle line number" })
-map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "Toggle relative number" })
 
 map({ "n", "x" }, "<leader>fm", function()
     require("conform").format({ lsp_fallback = true })
@@ -97,7 +96,6 @@ end, { desc = "Whichkey query lookup" })
 -- ---------- Core QoL --------------------------------------------------
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>", { desc = "Exit insert (jk)" })
--- map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>") -- Uncomment for Ctrl+S save
 
 -- =============================================
 -- Harpoon (file marks) - requires harpoon2
@@ -214,6 +212,9 @@ map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
+-- Notification history (noice)
+map("n", "<leader>nl", "<cmd>Noice<cr>", { desc = "Notification history" })
+
 -- Todo-comments navigation (if plugin installed)
 map("n", "]t", function()
     require("todo-comments").jump_next()
@@ -295,7 +296,6 @@ map("n", "<leader>lr", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
 -- =============================================
 -- Quick commands
 -- =============================================
-map("n", "<leader>nh", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New file" })
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 map("n", "<leader>wa", "<cmd>wa<cr>", { desc = "Save all" })

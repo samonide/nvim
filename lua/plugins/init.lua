@@ -30,8 +30,8 @@ return {
         "lukas-reineke/indent-blankline.nvim",
         event = "User FilePost",
         opts = {
-            indent = { char = "│", highlight = "IblChar" },
-            scope = { char = "│", highlight = "IblScopeChar" },
+            indent = { char = "│", highlight = "IblIndent" },
+            scope = { char = "│", highlight = "IblScope" },
         },
         config = function(_, opts)
             local hooks = require("ibl.hooks")
@@ -445,15 +445,21 @@ return {
     {
         "nvzone/floaterm",
         dependencies = { "nvzone/volt" },
-        cmd = { "FloatermToggle", "FloatermNew", "FloatermNext", "FloatermPrev" },
+        cmd = { "FloatermToggle" },
         keys = {
             { "<A-i>", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
             { "<leader>ft", "<cmd>FloatermToggle<cr>", desc = "Toggle floating terminal" },
-            { "<leader>ftn", "<cmd>FloatermNew<cr>", desc = "New floating terminal" },
+            {
+                "<leader>ftn",
+                function()
+                    require("floaterm.api").new_term()
+                end,
+                desc = "New floating terminal",
+            },
         },
         opts = {
             border = true,
-            size = { h = 0.85, w = 0.9 },
+            size = { h = 85, w = 90 },
         },
     },
 
