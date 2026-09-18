@@ -208,6 +208,18 @@ map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
+-- Undo tree (builtin, opt-in package)
+map("n", "<leader>u", "<cmd>packadd nvim.undotree | Undotree<cr>", { desc = "Undo tree" })
+
+-- Lazygit in a floating terminal (binary required in $PATH)
+map("n", "<leader>gg", function()
+    local floaterm = require("floaterm")
+    if not require("floaterm.state").volt_set then
+        floaterm.open()
+    end
+    require("floaterm.api").new_term({ name = "lazygit", cmd = "lazygit" })
+end, { desc = "Lazygit" })
+
 -- Notification history (noice)
 map("n", "<leader>N", "<cmd>Noice<cr>", { desc = "Notification history" })
 
@@ -243,7 +255,9 @@ map("n", "<leader>tx", "<cmd>Timesense stats<cr>", { desc = "Timesense coding st
 -- =============================================
 -- Buffer Management
 -- =============================================
-map("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
+map("n", "<leader>bd", function()
+    require("mini.bufremove").delete()
+end, { desc = "Delete buffer (keep layout)" })
 map("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 map("n", "<leader>ba", "<cmd>%bd|e#|bd#<cr>", { desc = "Close all buffers except current" })

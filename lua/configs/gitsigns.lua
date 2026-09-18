@@ -7,4 +7,5 @@ require("gitsigns").setup({
         delete = { text = "󰍵" },
         changedelete = { text = "󱕖" },
     },
+    current_line_blame = true,
 })

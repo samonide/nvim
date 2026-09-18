@@ -112,6 +112,51 @@ return {
         end,
     },
 
+    -- LSP progress spinner (bottom-right, hides itself)
+    {
+        "j-hui/fidget.nvim",
+        event = "LspAttach",
+        opts = {},
+    },
+
+    -- Telescope picker for vim.ui.select (code actions, etc.)
+    {
+        "nvim-telescope/telescope-ui-select.nvim",
+        event = "VeryLazy",
+        config = function()
+            local ok, telescope = pcall(require, "telescope")
+            if ok then
+                telescope.load_extension("ui-select")
+            end
+        end,
+    },
+
+    -- Markdown rendering everywhere (also used by pi2)
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        ft = "markdown",
+        keys = {
+            {
+                "<leader>md",
+                function()
+                    require("render-markdown.api").toggle()
+                end,
+                desc = "Toggle markdown render",
+            },
+        },
+        config = function()
+            require("render-markdown").setup({})
+        end,
+    },
+
+    -- Buffer delete that keeps window layout (see <leader>bd)
+    {
+        "nvim-mini/mini.bufremove",
+        keys = {
+            { "<leader>bd", mode = "n" },
+        },
+    },
+
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",

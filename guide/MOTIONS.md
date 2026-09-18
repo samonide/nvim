@@ -124,6 +124,7 @@ Use: `"+p` paste system clipboard, `"_daw` delete word without yanking.
 | `u` | Undo |
 | `<C-r>` | Redo |
 | `U` | (Deprecated) restore last changed line |
+| `<leader>u` | Undo tree (builtin visualizer) |
 
 ## Buffers / Windows / Tabs
 | Key | Action |
@@ -197,7 +198,7 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 
 | Key | Mode | Action |
 |-----|------|--------|
-| `<leader>bd` | Normal | Delete current buffer |
+| `<leader>bd` | Normal | Delete current buffer (keeps layout) |
 | `<leader>bn` | Normal | Next buffer |
 | `<leader>bp` | Normal | Previous buffer |
 | `<leader>ba` | Normal | Close all buffers except current |
@@ -254,6 +255,22 @@ Navigation: [User Manual](./USERMANUAL.md) · [Snippets](./SNIPPETS.md)
 
 ---
 
+## 🌿 Git
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `<leader>gg` | Normal | Lazygit in a floating terminal |
+| `<leader>gs` | Normal | Git status (telescope) |
+| `<leader>gc` | Normal | Git commits (telescope) |
+| `<leader>gb` | Normal | Git branches (telescope) |
+| `<leader>gd` | Normal | Diffview open |
+| `<leader>gh` | Normal | File history (diffview) |
+| `<leader>gH` | Normal | Toggle file history (diffview) |
+
+Current-line blame shows automatically (gitsigns).
+
+---
+
 ## 🎯 Harpoon (Quick File Marks)
 
 | Key | Mode | Action |
@@ -285,6 +302,8 @@ Inside pi buffers: `<C-g>s/n/m/h/p/t/c/e` for session, new, model, history, prom
 | `<F6>` | Normal | Toggle code outline (aerial) |
 
 Breadcrumbs (dropbar) and sticky context (treesitter-context) are automatic — no keys.
+
+Markdown files render in place automatically; `<leader>md` toggles it.
 
 ---
 

@@ -69,15 +69,16 @@ Formatters go in `configs/conform.lua`, linters in `configs/lint.lua`.
 
 ## Plugins
 
-48 total, pinned in `lazy-lock.json`.
+51 total, pinned in `lazy-lock.json`.
 
-- **core**: lazy.nvim, plenary, which-key, telescope (+fzf-native), nvim-tree, devicons
-- **code**: nvim-treesitter (+context), nvim-lspconfig, mason (+lspconfig/conform/lint bridges), nvim-cmp (+lsp/buffer/lua/path/snippets sources), LuaSnip, autopairs, conform, nvim-lint
-- **look**: caelestia colorscheme, lualine, dropbar breadcrumbs, aerial outline, indent-blankline, smear-cursor, mini.starter, noice, trouble, todo-comments, showkeys
-- **move**: harpoon, flash, surround
-- **git**: gitsigns, diffview
+- **core**: lazy.nvim, plenary, which-key, telescope (+fzf-native, +ui-select), nvim-tree, devicons
+- **code**: nvim-treesitter (+context), nvim-lspconfig, mason (+lspconfig/conform/lint bridges), nvim-cmp (+lsp/buffer/lua/path/snippets sources), LuaSnip, autopairs, conform, nvim-lint, fidget (LSP progress)
+- **look**: caelestia colorscheme, lualine, dropbar breadcrumbs, aerial outline, indent-blankline, smear-cursor, mini.starter, noice, trouble, todo-comments, showkeys, render-markdown
+- **move**: harpoon, flash, surround, mini.bufremove
+- **git**: gitsigns (+inline blame), diffview, lazygit (in floaterm, `<leader>gg`)
 - **cp**: runner.nvim, timesense.nvim
-- **agents**: pi2.nvim (+render-markdown), floaterm, cord (discord presence, `<leader>cd` toggles)
+- **agents**: pi2.nvim, floaterm, cord (discord presence, `<leader>cd` toggles)
+- **builtin**: `:Undotree` (`<leader>u`, ships with Neovim, no plugin)
 
 ## Trouble
 
